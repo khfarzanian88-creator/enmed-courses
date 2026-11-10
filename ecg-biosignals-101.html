@@ -1,0 +1,1435 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<style>:root{color-scheme:light;padding-top:env(safe-area-inset-top);padding-bottom:env(safe-area-inset-bottom)}body{margin:0}img{max-width:100%}[hidden]{display:none!important}</style>
+<title>ECG &amp; Biosignals 101</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,400;0,600;0,700;1,400&family=Work+Sans:wght@500;600;700;800&family=JetBrains+Mono:wght@400;600&display=swap">
+<style>
+/* Layout: Texas A&M maroon utility bar · white program header · module tab row · reading column (~740px) + sticky "On this page" rail */
+:root{
+  --bg:#ffffff; --fg:#1f1f1f; --muted:#5c5656; --rule:#e2dddd;
+  --maroon:#500000; --maroon-2:#732f2f; --nav:#500000; --nav-fg:#ffffff; --nav-dim:#e8d6d6;
+  --hdr:#ffffff; --hdr-fg:#1f1f1f; --hdr-rule:#d1d1d1;
+  --accent:#500000; --accent-ink:#500000; --link:#500000;
+  --panel:#f6f6f6; --card:#ffffff; --card-border:#d9d4d4;
+  --info:#3e5a7a; --info-bg:#eef2f6;
+  --tip:#500000; --tip-bg:#f7efef;
+  --warn:#9a6a00; --warn-bg:#fbf4e4;
+  --bad:#b3242b; --good:#2e7d4f;
+  --trace:#500000; --trace2:#c0392b; --trace3:#3e5a7a; --trace4:#9a6a00;
+  --grid:#ebe7e7; --axis:#7a7373;
+  --paper:#fffafa; --paper-minor:#f2d2d2; --paper-major:#e3a1a1; --paper-ink:#1c1c1c;
+  --banner-bg:#3e5a7a; --banner-fg:#ffffff;
+  --font-body:"Open Sans",Arial,"Helvetica Neue",sans-serif;
+  --font-head:"Work Sans","Open Sans",Arial,sans-serif;
+  --font-mono:"JetBrains Mono",ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
+  --bg:#141213; --fg:#ece7e7; --muted:#a79d9d; --rule:#2e2828;
+  --maroon:#500000; --maroon-2:#8a3a3a; --nav:#3a0000; --nav-fg:#ffffff; --nav-dim:#d9bdbd;
+  --hdr:#1b1818; --hdr-fg:#ece7e7; --hdr-rule:#332b2b;
+  --accent:#d39a9a; --accent-ink:#e2adad; --link:#e2adad;
+  --panel:#1d1a1a; --card:#191616; --card-border:#342c2c;
+  --info:#8fb0d4; --info-bg:#1a222c;
+  --tip:#d39a9a; --tip-bg:#2a1a1a;
+  --warn:#e2b45a; --warn-bg:#2e2512;
+  --bad:#f07a7a; --good:#5fcf8e;
+  --trace:#e7a3a3; --trace2:#f07a7a; --trace3:#8fb0d4; --trace4:#e2b45a;
+  --grid:#2a2525; --axis:#857b7b;
+  --paper:#1d1617; --paper-minor:#3b2628; --paper-major:#653438; --paper-ink:#f1e9e9;
+  --banner-bg:#22303f; --banner-fg:#eaf0f6;
+  color-scheme:dark;
+}}
+:root[data-theme="dark"]{
+  --bg:#141213; --fg:#ece7e7; --muted:#a79d9d; --rule:#2e2828;
+  --maroon:#500000; --maroon-2:#8a3a3a; --nav:#3a0000; --nav-fg:#ffffff; --nav-dim:#d9bdbd;
+  --hdr:#1b1818; --hdr-fg:#ece7e7; --hdr-rule:#332b2b;
+  --accent:#d39a9a; --accent-ink:#e2adad; --link:#e2adad;
+  --panel:#1d1a1a; --card:#191616; --card-border:#342c2c;
+  --info:#8fb0d4; --info-bg:#1a222c;
+  --tip:#d39a9a; --tip-bg:#2a1a1a;
+  --warn:#e2b45a; --warn-bg:#2e2512;
+  --bad:#f07a7a; --good:#5fcf8e;
+  --trace:#e7a3a3; --trace2:#f07a7a; --trace3:#8fb0d4; --trace4:#e2b45a;
+  --grid:#2a2525; --axis:#857b7b;
+  --paper:#1d1617; --paper-minor:#3b2628; --paper-major:#653438; --paper-ink:#f1e9e9;
+  --banner-bg:#22303f; --banner-fg:#eaf0f6;
+  color-scheme:dark;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+@media (prefers-reduced-motion: reduce){html{scroll-behavior:auto}}
+body{background:var(--bg);color:var(--fg);font-family:var(--font-body);font-size:17px;line-height:1.6}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:60;background:var(--hdr)}
+a{color:var(--link)}
+a:focus-visible,button:focus-visible,input:focus-visible,select:focus-visible,summary:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+
+/* ---------- header ---------- */
+.util{background:var(--nav);color:var(--nav-fg);font-family:var(--font-head);font-weight:700;font-size:13px;letter-spacing:.8px;text-transform:uppercase;
+  padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+.util-inner{max-width:1180px;margin:0 auto;display:flex;justify-content:space-between;align-items:center;gap:12px;min-height:38px}
+.theme-btn{flex:none;background:none;border:1px solid rgba(255,255,255,.4);color:var(--nav-fg);border-radius:3px;padding:3px 9px;font:inherit;font-size:12px;cursor:pointer}
+.prog{background:var(--hdr);color:var(--hdr-fg);border-bottom:1px solid var(--hdr-rule);
+  padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+.prog-inner{max-width:1180px;margin:0 auto;display:flex;align-items:center;gap:14px;padding-block:14px;flex-wrap:wrap}
+.mark{min-width:44px;height:44px;padding:0 9px;background:var(--maroon);color:#fff;display:grid;place-items:center;font-family:var(--font-head);font-weight:800;font-size:15px;letter-spacing:.5px;flex:none;text-decoration:none}
+.prog-txt{display:flex;flex-direction:column;line-height:1.2;text-decoration:none;color:inherit;min-width:0}
+.prog-txt .u{font-family:var(--font-head);font-size:12px;font-weight:700;letter-spacing:.8px;text-transform:uppercase}
+.prog-txt .p{font-family:var(--font-head);font-size:20px;font-weight:500}
+.prog-course{margin-left:auto;font-family:var(--font-head);font-weight:700;color:var(--accent-ink);font-size:15px}
+.topnav{position:sticky;top:env(safe-area-inset-top,0px);z-index:50;background:var(--hdr);border-bottom:1px solid var(--hdr-rule);box-shadow:0 1px 3px rgba(0,0,0,.06);
+  padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+.topnav-inner{max-width:1180px;margin:0 auto;display:flex;align-items:center;min-height:48px}
+.navlinks{display:flex;gap:2px;overflow-x:auto;scrollbar-width:thin;flex:1;min-width:0}
+.navlinks a{color:var(--hdr-fg);text-decoration:none;font-family:var(--font-head);font-weight:600;font-size:14.5px;padding:13px 10px 11px;white-space:nowrap;border-bottom:3px solid transparent}
+.navlinks a .n{color:var(--muted);margin-right:3px}
+.navlinks a:hover{color:var(--accent-ink)}
+.navlinks a.active{color:var(--accent-ink);border-bottom-color:var(--accent)}
+.banner{background:var(--banner-bg);color:var(--banner-fg);font-size:14px;line-height:1.45;
+  padding-block:9px;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+.banner-inner{max-width:1180px;margin:0 auto}
+.banner a{color:inherit;font-weight:700}
+.banner b{font-family:var(--font-head);text-transform:uppercase;letter-spacing:.6px}
+
+/* ---------- page layout ---------- */
+.page{max-width:1180px;margin:0 auto;display:grid;grid-template-columns:minmax(0,1fr);gap:40px;
+  padding-block:36px 80px;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+@media (min-width:1000px){.page{grid-template-columns:minmax(0,740px) 230px;justify-content:center}}
+main{min-width:0}
+.toc{display:none}
+@media (min-width:1000px){.toc{display:block;position:sticky;top:72px;align-self:start;font-size:14px}}
+.toc h2{font-size:13px;font-weight:700;text-transform:uppercase;letter-spacing:.8px;border:0;margin:0 0 8px;color:var(--fg)}
+.toc ul{list-style:none;margin:0;padding:0;border-left:1px solid var(--rule)}
+.toc li a{display:block;padding:4px 0 4px 12px;color:var(--muted);text-decoration:none;line-height:1.3;border-left:2px solid transparent;margin-left:-1px}
+.toc li a.on{color:var(--accent-ink);border-left-color:var(--accent)}
+
+h1{font-family:var(--font-head);font-size:clamp(30px,5vw,42px);font-weight:700;color:var(--accent-ink);line-height:1.15;margin:0 0 6px;text-wrap:balance}
+.subtitle{font-size:20px;color:var(--muted);margin:0 0 26px}
+h2{font-family:var(--font-head);font-size:27px;font-weight:600;line-height:1.2;margin:46px 0 14px;padding-bottom:8px;border-bottom:1px solid var(--rule);text-wrap:balance;scroll-margin-top:90px}
+h3{font-family:var(--font-head);font-size:19px;margin:28px 0 8px}
+p{margin:0 0 14px}
+ul,ol{padding-left:24px;margin:0 0 14px}
+li{margin-bottom:4px}
+code,.mono{font-family:var(--font-mono);font-size:.88em}
+pre{background:var(--panel);border:1px solid var(--card-border);border-radius:6px;padding:14px;overflow-x:auto;font-size:14px;line-height:1.5}
+table{border-collapse:collapse;font-size:15px;width:100%}
+.tablewrap{overflow-x:auto;margin:0 0 16px}
+th,td{border-bottom:1px solid var(--rule);padding:7px 10px;text-align:left;vertical-align:top}
+th{font-weight:700}
+td.num,th.num{text-align:right;font-variant-numeric:tabular-nums}
+
+/* ---------- callouts ---------- */
+.callout{border-left:5px solid var(--info);background:var(--info-bg);border-radius:4px;padding:14px 18px;margin:18px 0}
+.callout .lbl{font-size:13px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:var(--info);margin-bottom:6px;display:flex;gap:8px;align-items:center}
+.callout p:last-child,.callout ul:last-child{margin-bottom:0}
+.callout.tip{border-color:var(--tip);background:var(--tip-bg)}
+.callout.tip .lbl{color:var(--accent-ink)}
+.callout.warn{border-color:var(--warn);background:var(--warn-bg)}
+.callout.warn .lbl{color:var(--warn)}
+.callout.scenario p{font-style:italic}
+.ico{width:14px;height:14px;flex:none}
+
+/* ---------- widgets ---------- */
+.widget{border:1px solid var(--card-border);background:var(--card);border-radius:8px;padding:18px 20px;margin:18px 0;box-shadow:0 1px 3px rgba(0,0,0,.05)}
+.widget .wlabel{font-size:14px;font-weight:700;color:var(--muted);margin-bottom:8px}
+.presets{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:16px}
+.pill{border:none;border-radius:999px;padding:7px 16px;font:inherit;font-size:14px;cursor:pointer;color:#fff;background:var(--nav)}
+.pill.c1{background:#5b6236}.pill.c2{background:#332c2c}.pill.c3{background:#8f5d00}.pill.c4{background:#500000}.pill.c5{background:#3e5a7a}.pill.c6{background:#a7000c}
+.pill{border-radius:3px;font-family:var(--font-head);font-weight:600}
+.pill[aria-pressed="true"]{outline:3px solid var(--accent);outline-offset:2px}
+.ctrls{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:12px 22px;margin-bottom:12px}
+.ctrl label{display:block;font-size:15px;font-weight:700}
+.ctrl label output{color:var(--bad);font-weight:700;font-variant-numeric:tabular-nums}
+.ctrl input[type=range]{width:100%;accent-color:var(--info)}
+.toggles{display:flex;flex-wrap:wrap;gap:8px 18px;margin:4px 0 12px;font-size:15px}
+.toggles label{display:flex;gap:6px;align-items:center;cursor:pointer}
+.toggles input{accent-color:var(--info);width:16px;height:16px}
+.plot{width:100%;display:block;border-radius:4px}
+.plotwrap{background:var(--panel);border-radius:6px;padding:6px;margin:8px 0}
+.readout{display:flex;flex-wrap:wrap;gap:10px;margin:10px 0 2px}
+.stat{background:var(--panel);border:1px solid var(--card-border);border-radius:6px;padding:6px 12px;min-width:110px}
+.stat .k{font-size:12px;color:var(--muted);text-transform:uppercase;letter-spacing:.6px}
+.stat .v{font-size:20px;font-weight:700;font-variant-numeric:tabular-nums}
+.chip{display:inline-block;font-size:13px;font-weight:700;border-radius:999px;padding:2px 10px;border:1px solid currentColor}
+.chip.good{color:var(--good)}.chip.bad{color:var(--bad)}.chip.warn{color:var(--warn)}
+.wnote{font-size:15px;color:var(--muted);border-top:1px dashed var(--card-border);padding-top:10px;margin-top:10px}
+.btn{font:inherit;font-size:15px;border:1.5px solid var(--info);color:var(--info);background:transparent;border-radius:999px;padding:6px 16px;cursor:pointer}
+.btn.solid{background:var(--maroon);border-color:var(--maroon);color:#fff;border-radius:4px;font-weight:700;padding:9px 18px}
+.minigrid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}
+.mini{background:var(--panel);border-radius:6px;padding:6px 8px}
+.mini .t{font-size:13px;font-weight:700;display:flex;justify-content:space-between}
+
+/* ---------- quiz ---------- */
+.quiz{display:flex;flex-direction:column;gap:16px}
+.q{border:1px solid var(--card-border);border-radius:8px;padding:14px 18px;background:var(--card)}
+.q .qt{font-weight:700;margin-bottom:8px}
+.q label{display:flex;gap:10px;align-items:flex-start;padding:5px 6px;border-radius:4px;cursor:pointer}
+.q label:hover{background:var(--panel)}
+.q input{margin-top:6px;accent-color:var(--info)}
+.q .fb{margin-top:8px;font-size:15px;padding:8px 12px;border-radius:4px}
+.q .fb.ok{background:var(--tip-bg);color:var(--fg);border-left:4px solid var(--good)}
+.q .fb.no{background:var(--warn-bg);color:var(--fg);border-left:4px solid var(--bad)}
+
+/* ---------- home ---------- */
+.module-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(210px,1fr));gap:14px;margin:16px 0}
+.module-card{border-top:4px solid var(--maroon) !important;display:flex;flex-direction:column;gap:4px;border:1px solid var(--card-border);border-radius:8px;padding:16px;text-decoration:none;color:var(--fg);background:var(--card);transition:border-color .15s,transform .15s}
+.module-card:hover{border-color:var(--maroon-2);transform:translateY(-2px)}
+@media (prefers-reduced-motion: reduce){.module-card{transition:none}.module-card:hover{transform:none}}
+.module-number{font-family:var(--font-head);font-size:28px;font-weight:800;color:var(--accent-ink);line-height:1}
+.module-title{font-weight:700;font-size:17px}
+.module-desc{font-size:14.5px;color:var(--muted);line-height:1.45}
+.module-card.challenge{border-color:var(--warn);background:var(--warn-bg)}
+.module-card.challenge .module-number{color:var(--warn)}
+.hw-card{display:inline-flex;flex-direction:column;border:1px solid var(--info);border-radius:8px;padding:14px 18px;max-width:280px;text-decoration:none;color:var(--fg)}
+.hw-card .k{font-size:12px;font-weight:700;color:var(--info);letter-spacing:1px}
+.hw-card .t{font-weight:700;font-size:17px}
+.hw-card .d{font-size:14px;color:var(--muted)}
+.module-nav{display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;border-top:1px solid var(--rule);margin-top:48px;padding-top:20px}
+.module-nav a{text-decoration:none}
+.footer{text-align:center;color:var(--muted);font-size:14px;padding-block:0 40px;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+details.hint{margin-top:8px;font-size:15px}
+details.hint summary{cursor:pointer;color:var(--link);font-weight:700}
+.problem{border-bottom:1px solid var(--rule);padding:12px 0}
+.problem .pn{font-weight:900;color:var(--accent-ink)}
+.case{border:1px solid var(--card-border);border-radius:8px;padding:14px 16px;margin:16px 0;background:var(--card)}
+.case-head{display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap;margin-bottom:6px}
+.case-head b{font-size:17px}
+.case-form{display:flex;flex-wrap:wrap;gap:10px 18px;align-items:end;margin-top:8px}
+.case-form label{font-size:14px;font-weight:700;display:flex;flex-direction:column;gap:4px}
+.case-form input,.case-form select{font:inherit;font-size:15px;padding:6px 8px;border:1px solid var(--card-border);border-radius:4px;background:var(--bg);color:var(--fg)}
+.case-form input{width:110px}
+.case .res{font-size:15px;margin-top:8px}
+.scorebar{position:sticky;bottom:12px;margin-top:20px;background:var(--maroon);color:#fff;border-radius:8px;padding:12px 16px;display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap}
+.scorebar .btn.solid{background:#fff;border-color:#fff;color:#500000}
+
+.util-right{display:flex;align-items:center;gap:14px;min-width:0}
+.courses{display:flex;gap:4px;overflow-x:auto;scrollbar-width:none}
+.courses a{color:var(--nav-dim);text-decoration:none;white-space:nowrap;padding:4px 7px;font-size:12px}
+.courses a:hover{color:#fff}.courses a.cur{color:#fff;border-bottom:2px solid #fff}
+@media (max-width:640px){.courses{display:none}}
+/* ---------- case library ---------- */
+.cl-filters{display:flex;flex-wrap:wrap;gap:6px;margin:10px 0}
+.cl-chip{font:inherit;font-size:13px;font-weight:600;border:1px solid var(--card-border);background:var(--card);color:var(--fg);border-radius:999px;padding:4px 12px;cursor:pointer}
+.cl-chip[aria-pressed="true"]{background:var(--maroon);border-color:var(--maroon);color:#fff}
+.cl-search{font:inherit;font-size:15px;padding:7px 10px;border:1px solid var(--card-border);border-radius:4px;background:var(--bg);color:var(--fg);width:100%;max-width:340px}
+.cl-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:10px;margin:12px 0}
+.cl-card{text-align:left;font:inherit;border:1px solid var(--card-border);border-left:4px solid var(--maroon);background:var(--card);color:var(--fg);border-radius:6px;padding:10px 12px;cursor:pointer;display:flex;flex-direction:column;gap:3px}
+.cl-card:hover{border-color:var(--maroon-2)}
+.cl-card[aria-current="true"]{background:var(--tip-bg)}
+.cl-card .n{font-family:var(--font-head);font-weight:800;color:var(--accent-ink);font-size:13px}
+.cl-card .t{font-weight:700;font-size:15px;line-height:1.3}
+.cl-card .s{font-size:12.5px;color:var(--muted)}
+.cl-detail{border:1px solid var(--card-border);border-radius:8px;background:var(--card);padding:18px 20px;margin:14px 0;scroll-margin-top:70px}
+.cl-detail h3{margin:0 0 4px;font-size:22px;color:var(--accent-ink)}
+.cl-tags{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:10px}
+.cl-tag{font-size:12px;font-weight:700;border-radius:3px;padding:2px 8px;background:var(--panel);color:var(--muted);border:1px solid var(--card-border)}
+.cl-two{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:12px;margin:12px 0}
+.cl-box{background:var(--panel);border-radius:6px;padding:12px 14px;font-size:15.5px}
+.cl-box .h{font-family:var(--font-head);font-weight:700;font-size:13px;text-transform:uppercase;letter-spacing:.7px;color:var(--muted);margin-bottom:4px}
+.cl-box p:last-child{margin:0}
+.eq{font-family:var(--font-mono);font-size:14px;background:var(--bg);border:1px solid var(--card-border);border-radius:4px;padding:6px 10px;margin:6px 0;overflow-x:auto;white-space:nowrap}
+.cl-nav{display:flex;justify-content:space-between;gap:10px;margin-top:12px;flex-wrap:wrap}
+.cl-count{font-size:14px;color:var(--muted)}
+</style>
+</head><body>
+
+
+<div class="util"><div class="util-inner"><span>Texas A&amp;M University</span><span class="util-right"><nav class="courses" aria-label="Courses"><a href="index.html">All courses</a><a href="ecg-biosignals-101.html" class="cur">ECG 101</a><a href="biomechanics-biomaterials-101.html" class="">Biomechanics 101</a><a href="hemodynamics-biofluids-101.html" class="">Hemodynamics 101</a></nav><button class="theme-btn" id="themeBtn" type="button" aria-label="Toggle light or dark theme">Theme</button></span></div></div>
+<div class="prog"><div class="prog-inner">
+  <a class="mark" href="#home" aria-label="Course home">EnMed</a>
+  <a class="prog-txt" href="#home"><span class="u">Texas A&amp;M University</span><span class="p">Engineering Medicine Program</span></a>
+  <span class="prog-course">ECG &amp; Biosignals 101</span>
+</div></div>
+<header class="topnav">
+  <div class="topnav-inner"><nav class="navlinks" id="navlinks" aria-label="Modules"></nav></div>
+</header>
+<div class="banner"><div class="banner-inner"><b>Course prototype:</b> Draft interactive module for Texas A&amp;M EnMed students, under faculty review. Not an official university publication. Layout modeled on the open tutorial <a href="https://judepj.github.io/neuro-signals-101/" target="_blank" rel="noopener">EEG &amp; Signal Processing (Neuro Signals 101)</a> by judepj; all content here is original.</div></div>
+<div class="page">
+  <main id="main"></main>
+  <aside class="toc" id="toc" aria-label="On this page"></aside>
+</div>
+<div class="footer">ECG &amp; Biosignals 101 · Texas A&amp;M Engineering Medicine (EnMed) · Houston, Texas<br>Prototype course material · Simplified models and synthetic data for teaching only, not for clinical use</div>
+<script>
+"use strict";
+/* ================= utilities ================= */
+const $ = (s, r = document) => r.querySelector(s);
+const $$ = (s, r = document) => [...r.querySelectorAll(s)];
+function css(name) { return getComputedStyle(document.documentElement).getPropertyValue(name).trim(); }
+function rng(seed) { let a = seed >>> 0; return () => { a |= 0; a = a + 0x6D2B79F5 | 0; let t = Math.imul(a ^ a >>> 15, 1 | a); t = t + Math.imul(t ^ t >>> 7, 61 | t) ^ t; return ((t ^ t >>> 14) >>> 0) / 4294967296; }; }
+function gauss(r) { let u = 0, v = 0; while (u === 0) u = r(); while (v === 0) v = r(); return Math.sqrt(-2 * Math.log(u)) * Math.cos(2 * Math.PI * v); }
+const clamp = (x, a, b) => Math.max(a, Math.min(b, x));
+const fmt = (x, d = 0) => Number.isFinite(x) ? x.toFixed(d) : "—";
+const ICON = {
+  scenario: '<svg class="ico" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true"><path d="M3 1h8l3 3v11H3z" opacity=".25"/><path d="M3 1h8l3 3v11H3zM5 6h7v1H5zm0 3h7v1H5zm0 3h5v1H5z"/></svg>',
+  tip: '<svg class="ico" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true"><path d="M10.5 1.5a4 4 0 0 0-3.8 5.2L1.5 12l2.5 2.5 5.3-5.2A4 4 0 0 0 14.5 5l-2.2 2.2-2-.5-.5-2z"/></svg>',
+  warn: '<svg class="ico" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true"><path d="M8 1 15 14H1z"/><path d="M7.3 5.5h1.4v4.5H7.3zm0 5.5h1.4v1.5H7.3z" fill="#fff"/></svg>',
+  info: '<svg class="ico" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true"><circle cx="8" cy="8" r="7"/><path d="M7.3 7h1.4v5H7.3zm0-3h1.4v1.5H7.3z" fill="#fff"/></svg>'
+};
+function callout(kind, label, html) {
+  const ic = kind === "scenario" ? ICON.scenario : kind === "tip" ? ICON.tip : kind === "warn" ? ICON.warn : ICON.info;
+  return `<div class="callout ${kind}"><div class="lbl">${ic}${label}</div>${html}</div>`;
+}
+
+/* ================= synthetic ECG =================
+   Each beat = sum of Gaussian bumps (P, Q, R, S, T) placed relative to the R peak.
+   Amplitudes in mV, times in seconds. */
+function beatTemplate(o) {
+  const qrs = o.qrsW ?? 0.09;            // QRS duration (s)
+  const s = qrs / 0.09;                   // width scale
+  const w = [];
+  if (o.pAmp !== 0) w.push({ mu: -(o.pr ?? 0.16), sd: 0.022, a: o.pAmp ?? 0.15 });
+  w.push({ mu: -0.022 * s, sd: 0.008 * s, a: o.qAmp ?? -0.1 });
+  w.push({ mu: 0, sd: 0.010 * s, a: o.rAmp ?? 1.2 });
+  w.push({ mu: 0.024 * s, sd: 0.009 * s, a: o.sAmp ?? -0.28 });
+  w.push({ mu: o.tPos ?? 0.28, sd: o.tW ?? 0.045, a: o.tAmp ?? 0.32 });
+  return w;
+}
+function rrSequence(o, dur, r) {
+  const rr = [];
+  let t = 0.35;
+  const base = 60 / o.hr;
+  let i = 0;
+  while (t < dur + 1) {
+    let d;
+    if (o.rhythm === "af") d = base * (0.6 + 0.8 * r());
+    else d = base * (1 + (o.hrv ?? 0.03) * gauss(r) + 0.04 * (o.hrv ? o.hrv / 0.03 : 1) * Math.sin(2 * Math.PI * t / 4));
+    rr.push({ t, kind: "n" });
+    if (o.rhythm === "pvc" && i % (o.pvcEvery ?? 4) === (o.pvcEvery ?? 4) - 2) {
+      // next beat comes early as a PVC, then a compensatory pause
+      const tp = t + base * 0.62;
+      rr.push({ t: tp, kind: "v" });
+      t = t + 2 * base; i += 2; continue;
+    }
+    t += Math.max(0.25, d); i++;
+  }
+  return rr.filter(b => b.t < dur + 0.5);
+}
+function synthECG(o) {
+  const fs = o.fs ?? 500, dur = o.dur ?? 6, n = Math.round(fs * dur);
+  const r = rng(o.seed ?? 7);
+  const y = new Float64Array(n), t = new Float64Array(n);
+  for (let k = 0; k < n; k++) t[k] = k / fs;
+  const beats = rrSequence(o, dur, r);
+  const scale = o.scale ?? 1;
+  for (const b of beats) {
+    let tmpl;
+    if (b.kind === "v") tmpl = [{ mu: 0, sd: 0.03, a: 1.5 }, { mu: 0.05, sd: 0.03, a: -0.5 }, { mu: 0.3, sd: 0.06, a: -0.45 }];
+    else {
+      const rrPrev = 60 / o.hr;
+      tmpl = beatTemplate({ ...o, pAmp: o.rhythm === "af" ? 0 : o.pAmp, tPos: (o.tPos ?? 0.28) * Math.sqrt(Math.min(1.2, rrPrev)) });
+    }
+    for (const w of tmpl) {
+      const c = b.t + w.mu, k0 = Math.max(0, Math.floor((c - 5 * w.sd) * fs)), k1 = Math.min(n - 1, Math.ceil((c + 5 * w.sd) * fs));
+      for (let k = k0; k <= k1; k++) { const z = (t[k] - c) / w.sd; y[k] += scale * w.a * Math.exp(-0.5 * z * z); }
+    }
+  }
+  if (o.rhythm === "af") { // fibrillatory baseline 5–7 Hz
+    const f1 = 5.3 + r(), f2 = 6.6 + r(), p1 = r() * 6, p2 = r() * 6;
+    for (let k = 0; k < n; k++) y[k] += 0.05 * Math.sin(2 * Math.PI * f1 * t[k] + p1) + 0.035 * Math.sin(2 * Math.PI * f2 * t[k] + p2);
+  }
+  addNoise(y, t, o, r);
+  return { t, y, fs, beats: beats.filter(b => b.t < dur).map(b => b.t), kinds: beats.filter(b => b.t < dur).map(b => b.kind) };
+}
+function addNoise(y, t, o, r) {
+  const n = y.length;
+  if (o.wander) { const ph = r() * 6; for (let k = 0; k < n; k++) y[k] += o.wander * (Math.sin(2 * Math.PI * 0.22 * t[k] + ph) + 0.5 * Math.sin(2 * Math.PI * 0.07 * t[k])); }
+  if (o.mains) { for (let k = 0; k < n; k++) y[k] += o.mains * Math.sin(2 * Math.PI * 60 * t[k]); }
+  if (o.emg) { // band-limited muscle noise
+    let lp = 0; for (let k = 0; k < n; k++) { const g = gauss(r); lp = 0.6 * lp + 0.4 * g; y[k] += o.emg * (g - lp) * 1.6; }
+  }
+  if (o.motion) { // occasional large slow excursions
+    for (let j = 0; j < 3; j++) { const c = 0.8 + r() * (t[n - 1] - 1.6), a = (r() - .5) * 2 * o.motion, sd = 0.18 + r() * 0.2;
+      for (let k = 0; k < n; k++) { const z = (t[k] - c) / sd; y[k] += a * Math.exp(-0.5 * z * z); } }
+  }
+  if (o.pop) { // electrode pop: step + exponential recovery
+    const c = t[n - 1] * 0.55, k0 = Math.floor(c / (t[1] - t[0]));
+    for (let k = k0; k < n; k++) y[k] += o.pop * Math.exp(-(t[k] - c) / 0.35);
+  }
+  if (o.white) for (let k = 0; k < n; k++) y[k] += o.white * gauss(r);
+}
+
+/* ================= filters (RBJ biquads, zero-phase filtfilt) ================= */
+function biquad(type, f0, fs, Q = Math.SQRT1_2) {
+  const w = 2 * Math.PI * f0 / fs, c = Math.cos(w), s = Math.sin(w), al = s / (2 * Q);
+  let b0, b1, b2, a0, a1, a2;
+  if (type === "lp") { b0 = (1 - c) / 2; b1 = 1 - c; b2 = (1 - c) / 2; }
+  else if (type === "hp") { b0 = (1 + c) / 2; b1 = -(1 + c); b2 = (1 + c) / 2; }
+  else { b0 = 1; b1 = -2 * c; b2 = 1; } // notch
+  a0 = 1 + al; a1 = -2 * c; a2 = 1 - al;
+  return [b0 / a0, b1 / a0, b2 / a0, a1 / a0, a2 / a0];
+}
+function runBiquad(k, x) {
+  const y = new Float64Array(x.length); let x1 = x[0], x2 = x[0], y1 = x[0] * (k[0] + k[1] + k[2]) / (1 + k[3] + k[4]), y2 = y1;
+  for (let i = 0; i < x.length; i++) { const v = k[0] * x[i] + k[1] * x1 + k[2] * x2 - k[3] * y1 - k[4] * y2; x2 = x1; x1 = x[i]; y2 = y1; y1 = v; y[i] = v; }
+  return y;
+}
+function filtfilt(k, x) { const a = runBiquad(k, x); a.reverse(); const b = runBiquad(k, a); b.reverse(); return b; }
+function hpFirstSafe(x, f0, fs) { // high-pass that starts settled (subtract mean first)
+  const m = x.reduce((a, b) => a + b, 0) / x.length; return filtfilt(biquad("hp", f0, fs), x.map(v => v - m));
+}
+
+/* ================= FFT ================= */
+function fftMag(x, fs) {
+  let N = 1; while (N < x.length) N <<= 1;
+  const re = new Float64Array(N), im = new Float64Array(N);
+  const m = x.reduce((a, b) => a + b, 0) / x.length;
+  for (let i = 0; i < x.length; i++) { const w = 0.5 - 0.5 * Math.cos(2 * Math.PI * i / (x.length - 1)); re[i] = (x[i] - m) * w; }
+  for (let i = 1, j = 0; i < N; i++) { let bit = N >> 1; for (; j & bit; bit >>= 1) j ^= bit; j ^= bit; if (i < j) { [re[i], re[j]] = [re[j], re[i]]; [im[i], im[j]] = [im[j], im[i]]; } }
+  for (let len = 2; len <= N; len <<= 1) {
+    const ang = -2 * Math.PI / len, wr = Math.cos(ang), wi = Math.sin(ang);
+    for (let i = 0; i < N; i += len) { let cr = 1, ci = 0;
+      for (let j = 0; j < len / 2; j++) { const ur = re[i + j], ui = im[i + j], vr = re[i + j + len / 2] * cr - im[i + j + len / 2] * ci, vi = re[i + j + len / 2] * ci + im[i + j + len / 2] * cr;
+        re[i + j] = ur + vr; im[i + j] = ui + vi; re[i + j + len / 2] = ur - vr; im[i + j + len / 2] = ui - vi; const nr = cr * wr - ci * wi; ci = cr * wi + ci * wr; cr = nr; } }
+  }
+  const f = [], p = [];
+  for (let k = 0; k <= N / 2; k++) { f.push(k * fs / N); p.push(Math.hypot(re[k], im[k]) * 4 / x.length); }
+  return { f, p };
+}
+
+/* ================= plotting (canvas) ================= */
+function niceTicks(a, b, n = 5) {
+  if (n <= 0) return [];
+  const span = b - a; if (span <= 0) return [a];
+  const step0 = span / n, mag = Math.pow(10, Math.floor(Math.log10(step0))), r = step0 / mag;
+  const step = (r < 1.5 ? 1 : r < 3 ? 2 : r < 7 ? 5 : 10) * mag;
+  const out = []; for (let v = Math.ceil(a / step - 1e-9) * step; v <= b + 1e-9; v += step) out.push(+v.toFixed(10));
+  return out;
+}
+const PLOTS = new Set();
+function plot(cv, o) {
+  cv._opts = o; PLOTS.add(cv); drawPlot(cv);
+}
+function drawPlot(cv) {
+  const o = cv._opts; if (!o || !cv.isConnected) { PLOTS.delete(cv); return; }
+  const dpr = window.devicePixelRatio || 1, W = cv.clientWidth || 600, H = +(cv.dataset.h || 220);
+  cv.style.height = H + "px"; cv.width = Math.round(W * dpr); cv.height = Math.round(H * dpr);
+  const g = cv.getContext("2d"); g.setTransform(dpr, 0, 0, dpr, 0, 0); g.clearRect(0, 0, W, H);
+  const fg = css("--fg"), muted = css("--muted"), grid = css("--grid"), axis = css("--axis");
+  const L = o.left ?? 48, R = 18, T = o.title ? 24 : 12, B = o.xlabel ? 42 : 26;
+  const pw = W - L - R, ph = H - T - B;
+  const [x0, x1] = o.xlim, [y0, y1] = o.ylim;
+  const X = v => L + (v - x0) / (x1 - x0) * pw, Y = v => T + (1 - (v - y0) / (y1 - y0)) * ph;
+  g.font = `12px ${css("--font-body")}`;
+  if (o.paper) { // ECG paper: 1 mm = 0.04 s and 0.1 mV
+    g.fillStyle = css("--paper"); g.fillRect(L, T, pw, ph);
+    const minor = css("--paper-minor"), major = css("--paper-major");
+    for (let v = Math.ceil(x0 / 0.04) * 0.04, i = Math.round(v / 0.04); v <= x1 + 1e-9; v += 0.04, i++) { g.strokeStyle = i % 5 === 0 ? major : minor; g.lineWidth = i % 5 === 0 ? 1 : 0.5; g.beginPath(); g.moveTo(X(v), T); g.lineTo(X(v), T + ph); g.stroke(); }
+    for (let v = Math.ceil(y0 / 0.1) * 0.1, i = Math.round(v / 0.1); v <= y1 + 1e-9; v += 0.1, i++) { g.strokeStyle = i % 5 === 0 ? major : minor; g.lineWidth = i % 5 === 0 ? 1 : 0.5; g.beginPath(); g.moveTo(L, Y(v)); g.lineTo(L + pw, Y(v)); g.stroke(); }
+  } else {
+    g.strokeStyle = grid; g.lineWidth = 1;
+    for (const v of niceTicks(x0, x1, o.xt ?? 6)) { g.beginPath(); g.moveTo(X(v), T); g.lineTo(X(v), T + ph); g.stroke(); }
+    for (const v of niceTicks(y0, y1, o.yt ?? 4)) { g.beginPath(); g.moveTo(L, Y(v)); g.lineTo(L + pw, Y(v)); g.stroke(); }
+  }
+  for (const b of (o.bands || [])) { g.fillStyle = b.color; g.globalAlpha = b.alpha ?? 0.15; g.fillRect(X(Math.max(b.x0, x0)), T, X(Math.min(b.x1, x1)) - X(Math.max(b.x0, x0)), ph); g.globalAlpha = 1;
+    if (b.label) { g.fillStyle = b.color; g.textAlign = "center"; g.fillText(b.label, (X(b.x0) + X(b.x1)) / 2, T + 13); } }
+  // axes
+  g.strokeStyle = axis; g.lineWidth = 1; g.beginPath(); g.moveTo(L, T); g.lineTo(L, T + ph); g.lineTo(L + pw, T + ph); g.stroke();
+  g.fillStyle = muted; g.textAlign = "center"; g.textBaseline = "top";
+  for (const v of niceTicks(x0, x1, o.xt ?? 6)) g.fillText(o.xfmt ? o.xfmt(v) : String(+v.toFixed(3)), X(v), T + ph + 5);
+  g.textAlign = "right"; g.textBaseline = "middle";
+  for (const v of niceTicks(y0, y1, o.yt ?? 4)) g.fillText(o.yfmt ? o.yfmt(v) : String(+v.toFixed(3)), L - 6, Y(v));
+  if (o.xlabel) { g.textAlign = "center"; g.textBaseline = "bottom"; g.fillStyle = fg; g.fillText(o.xlabel, L + pw / 2, H - 2); }
+  if (o.ylabel) { g.save(); g.translate(12, T + ph / 2); g.rotate(-Math.PI / 2); g.textAlign = "center"; g.textBaseline = "middle"; g.fillStyle = fg; g.fillText(o.ylabel, 0, 0); g.restore(); }
+  if (o.title) { g.textAlign = "left"; g.textBaseline = "top"; g.fillStyle = fg; g.font = `700 13px ${css("--font-body")}`; g.fillText(o.title, L, 4); g.font = `12px ${css("--font-body")}`; }
+  for (const h of (o.hlines || [])) { g.strokeStyle = css(h.color) || h.color; g.setLineDash(h.dash || [5, 4]); g.lineWidth = 1.2; g.beginPath(); g.moveTo(L, Y(h.y)); g.lineTo(L + pw, Y(h.y)); g.stroke(); g.setLineDash([]);
+    if (h.label) { g.fillStyle = css(h.color) || h.color; g.textAlign = "right"; g.textBaseline = "bottom"; g.fillText(h.label, L + pw - 4, Y(h.y) - 2); } }
+  // series
+  g.save(); g.beginPath(); g.rect(L, T, pw, ph); g.clip();
+  for (const s of o.series) {
+    const col = s.color.startsWith("--") ? css(s.color) : s.color;
+    g.strokeStyle = col; g.fillStyle = col; g.lineWidth = s.w ?? 1.6; g.globalAlpha = s.alpha ?? 1;
+    if (s.dash) g.setLineDash(s.dash);
+    const xs = s.x, ys = s.y, n = ys.length;
+    if (s.stems) { for (let i = 0; i < n; i++) { if (xs[i] < x0 || xs[i] > x1) continue; g.beginPath(); g.moveTo(X(xs[i]), Y(Math.max(y0, Math.min(y1, 0)))); g.lineTo(X(xs[i]), Y(ys[i])); g.stroke(); g.beginPath(); g.arc(X(xs[i]), Y(ys[i]), s.r ?? 3, 0, 7); g.fill(); } }
+    else if (s.dots) { for (let i = 0; i < n; i++) { if (xs[i] < x0 || xs[i] > x1) continue; g.beginPath(); g.arc(X(xs[i]), Y(ys[i]), s.r ?? 3.5, 0, 7); g.fill(); } }
+    else {
+      // decimate to ~2 points per pixel with min/max to keep spikes visible
+      g.beginPath(); let started = false;
+      const per = Math.max(1, Math.floor(n / (pw * 2)));
+      for (let i = 0; i < n; i += per) {
+        if (per === 1) { const px = X(xs[i]), py = Y(ys[i]); started ? g.lineTo(px, py) : (g.moveTo(px, py), started = true); continue; }
+        let mn = Infinity, mx = -Infinity, imn = i, imx = i;
+        for (let j = i; j < Math.min(n, i + per); j++) { if (ys[j] < mn) { mn = ys[j]; imn = j; } if (ys[j] > mx) { mx = ys[j]; imx = j; } }
+        const a = imn < imx ? [imn, imx] : [imx, imn];
+        for (const j of a) { const px = X(xs[j]), py = Y(ys[j]); started ? g.lineTo(px, py) : (g.moveTo(px, py), started = true); }
+      }
+      g.stroke();
+    }
+    g.setLineDash([]); g.globalAlpha = 1;
+  }
+  for (const m of (o.markers || [])) { const col = m.color.startsWith("--") ? css(m.color) : m.color; g.fillStyle = col; g.strokeStyle = col;
+    if (m.shape === "tri") { const px = X(m.x), py = Y(m.y) - 8; g.beginPath(); g.moveTo(px - 5, py - 8); g.lineTo(px + 5, py - 8); g.lineTo(px, py); g.fill(); }
+    else { g.beginPath(); g.arc(X(m.x), Y(m.y), m.r ?? 4, 0, 7); g.fill(); }
+    if (m.label) { g.textAlign = "center"; g.textBaseline = "bottom"; g.font = `700 12px ${css("--font-body")}`; g.fillText(m.label, X(m.x), Y(m.y) - (m.shape === "tri" ? 18 : 7)); g.font = `12px ${css("--font-body")}`; } }
+  for (const a of (o.annots || [])) { g.fillStyle = a.color ? css(a.color) : fg; g.textAlign = a.align || "left"; g.textBaseline = "top"; g.font = `${a.bold ? 700 : 400} 12px ${css("--font-body")}`; g.fillText(a.text, X(a.x), Y(a.y)); }
+  g.restore();
+}
+function redrawAll() { for (const cv of [...PLOTS]) drawPlot(cv); }
+let rT; window.addEventListener("resize", () => { clearTimeout(rT); rT = setTimeout(redrawAll, 80); });
+matchMedia("(prefers-color-scheme: dark)").addEventListener("change", () => setTimeout(redrawAll, 30));
+
+/* ================= small UI builders ================= */
+function slider(id, label, min, max, step, val, unit = "") {
+  return `<div class="ctrl"><label for="${id}">${label}: <output id="${id}-o">${val}${unit}</output></label><input type="range" id="${id}" min="${min}" max="${max}" step="${step}" value="${val}" data-unit="${unit}"></div>`;
+}
+function bindSliders(root, onChange) {
+  $$("input[type=range]", root).forEach(el => el.addEventListener("input", () => { $(`#${el.id}-o`).textContent = el.value + (el.dataset.unit || ""); onChange(); }));
+  $$("input[type=checkbox],select", root).forEach(el => el.addEventListener("change", onChange));
+}
+function setSlider(id, v) { const el = $("#" + id); if (!el) return; el.value = v; $(`#${id}-o`).textContent = el.value + (el.dataset.unit || ""); }
+const val = id => +$("#" + id).value;
+const chk = id => $("#" + id).checked;
+function stat(k, v, extra = "") { return `<div class="stat"><div class="k">${k}</div><div class="v">${v}${extra}</div></div>`; }
+
+function quizHTML(id, qs) {
+  return `<div class="quiz" id="${id}">${qs.map((q, i) => `<fieldset class="q" style="margin:0"><legend class="qt">Q${i + 1}. ${q.q}</legend>${q.a.map((a, j) => `<label><input type="radio" name="${id}-${i}" value="${j}"><span>${a}</span></label>`).join("")}<div class="fb" hidden></div></fieldset>`).join("")}</div>`;
+}
+function bindQuiz(id, qs) {
+  const root = $("#" + id); if (!root) return;
+  $$(".q", root).forEach((el, i) => el.addEventListener("change", e => {
+    const j = +e.target.value, fb = $(".fb", el), q = qs[i]; fb.hidden = false;
+    if (j === q.c) { fb.className = "fb ok"; fb.innerHTML = `<b>Correct.</b> ${q.why}`; }
+    else { fb.className = "fb no"; fb.innerHTML = `<b>Not quite.</b> ${q.hint || q.why}`; }
+  }));
+}
+
+function cvHook(cv, fn) { cv._custom = fn; CUSTOM.add(cv); }
+const CUSTOM = new Set();
+window.addEventListener("resize", () => setTimeout(() => { for (const cv of [...CUSTOM]) { if (cv.isConnected) cv._custom(); else CUSTOM.delete(cv); } }, 100));
+matchMedia("(prefers-color-scheme: dark)").addEventListener("change", () => setTimeout(() => { for (const cv of [...CUSTOM]) if (cv.isConnected) cv._custom(); }, 40));
+
+
+/* ================= Case library engine (shared) =================
+   A case: { title, system, concepts:[..], hook, present, md, eng, eq, ctrls:[[key,label,min,max,step,val,unit]],
+             presets:[[label,{key:val}]], h (canvas height), render(v, cv, out), pearl } */
+function caseLibraryModule(opts) {
+  const { id, num, cases, intro } = opts;
+  const concepts = [...new Set(cases.flatMap(c => c.concepts))].sort();
+  return {
+    id, num, nav: "Case Library", title: `Module ${num}: Clinical Case Library`, subtitle: `${cases.length} interactive cases where the engineering explains the medicine`,
+    html: () => `
+${callout("info", "How to use this library", `<p>${intro}</p><p>Each case has three parts: what the clinician sees, the engineering principle underneath it, and a model you can change. Change the inputs until the clinical picture makes sense to you as an engineer.</p>`)}
+<h2 id="browse">Browse Cases</h2>
+<div style="display:flex;flex-wrap:wrap;gap:10px;align-items:center"><input class="cl-search" id="cl-q" type="search" placeholder="Search cases (e.g. potassium, stent, bone)" aria-label="Search cases"><span class="cl-count" id="cl-count"></span></div>
+<div class="cl-filters" id="cl-f"><button class="cl-chip" data-c="" aria-pressed="true">All</button>${concepts.map(c => `<button class="cl-chip" data-c="${c}" aria-pressed="false">${c}</button>`).join("")}</div>
+<div class="cl-detail" id="cl-detail"></div>
+<div class="cl-grid" id="cl-grid"></div>
+<h2 id="summary">Summary</h2>
+<p>The pattern repeats in every case: a clinical observation, a physical law that explains it, and a parameter that changes the outcome. That chain is engineering judgment, and it is what lets you predict, not just recognize.</p>`,
+    init() {
+      let cur = 0, filt = "", q = "";
+      const grid = $("#cl-grid"), det = $("#cl-detail");
+      const visible = () => cases.map((c, i) => [c, i]).filter(([c]) => (!filt || c.concepts.includes(filt)) && (!q || (c.title + " " + c.system + " " + c.concepts.join(" ") + " " + c.hook).toLowerCase().includes(q)));
+      const drawGrid = () => {
+        const vs = visible();
+        grid.innerHTML = vs.map(([c, i]) => `<button class="cl-card" data-i="${i}" aria-current="${i === cur}"><span class="n">CASE ${i + 1} · ${c.system}</span><span class="t">${c.title}</span><span class="s">${c.hook}</span></button>`).join("");
+        $("#cl-count").textContent = `${vs.length} of ${cases.length} cases`;
+        $$(".cl-card", grid).forEach(b => b.addEventListener("click", () => { show(+b.dataset.i); det.scrollIntoView({ block: "start" }); }));
+      };
+      const show = i => {
+        cur = i; const c = cases[i];
+        det.innerHTML = `<div class="cl-count">Case ${i + 1} of ${cases.length}</div><h3>${c.title}</h3>
+<div class="cl-tags"><span class="cl-tag">${c.system}</span>${c.concepts.map(k => `<span class="cl-tag">${k}</span>`).join("")}</div>
+${callout("scenario", "Presentation", `<p>${c.present}</p>`)}
+<div class="cl-two"><div class="cl-box"><div class="h">What the clinician sees</div><p>${c.md}</p></div><div class="cl-box"><div class="h">What the engineer sees</div><p>${c.eng}</p>${c.eq ? `<div class="eq">${c.eq}</div>` : ""}</div></div>
+<div class="widget" id="cl-w" style="margin:12px 0">
+${c.presets ? `<div class="presets">${c.presets.map((p, j) => `<button class="pill c${[4, 5, 3, 6, 1, 2][j % 6]}" data-j="${j}">${p[0]}</button>`).join("")}</div>` : ""}
+<div class="ctrls">${c.ctrls.map(k => slider("cs-" + k[0], k[1], k[2], k[3], k[4], k[5], k[6] || "")).join("")}</div>
+<div class="plotwrap"><canvas class="plot" id="cl-cv" data-h="${c.h || 230}"></canvas></div><div class="readout" id="cl-out"></div></div>
+${callout("tip", "Clinical pearl", `<p>${c.pearl}</p>`)}
+<div class="cl-nav"><button class="btn" id="cl-prev">← Previous case</button><button class="btn" id="cl-next">Next case →</button></div>`;
+        const run = () => { const v = {}; c.ctrls.forEach(k => v[k[0]] = val("cs-" + k[0])); try { c.render(v, $("#cl-cv"), $("#cl-out")); } catch (e) { $("#cl-out").textContent = "Model error: " + e.message; } };
+        bindSliders($("#cl-w"), run);
+        $$("#cl-w .pill").forEach(b => b.addEventListener("click", () => { const p = c.presets[+b.dataset.j][1]; Object.entries(p).forEach(([k, x]) => setSlider("cs-" + k, x)); $$("#cl-w .pill").forEach(x => x.setAttribute("aria-pressed", x === b)); run(); }));
+        $("#cl-prev").addEventListener("click", () => show((cur - 1 + cases.length) % cases.length));
+        $("#cl-next").addEventListener("click", () => show((cur + 1) % cases.length));
+        run(); drawGrid();
+      };
+      $$("#cl-f .cl-chip").forEach(b => b.addEventListener("click", () => { filt = b.dataset.c; $$("#cl-f .cl-chip").forEach(x => x.setAttribute("aria-pressed", x === b)); drawGrid(); }));
+      $("#cl-q").addEventListener("input", e => { q = e.target.value.trim().toLowerCase(); drawGrid(); });
+      show(0);
+    }
+  };
+}
+/* helpers for case models */
+function linspace(a, b, n) { const o = []; for (let i = 0; i < n; i++) o.push(a + (b - a) * i / (n - 1)); return o; }
+function chip(text, kind) { return `<span class="chip ${kind}" style="align-self:center">${text}</span>`; }
+function beatOnce(o, dur = 1.2, fs = 500) { return synthECG({ hr: 60 / dur * 0.999, dur, fs, hrv: 0, seed: 2, ...o }); }
+
+/* ================= Numeric challenge engine (shared) =================
+   items: { title, q (html), unit, ans (number), tol (fraction), sol (html) }  or  { title, q, choices:[...], ans (index), sol } */
+function challengeModule(opts) {
+  const { id, num, items, scenario, subtitle } = opts;
+  return {
+    id, num, nav: "Challenge", title: `Module ${num}: The Challenge`, subtitle: subtitle || `${items.length} problems. Your numbers. Graded.`,
+    html: () => `${callout("scenario", "Your shift", `<p>${scenario}</p>`)}
+<h2 id="rules">How It's Graded</h2><ul><li>Numeric answers are correct within the tolerance shown (usually ±10%).</li><li>Each problem is worth 1 point. A worked solution appears after grading.</li><li>Use the modules' widgets as calculators if you like.</li></ul>
+<h2 id="problems">The Problems</h2>
+${items.map((it, i) => `<div class="case" id="ch${i}"><div class="case-head"><b>Problem ${i + 1}: ${it.title}</b><span id="ch${i}-chip"></span></div><p style="margin:4px 0 8px">${it.q}</p>
+<div class="case-form">${it.choices ? `<label for="ch${i}-a">Your answer<select id="ch${i}-a"><option value="">Choose…</option>${it.choices.map((c, j) => `<option value="${j}">${c}</option>`).join("")}</select></label>` : `<label for="ch${i}-a">Your answer (${it.unit})<input id="ch${i}-a" type="number" step="any" inputmode="decimal"></label>`}</div>
+<div class="res" id="ch${i}-res"></div></div>`).join("")}
+<div class="scorebar"><span id="chscore">Answer all ${items.length} problems, then grade.</span><span style="display:flex;gap:8px"><button class="btn" id="chreset" style="color:#fff;border-color:#fff">Reset</button><button class="btn solid" id="chgrade">Grade my answers</button></span></div>`,
+    init() {
+      $("#chgrade").addEventListener("click", () => { let tot = 0;
+        items.forEach((it, i) => { const raw = $(`#ch${i}-a`).value; let ok;
+          if (it.choices) ok = raw !== "" && +raw === it.ans; else { const x = +raw; ok = raw !== "" && Math.abs(x - it.ans) <= Math.abs(it.ans) * (it.tol ?? 0.1); }
+          tot += ok; $(`#ch${i}-chip`).innerHTML = chip(ok ? "Correct" : "Not quite", ok ? "good" : "bad");
+          $(`#ch${i}-res`).innerHTML = `<b>Answer:</b> ${it.choices ? it.choices[it.ans] : `${+it.ans.toPrecision(3)} ${it.unit}`}<br>${it.sol}`; });
+        $("#chscore").innerHTML = `Score: <b>${tot} / ${items.length}</b>${tot >= items.length - 1 ? " · Excellent." : tot >= items.length / 2 ? " · Solid. Review the solutions." : " · Revisit the modules and try again."}`; });
+      $("#chreset").addEventListener("click", () => { items.forEach((it, i) => { $(`#ch${i}-a`).value = ""; $(`#ch${i}-chip`).innerHTML = ""; $(`#ch${i}-res`).innerHTML = ""; }); $("#chscore").textContent = `Answer all ${items.length} problems, then grade.`; });
+    }
+  };
+}
+/* shared home + homework builders */
+function homeworkModule(list, n) {
+  return { id: "hw", num: "", nav: "Homework", title: "Homework", subtitle: `${list.length} problems covering modules 1–${n}`,
+    html: () => `<p>Keep this course open while you work. Every problem can be solved with the modules and widgets. Answer keys are hidden under each problem.</p><h2 id="problems">Problems</h2>
+${list.map((h, i) => `<div class="problem"><div><span class="pn">Problem ${i + 1}</span> <span style="color:var(--muted)">· Module ${h[0]} · ${h[1]}</span></div><p style="margin:6px 0 0">${h[2]}</p><details class="hint"><summary>Show answer key</summary><p style="margin:6px 0 0">${h[3]}</p></details></div>`).join("")}
+<h2 id="submit">Submitting</h2><p>Submit answers as a single PDF with screenshots of any widget settings you used as evidence.</p>`, init() {} };
+}
+function genericHome(o) {
+  return `<h1>${o.title}</h1><p class="subtitle">${o.subtitle}</p>
+<h2 id="welcome">Welcome</h2>${o.welcome}
+<h2 id="how-this-works">How This Works</h2>
+<ol><li><b>Clinical scenario.</b> Each module opens with a patient problem.</li><li><b>Interactive widgets.</b> Change the inputs. The model and graphs respond in real time.</li><li><b>Try it.</b> Short guided experiments point you at the key insight.</li><li><b>Quiz.</b> Three questions with instant feedback.</li><li><b>The Challenge.</b> Graded problems with worked solutions.</li><li><b>Clinical Case Library.</b> ${o.caseCount} real clinical cases, each with a model you can change.</li></ol>
+<h2 id="modules">Modules</h2>
+<div class="module-grid">${MODULES.filter(m => m.id !== "hw").map(m => `<a class="module-card ${m.nav === "Challenge" ? "challenge" : ""}" href="#${m.id}"><span class="module-number">${String(m.num).padStart(2, "0")}</span><span class="module-title">${m.title.replace(/^Module \d+: /, "")}</span><span class="module-desc">${o.descs[m.id] || ""}</span></a>`).join("")}</div>
+<h2 id="what-youll-need">What You'll Need</h2><ul><li>A web browser. Everything runs on this page; nothing to install.</li><li>About 20–30 minutes per module.</li>${o.need || ""}</ul>
+<h2 id="homework">Homework</h2><p>A self-paced problem set designed to be solved with the widgets.</p>
+<a class="hw-card" href="#hw"><span class="k">PROBLEM SET</span><span class="t">Open Homework</span><span class="d">${o.hwCount} problems · answer keys included</span></a>
+<p style="margin-top:22px">Let's begin.</p><p><a class="btn solid" href="#m1" style="text-decoration:none;display:inline-block">Begin Module 1 →</a></p>`;
+}
+
+/* ================= course content ================= */
+const MODULES = [];
+const M = m => MODULES.push(m);
+
+/* ---------- Module 1 ---------- */
+const Q1 = [
+  { q: "On standard ECG paper (25 mm/s), how long is one large box?", a: ["0.04 s", "0.20 s", "1 s", "0.5 s"], c: 1, why: "Each small box is 0.04 s, and a large box holds five of them, so 0.20 s. Five large boxes make one second." },
+  { q: "The R–R interval spans 4 large boxes. What is the heart rate?", a: ["40 bpm", "60 bpm", "75 bpm", "100 bpm"], c: 2, why: "Rate = 300 ÷ number of large boxes = 300 ÷ 4 = 75 bpm. Equivalently, 4 × 0.2 s = 0.8 s per beat, and 60 ÷ 0.8 = 75." },
+  { q: "A patient's QRS widens and their T waves become tall and peaked. Which electrolyte problem should come to mind first?", a: ["Hypokalemia", "Hyperkalemia", "Hypercalcemia", "Hyponatremia"], c: 1, why: "Peaked T waves are the earliest classic sign of hyperkalemia. As potassium climbs, P waves flatten and the QRS widens. Try the Hyperkalemia preset above." }
+];
+M({
+  id: "m1", num: "1", nav: "Signals", title: "Module 1: The Heart's Signal", subtitle: "What the electrocardiogram is actually measuring",
+  html: () => `
+${callout("scenario", "Clinical scenario", `<p>A 54-year-old man on an ACE inhibitor and spironolactone comes to clinic feeling weak. His last labs were six weeks ago. Before the blood draw is even back, the nurse hands you a rhythm strip. The T waves look unusually tall. Is that just how he looks, or is it telling you something?</p>`)}
+<h2 id="basics">The Basics</h2>
+<p>Every heartbeat starts as an electrical wave. The sinoatrial node fires, the wave spreads across the atria, pauses at the AV node, then races down the His–Purkinje system and through the ventricles. Muscle depolarizes, then repolarizes. Electrodes on the skin pick up the <b>sum</b> of all that activity as a voltage that changes over time, measured in <b>millivolts (mV)</b>.</p>
+<p>That voltage trace has named landmarks. Each one is a physiological event:</p>
+<div class="tablewrap"><table><thead><tr><th>Wave</th><th>Event</th><th>Normal size</th></tr></thead><tbody>
+<tr><td><b>P</b></td><td>Atrial depolarization</td><td>&lt; 0.12 s wide, &lt; 0.25 mV</td></tr>
+<tr><td><b>PR interval</b></td><td>Atria → AV node delay → ventricles</td><td>0.12–0.20 s</td></tr>
+<tr><td><b>QRS</b></td><td>Ventricular depolarization</td><td>&lt; 0.12 s wide</td></tr>
+<tr><td><b>T</b></td><td>Ventricular repolarization</td><td>Usually upright, smaller than R</td></tr>
+</tbody></table></div>
+<p>To an engineer, one beat is just a waveform made of a few smooth bumps. Change the size or width of a bump and you change the physiology it represents. Let's build one.</p>
+
+<h2 id="build">Interactive: Build a Heartbeat</h2>
+<p>Drag the sliders. The strip is drawn on real ECG paper scale: 25 mm/s and 10 mm/mV.</p>
+<div class="widget" id="w1">
+  <div class="wlabel">Try a clinical preset:</div>
+  <div class="presets">
+    <button class="pill c4" data-p="normal" aria-pressed="true">Normal sinus (72 bpm)</button>
+    <button class="pill c2" data-p="brady">Bradycardia (45 bpm)</button>
+    <button class="pill c3" data-p="tachy">Tachycardia (130 bpm)</button>
+    <button class="pill c1" data-p="hyperk">Hyperkalemia</button>
+  </div>
+  <div class="ctrls">
+    ${slider("m1hr", "Heart rate (bpm)", 30, 180, 1, 72)}
+    ${slider("m1r", "R amplitude (mV)", 0.3, 2.5, 0.05, 1.2)}
+    ${slider("m1t", "T amplitude (mV)", -0.4, 1.2, 0.02, 0.32)}
+    ${slider("m1p", "P amplitude (mV)", 0, 0.3, 0.01, 0.15)}
+    ${slider("m1q", "QRS width (ms)", 60, 200, 5, 90)}
+    ${slider("m1pr", "PR interval (ms)", 100, 320, 5, 160)}
+  </div>
+  <div class="plotwrap"><canvas class="plot" id="m1plot" data-h="250"></canvas></div>
+  <div class="readout" id="m1read"></div>
+  <div class="wnote">The red flags update as you go: a QRS of 120 ms or more, a PR over 200 ms, or a heart rate outside 60–100 bpm.</div>
+</div>
+${callout("tip", "Try it", `<p><b>Experiment:</b></p><ul>
+<li>Set heart rate to <b>40</b>, then <b>150</b>. Watch the R–R spacing shrink. The beat shape barely changes; mostly the gap between beats does.</li>
+<li>Drag PR above <b>200 ms</b>. That is <b>first-degree AV block</b>: every impulse still gets through, just late.</li>
+<li>Push QRS width to <b>140 ms</b>. A wide QRS means the ventricles are not using the fast Purkinje highway, as in bundle branch block or a ventricular rhythm.</li>
+<li>Click <b>Hyperkalemia</b>. Compare the T wave to the normal preset.</li></ul>`)}
+
+<h2 id="paper">Reading the Paper</h2>
+<p>ECG paper is a measuring instrument. At the standard speed of <b>25 mm/s</b>:</p>
+<ul><li>1 small box (1 mm) = <b>0.04 s</b> horizontally and <b>0.1 mV</b> vertically</li>
+<li>1 large box (5 mm) = <b>0.20 s</b> and <b>0.5 mV</b></li>
+<li>Heart rate ≈ <b>300 ÷ large boxes</b> between consecutive R waves (or 1500 ÷ small boxes)</li></ul>
+<p>This is a <b>sampling grid drawn in ink</b>. It existed long before digital ECGs, and it is why clinicians can estimate intervals by eye in seconds.</p>
+${callout("info", "Why does this matter clinically?", `<p>Interval measurements drive real decisions. A QTc over 500 ms makes you stop a QT-prolonging drug. A new wide QRS in chest pain changes the work-up. Peaked T waves can prompt treatment for hyperkalemia before the lab result returns. All of these are just distances on this grid.</p>`)}
+
+<h2 id="quiz">Quiz: Check Your Understanding</h2>
+${quizHTML("q1", Q1)}
+<h2 id="summary">Summary</h2>
+<ul><li>The ECG is the summed electrical activity of the heart, measured as voltage over time in mV.</li>
+<li>Each wave maps to an event: P = atria, QRS = ventricular depolarization, T = repolarization.</li>
+<li>Shape tells you about conduction and electrolytes. Spacing tells you about rate and rhythm.</li>
+<li>ECG paper is a calibrated grid: 0.04 s and 0.1 mV per small box.</li></ul>`,
+  init() {
+    const P = { normal: [72, 1.2, 0.32, 0.15, 90, 160], brady: [45, 1.2, 0.32, 0.15, 90, 160], tachy: [130, 1.1, 0.25, 0.14, 85, 140], hyperk: [68, 1.0, 0.95, 0.04, 150, 200] };
+    const ids = ["m1hr", "m1r", "m1t", "m1p", "m1q", "m1pr"];
+    const draw = () => {
+      const hr = val("m1hr"), q = val("m1q"), pr = val("m1pr");
+      const s = synthECG({ hr, rAmp: val("m1r"), tAmp: val("m1t"), pAmp: val("m1p"), qrsW: q / 1000, pr: pr / 1000, hrv: 0.005, dur: 4, fs: 500, tW: q > 120 ? 0.06 : 0.045 });
+      plot($("#m1plot"), { series: [{ x: s.t, y: s.y, color: "--paper-ink", w: 1.6 }], xlim: [0, 4], ylim: [-0.8, 2.2], paper: true, xlabel: "Time (s)  ·  25 mm/s", ylabel: "mV", xt: 8, yt: 6 });
+      const flags = [];
+      flags.push(hr < 60 ? `<span class="chip warn">Bradycardia</span>` : hr > 100 ? `<span class="chip warn">Tachycardia</span>` : `<span class="chip good">Rate normal</span>`);
+      flags.push(q >= 120 ? `<span class="chip bad">Wide QRS</span>` : `<span class="chip good">QRS narrow</span>`);
+      flags.push(pr > 200 ? `<span class="chip warn">1° AV block</span>` : pr < 120 ? `<span class="chip warn">Short PR</span>` : `<span class="chip good">PR normal</span>`);
+      if (val("m1t") > 0.8) flags.push(`<span class="chip bad">Peaked T</span>`);
+      $("#m1read").innerHTML = stat("R–R interval", fmt(60 / hr, 2), " s") + stat("Large boxes", fmt(60 / hr / 0.2, 1)) + `<div style="display:flex;gap:6px;flex-wrap:wrap;align-items:center">${flags.join("")}</div>`;
+    };
+    $$("#w1 .pill").forEach(b => b.addEventListener("click", () => { P[b.dataset.p].forEach((v, i) => setSlider(ids[i], v)); $$("#w1 .pill").forEach(x => x.setAttribute("aria-pressed", x === b)); draw(); }));
+    bindSliders($("#w1"), draw); draw(); bindQuiz("q1", Q1);
+  }
+});
+
+/* ---------- Module 2 ---------- */
+const Q2 = [
+  { q: "A wearable patch samples ECG at 125 Hz. What is its Nyquist frequency?", a: ["250 Hz", "125 Hz", "62.5 Hz", "31 Hz"], c: 2, why: "Nyquist = fs ÷ 2 = 62.5 Hz. Any content above that cannot be represented and will fold back (alias) into lower frequencies." },
+  { q: "Why do diagnostic 12-lead machines sample at 500 Hz or more when most ECG energy is below 40 Hz?", a: ["To make files larger", "To capture sharp QRS edges, small notches and pacemaker spikes accurately", "Because 60 Hz noise needs it", "It is required by the paper speed"], c: 1, why: "The QRS has fast edges and small high-frequency details (notches, slurs). Pacing spikes last well under 1 ms. Low sample rates round off peaks and can miss these features." },
+  { q: "You sample a 60 Hz power-line hum at 100 Hz. At what frequency does it appear?", a: ["60 Hz", "40 Hz", "20 Hz", "It disappears"], c: 1, why: "60 Hz is above the 50 Hz Nyquist limit, so it folds to |100 − 60| = 40 Hz. Aliased noise looks like a real signal and cannot be filtered out afterward." }
+];
+M({
+  id: "m2", num: "2", nav: "Sampling", title: "Module 2: Sampling", subtitle: "Turning a continuous heartbeat into numbers",
+  html: () => `
+${callout("scenario", "Clinical scenario", `<p>Your hospital is evaluating a low-cost ECG patch for post-discharge monitoring. The spec sheet says it samples at 100 Hz to save battery. A cardiologist on the committee asks whether that is enough to measure QRS duration reliably. You are the person in the room with an engineering degree.</p>`)}
+<h2 id="basics">The Basics</h2>
+<p>A computer cannot store a continuous wave. It stores <b>samples</b>: the voltage measured every 1/fs seconds, where <b>fs</b> is the sampling rate in hertz. A 500 Hz system takes a reading every 2 ms.</p>
+<p>The rule that governs this is the <b>Nyquist criterion</b>: to represent a frequency f, you must sample faster than 2f. Half the sampling rate, fs/2, is called the <b>Nyquist frequency</b>. Anything above it does not vanish. It <b>aliases</b>, showing up as a false lower frequency.</p>
+
+<h2 id="interactive">Interactive: Sample a Heartbeat</h2>
+<p>The thin line is the "true" analog ECG. The dots are what the device actually stores. Lower the rate and watch the R peak shrink and the QRS get blurry.</p>
+<div class="widget" id="w2">
+  <div class="presets">
+    <button class="pill c5" data-f="1000">Research (1000 Hz)</button>
+    <button class="pill c4" data-f="500" aria-pressed="true">Diagnostic 12-lead (500 Hz)</button>
+    <button class="pill c3" data-f="125">Wearable (125 Hz)</button>
+    <button class="pill c6" data-f="40">Too slow (40 Hz)</button>
+  </div>
+  <div class="ctrls">${slider("m2fs", "Sampling rate (Hz)", 20, 1000, 5, 500, "")}</div>
+  <div class="plotwrap"><canvas class="plot" id="m2plot" data-h="250"></canvas></div>
+  <div class="readout" id="m2read"></div>
+</div>
+${callout("tip", "Try it", `<ul><li>Start at 500 Hz and zoom your eyes in on the R peak. Now go to <b>125 Hz</b>. The peak is still there, but its measured height is a bit lower.</li>
+<li>At <b>40 Hz</b>, the QRS can be represented by just 3–4 dots. Measuring a 90 ms QRS when samples are 25 ms apart is guesswork.</li></ul>`)}
+
+<h2 id="aliasing">Aliasing: The Ghost Frequency</h2>
+<p>Power lines in North America run at <b>60 Hz</b>, and that hum leaks into every ECG. What happens if the device samples it too slowly?</p>
+<div class="widget" id="w2b">
+  <div class="ctrls">${slider("m2afs", "Sampling rate (Hz)", 70, 400, 1, 100)}</div>
+  <div class="plotwrap"><canvas class="plot" id="m2aplot" data-h="220"></canvas></div>
+  <div class="readout" id="m2aread"></div>
+  <div class="wnote">This is why every ECG front end has an analog <b>anti-aliasing low-pass filter</b> before the analog-to-digital converter. Once aliasing happens, no digital filter can undo it.</div>
+</div>
+
+<h2 id="clinical">Why Does This Matter Clinically?</h2>
+<p>Professional guidelines recommend at least <b>500 Hz</b> for diagnostic 12-lead ECGs, and higher for children, whose QRS complexes are narrower. Pacemaker spikes last under a millisecond, so devices that report them often use dedicated detection hardware. Consumer wearables trade sample rate for battery life. That is fine for rhythm, less fine for measuring intervals.</p>
+
+<h2 id="quiz">Quiz: Check Your Understanding</h2>
+${quizHTML("q2", Q2)}
+<h2 id="summary">Summary</h2>
+<ul><li>Sampling rate fs = how many measurements per second.</li><li>Nyquist: you need fs &gt; 2 × the highest frequency you care about.</li>
+<li>Content above fs/2 aliases into false low frequencies and cannot be removed later.</li><li>Sample rate limits how precisely you can measure peaks and intervals, not just whether you see the beat.</li></ul>`,
+  init() {
+    const truth = synthECG({ hr: 75, fs: 4000, dur: 1.6, hrv: 0, seed: 3 });
+    const draw = () => {
+      const fs = val("m2fs"), step = Math.max(1, Math.round(4000 / fs));
+      const xs = [], ys = []; for (let i = 0; i < truth.y.length; i += step) { xs.push(truth.t[i]); ys.push(truth.y[i]); }
+      plot($("#m2plot"), { series: [{ x: truth.t, y: truth.y, color: "--axis", w: 1, alpha: 0.7 }, { x: xs, y: ys, color: "--trace", w: 1.6 }, { x: xs, y: ys, color: "--trace", dots: fs <= 200, r: 3 }], xlim: [0.2, 1.6], ylim: [-0.6, 1.5], xlabel: "Time (s)", ylabel: "mV" });
+      const trueR = Math.max(...truth.y), sampR = Math.max(...ys);
+      $("#m2read").innerHTML = stat("Sample spacing", fmt(1000 / fs, 1), " ms") + stat("Nyquist", fmt(fs / 2, 0), " Hz") + stat("Samples in QRS", fmt(0.09 * fs, 0)) + stat("Measured R peak", fmt(sampR, 2), " mV") + stat("Peak error", fmt(100 * (trueR - sampR) / trueR, 1), " %");
+      $$("#w2 .pill").forEach(x => x.setAttribute("aria-pressed", +x.dataset.f === fs));
+    };
+    $$("#w2 .pill").forEach(b => b.addEventListener("click", () => { setSlider("m2fs", b.dataset.f); draw(); }));
+    bindSliders($("#w2"), draw); draw();
+    const drawA = () => {
+      const fs = val("m2afs"), T = 0.1, tt = [], yy = [], st = [], sy = [];
+      for (let i = 0; i <= 2000; i++) { const t = i / 2000 * T; tt.push(t); yy.push(Math.sin(2 * Math.PI * 60 * t)); }
+      for (let t = 0; t <= T; t += 1 / fs) { st.push(t); sy.push(Math.sin(2 * Math.PI * 60 * t)); }
+      let fa = 60 % fs; if (fa > fs / 2) fa = fs - fa;
+      const ay = tt.map(t => Math.sin(2 * Math.PI * fa * t) * (60 % fs > fs / 2 ? -1 : 1));
+      const aliased = fs < 120;
+      plot($("#m2aplot"), { series: [{ x: tt, y: yy, color: "--axis", w: 1, alpha: .6 }, ...(aliased ? [{ x: tt, y: ay, color: "--trace2", w: 2, dash: [6, 4] }] : []), { x: st, y: sy, color: "--trace", stems: true, w: 1.2, r: 3.5 }], xlim: [0, T], ylim: [-1.3, 1.3], xlabel: "Time (ms)", ylabel: "Amplitude", xfmt: v => (v * 1000).toFixed(0) });
+      $("#m2aread").innerHTML = stat("True frequency", "60", " Hz") + stat("Nyquist", fmt(fs / 2, 1), " Hz") + stat("Apparent frequency", fmt(aliased ? fa : 60, 0), " Hz") + `<span class="chip ${aliased ? "bad" : "good"}" style="align-self:center">${aliased ? "Aliased" : "Captured correctly"}</span>`;
+    };
+    bindSliders($("#w2b"), drawA); drawA(); bindQuiz("q2", Q2);
+  }
+});
+
+/* ---------- Module 3 ---------- */
+const Q3 = [
+  { q: "Your ECG monitor shows the baseline drifting slowly up and down with each breath. Which filter removes it?", a: ["Low-pass at 40 Hz", "High-pass around 0.5 Hz", "Notch at 60 Hz", "None; it cannot be removed"], c: 1, why: "Respiratory baseline wander lives below about 0.5 Hz. A high-pass filter passes the faster ECG and blocks the slow drift." },
+  { q: "A 12-lead in 'monitoring mode' (0.5–40 Hz) shows ST depression that disappears in 'diagnostic mode' (0.05–150 Hz). What is the likely explanation?", a: ["The patient's ischemia resolved", "The aggressive high-pass filter distorted the ST segment", "The notch filter removed the ST segment", "Sampling rate changed"], c: 1, why: "The ST segment is a slow, low-frequency feature. A high-pass cutoff that is too high (especially a non-linear-phase one) can create or hide ST shifts. ST analysis needs diagnostic bandwidth." },
+  { q: "What is the main cost of applying a 40 Hz low-pass filter?", a: ["It adds 60 Hz noise", "It rounds off the QRS and reduces R amplitude", "It causes baseline wander", "It speeds up the heart rate"], c: 1, why: "The QRS contains energy above 40 Hz. Removing it smooths the complex, lowers its peak and can hide small notches. That is acceptable for rhythm monitoring but not for detailed morphology." }
+];
+M({
+  id: "m3", num: "3", nav: "Filtering", title: "Module 3: Filtering", subtitle: "Keeping the heart, removing everything else",
+  html: () => `
+${callout("scenario", "Clinical scenario", `<p>An ICU nurse pages you: "Bed 12's monitor shows ST depression in lead II, new since this morning." You walk over. The patient is comfortable. The monitor is set to its default filter. You order a 12-lead, and the ST segments look normal. Who is right?</p>`)}
+<h2 id="basics">The Basics</h2>
+<p>A real ECG arrives contaminated. Three culprits show up every day, each in its own frequency range:</p>
+<div class="tablewrap"><table><thead><tr><th>Noise</th><th>Source</th><th class="num">Frequency</th><th>Fix</th></tr></thead><tbody>
+<tr><td>Baseline wander</td><td>Breathing, movement, electrode–skin drift</td><td class="num">&lt; 0.5 Hz</td><td>High-pass filter</td></tr>
+<tr><td>Power-line hum</td><td>Mains wiring, nearby equipment</td><td class="num">60 Hz (50 Hz in Europe)</td><td>Notch filter</td></tr>
+<tr><td>Muscle (EMG) noise</td><td>Shivering, tremor, tense patient</td><td class="num">≈ 20–500 Hz</td><td>Low-pass filter (partly)</td></tr></tbody></table></div>
+<p>A <b>filter</b> keeps some frequencies and attenuates others. The cutoff frequency is the boundary. Choosing it is always a trade-off: filter hard enough to remove noise without carving away the ECG itself.</p>
+
+<h2 id="interactive">Interactive: Clean Up a Noisy ECG</h2>
+<div class="widget" id="w3">
+  <div class="wlabel">Add noise:</div>
+  <div class="toggles"><label><input type="checkbox" id="n3w" checked> Baseline wander</label><label><input type="checkbox" id="n3m" checked> 60 Hz hum</label><label><input type="checkbox" id="n3e"> Muscle noise</label></div>
+  <div class="wlabel">Apply filters (zero-phase, applied forward and backward):</div>
+  <div class="toggles"><label><input type="checkbox" id="f3hp"> High-pass</label><label><input type="checkbox" id="f3n"> 60 Hz notch</label><label><input type="checkbox" id="f3lp"> Low-pass</label></div>
+  <div class="ctrls">${slider("m3hp", "High-pass cutoff (Hz)", 0.05, 3, 0.05, 0.5)}${slider("m3lp", "Low-pass cutoff (Hz)", 15, 150, 1, 40)}</div>
+  <div class="presets"><button class="pill c5" data-m="diag">Diagnostic mode (0.05–150 Hz)</button><button class="pill c3" data-m="mon">Monitor mode (0.5–40 Hz)</button><button class="pill c6" data-m="over">Over-filtered (2–20 Hz)</button></div>
+  <div class="plotwrap"><canvas class="plot" id="m3raw" data-h="190"></canvas></div>
+  <div class="plotwrap"><canvas class="plot" id="m3flt" data-h="210"></canvas></div>
+  <div class="readout" id="m3read"></div>
+</div>
+${callout("tip", "Try it", `<ul><li>Turn on all three filters with defaults. The trace looks clean.</li>
+<li>Now click <b>Over-filtered</b>. The ECG still looks smooth, but compare the R peak and the ST segment with the dashed clean reference. Smooth is not the same as accurate.</li>
+<li>Raise the high-pass cutoff slowly from 0.05 to 3 Hz and watch the ST segment and T wave change shape.</li></ul>`)}
+<h2 id="clinical">Why Does This Matter Clinically?</h2>
+${callout("warn", "Filters can manufacture findings", `<p>Bedside monitors default to narrow "monitoring" bandwidths to keep the trace stable. That is the right call for watching rhythm, but a high-pass cutoff of 0.5 Hz or more can distort ST segments. Before acting on an ST change from a monitor, confirm it on a 12-lead recorded at diagnostic bandwidth.</p>`)}
+<h2 id="quiz">Quiz: Check Your Understanding</h2>
+${quizHTML("q3", Q3)}
+<h2 id="summary">Summary</h2>
+<ul><li>Each kind of noise lives in its own frequency band. That is what makes filtering possible.</li><li>High-pass removes drift, notch removes mains hum, low-pass removes fast noise.</li>
+<li>Every filter also changes the ECG a little. Narrow bandwidth = cleaner trace, more distortion.</li><li>Know which mode a machine is in before interpreting ST segments.</li></ul>`,
+  init() {
+    const fs = 500, base = synthECG({ hr: 70, fs, dur: 6, hrv: 0.01, seed: 11 });
+    const r = rng(99), n = base.y.length, wander = new Float64Array(n), mains = new Float64Array(n), emg = new Float64Array(n);
+    let lp = 0; for (let k = 0; k < n; k++) { const t = base.t[k]; wander[k] = 0.45 * Math.sin(2 * Math.PI * 0.25 * t) + 0.25 * Math.sin(2 * Math.PI * 0.08 * t + 1); mains[k] = 0.18 * Math.sin(2 * Math.PI * 60 * t); const g = gauss(r); lp = 0.5 * lp + 0.5 * g; emg[k] = 0.09 * (g - lp) * 1.7; }
+    const draw = () => {
+      const x = new Float64Array(n); for (let k = 0; k < n; k++) x[k] = base.y[k] + (chk("n3w") ? wander[k] : 0) + (chk("n3m") ? mains[k] : 0) + (chk("n3e") ? emg[k] : 0);
+      let y = x;
+      if (chk("f3hp")) y = hpFirstSafe(y, val("m3hp"), fs);
+      if (chk("f3n")) y = filtfilt(biquad("notch", 60, fs, 8), y);
+      if (chk("f3lp")) y = filtfilt(biquad("lp", val("m3lp"), fs), y);
+      plot($("#m3raw"), { title: "Recorded signal", series: [{ x: base.t, y: x, color: "--trace2", w: 1.1 }], xlim: [0, 6], ylim: [-1.4, 2.2], ylabel: "mV" });
+      plot($("#m3flt"), { title: "After filtering  (dashed = clean reference)", series: [{ x: base.t, y: base.y, color: "--axis", w: 1, dash: [4, 3] }, { x: base.t, y, color: "--trace", w: 1.6 }], xlim: [0, 6], ylim: [-1.4, 2.2], xlabel: "Time (s)", ylabel: "mV" });
+      let se = 0, ss = 0; const k0 = Math.round(0.5 * fs), k1 = n - k0; for (let k = k0; k < k1; k++) { se += (y[k] - base.y[k]) ** 2; ss += base.y[k] ** 2; }
+      const rTrue = Math.max(...base.y.slice(k0, k1)), rNow = Math.max(...y.slice(k0, k1));
+      $("#m3read").innerHTML = stat("Error vs clean", fmt(100 * Math.sqrt(se / ss), 0), " %") + stat("R peak", fmt(rNow, 2), " mV") + stat("Clean R peak", fmt(rTrue, 2), " mV");
+    };
+    const modes = { diag: [0.05, 150], mon: [0.5, 40], over: [2, 20] };
+    $$("#w3 .pill").forEach(b => b.addEventListener("click", () => { const [h, l] = modes[b.dataset.m]; setSlider("m3hp", h); setSlider("m3lp", l); ["f3hp", "f3n", "f3lp"].forEach(id => $("#" + id).checked = true); $$("#w3 .pill").forEach(x => x.setAttribute("aria-pressed", x === b)); draw(); }));
+    bindSliders($("#w3"), draw); draw(); bindQuiz("q3", Q3);
+  }
+});
+
+/* ---------- Module 4 ---------- */
+const Q4 = [
+  { q: "A spectrum shows sharp peaks at 1.2, 2.4, 3.6 and 4.8 Hz. What heart rate does that suggest?", a: ["60 bpm", "72 bpm", "120 bpm", "144 bpm"], c: 1, why: "The fundamental is 1.2 Hz, and 1.2 × 60 = 72 bpm. The other peaks are harmonics: the ECG is periodic but not a sine wave, so its energy repeats at multiples of the heart rate." },
+  { q: "On the spectrum, a single narrow spike stands out at exactly 60 Hz. What is it?", a: ["Ventricular fibrillation", "Power-line interference", "The T wave", "A fast heart rate"], c: 1, why: "A very narrow line at exactly the mains frequency is almost always electrical interference. Physiology is rarely that perfectly tuned." },
+  { q: "Where does most of the energy of a normal QRS complex sit?", a: ["Below 0.5 Hz", "Roughly 5–15 Hz", "Exactly 60 Hz", "Above 200 Hz"], c: 1, why: "The QRS is a fast, sharp event of about 0.1 s, so its energy centers around 10 Hz. That is why QRS detectors usually band-pass the signal around 5–15 Hz first (you will use this in Module 7)." }
+];
+M({
+  id: "m4", num: "4", nav: "FFT", title: "Module 4: Frequency (FFT)", subtitle: "Seeing the ECG as a recipe of frequencies",
+  html: () => `
+${callout("scenario", "Clinical scenario", `<p>A tele-monitoring company sends you a report: "Persistent high-frequency contamination on patient 0417, source unknown." They attach a 10-second trace that looks like a fuzzy line. Is it muscle, mains, or a failing electrode? The time-domain trace alone will not tell you. Its spectrum will.</p>`)}
+<h2 id="basics">The Basics</h2>
+<p>Any signal can be described as a sum of sine waves of different frequencies. The <b>Fourier transform</b> takes a signal in time and tells you how much of each frequency it contains. The <b>FFT</b> (fast Fourier transform) is the algorithm computers use to do this quickly.</p>
+<p>The ECG repeats once per beat, so its spectrum has peaks at the <b>heart rate</b> and its <b>harmonics</b> (2×, 3×, 4×...). Noise sources leave their own fingerprints in other parts of the spectrum.</p>
+<h2 id="interactive">Interactive: Time vs Frequency</h2>
+<div class="widget" id="w4">
+  <div class="ctrls">${slider("m4hr", "Heart rate (bpm)", 40, 160, 1, 72)}</div>
+  <div class="toggles"><label><input type="checkbox" id="n4m"> 60 Hz hum</label><label><input type="checkbox" id="n4e"> Muscle noise</label><label><input type="checkbox" id="n4w"> Baseline wander</label><label><input type="checkbox" id="n4af"> Atrial fibrillation</label></div>
+  <div class="plotwrap"><canvas class="plot" id="m4t" data-h="180"></canvas></div>
+  <div class="plotwrap"><canvas class="plot" id="m4f" data-h="230"></canvas></div>
+  <div class="readout" id="m4read"></div>
+</div>
+${callout("tip", "Try it", `<ul><li>Move the heart rate. The first spectral peak follows it exactly: 60 bpm sits at 1 Hz.</li>
+<li>Turn on <b>60 Hz hum</b>. Barely visible in time, unmistakable in frequency.</li>
+<li>Turn on <b>muscle noise</b>. It spreads broadly across high frequencies instead of forming a line.</li>
+<li>Switch to <b>atrial fibrillation</b>. With irregular beats, the neat harmonic ladder smears out.</li></ul>`)}
+<h2 id="clinical">Why Does This Matter Clinically?</h2>
+<p>Frequency analysis is built into devices you will use. Implantable defibrillators and AED algorithms look at frequency content to recognize ventricular fibrillation. Heart rate variability analysis (Module 7) splits rhythm changes into low- and high-frequency bands linked to sympathetic and vagal tone. And every filter in Module 3 is designed in the frequency domain.</p>
+<h2 id="quiz">Quiz: Check Your Understanding</h2>
+${quizHTML("q4", Q4)}
+<h2 id="summary">Summary</h2>
+<ul><li>The FFT turns a time signal into a spectrum: amplitude vs frequency.</li><li>A regular rhythm gives peaks at the heart rate and its harmonics.</li>
+<li>Mains hum = one narrow line. Muscle noise = broad high-frequency energy. Wander = energy near 0 Hz.</li><li>Seeing the spectrum tells you which filter to use.</li></ul>`,
+  init() {
+    const fs = 500;
+    const draw = () => {
+      const hr = val("m4hr");
+      const s = synthECG({ hr, fs, dur: 16, hrv: 0.004, seed: 21, rhythm: chk("n4af") ? "af" : "sinus", mains: chk("n4m") ? 0.1 : 0, emg: chk("n4e") ? 0.06 : 0, wander: chk("n4w") ? 0.3 : 0 });
+      plot($("#m4t"), { title: "Time domain", series: [{ x: s.t, y: s.y, color: "--trace", w: 1.2 }], xlim: [0, 5], ylim: [-1, 2], xlabel: "Time (s)", ylabel: "mV" });
+      const { f, p } = fftMag(s.y, fs), db = p.map(v => 20 * Math.log10(v + 1e-5));
+      const marks = []; if (!chk("n4af")) for (let h = 1; h <= 4; h++) { const fh = h * hr / 60; let bi = 0, bv = -1; f.forEach((ff, i) => { if (Math.abs(ff - fh) < 0.15 && p[i] > bv) { bv = p[i]; bi = i; } }); marks.push({ x: f[bi], y: db[bi], color: "--trace2", shape: "tri", label: h === 1 ? "HR" : "" }); }
+      if (chk("n4m")) { let bi = 0, bv = -1; f.forEach((ff, i) => { if (Math.abs(ff - 60) < 0.5 && p[i] > bv) { bv = p[i]; bi = i; } }); marks.push({ x: 60, y: db[bi], color: "--trace4", shape: "tri", label: "60 Hz" }); }
+      plot($("#m4f"), { title: "Frequency domain (FFT)", series: [{ x: f, y: db, color: "--trace3", w: 1.2 }], xlim: [0, 80], ylim: [-80, 0], xlabel: "Frequency (Hz)", ylabel: "Amplitude (dB)", markers: marks, bands: [{ x0: 5, x1: 15, color: css("--accent"), alpha: 0.12, label: "QRS band" }] });
+      $("#m4read").innerHTML = stat("Heart rate", hr, " bpm") + stat("Fundamental", fmt(hr / 60, 2), " Hz");
+    };
+    bindSliders($("#w4"), draw); draw(); bindQuiz("q4", Q4);
+  }
+});
+
+/* ---------- Module 5 ---------- */
+const LEADS = [["I", 0], ["II", 60], ["III", 120], ["aVR", -150], ["aVL", -30], ["aVF", 90]];
+const Q5 = [
+  { q: "QRS is positive in lead I and positive in aVF. What is the axis?", a: ["Normal", "Left axis deviation", "Right axis deviation", "Extreme (northwest) axis"], c: 0, why: "Lead I at 0° and aVF at +90° both positive puts the vector between 0° and +90°, inside the normal range (−30° to +90°)." },
+  { q: "QRS is negative in lead I and positive in aVF. What is the axis?", a: ["Normal", "Left axis deviation", "Right axis deviation", "Extreme axis"], c: 2, why: "Pointing away from lead I and toward aVF places the vector between +90° and 180°, which is right axis deviation. Think right ventricular strain, for example in pulmonary embolism or COPD." },
+  { q: "Which lead looks at the heart from the opposite direction of the normal axis, so it is usually negative?", a: ["Lead II", "aVF", "aVR", "Lead I"], c: 2, why: "aVR sits at −150°, roughly opposite a normal +60° vector, so its P, QRS and T are normally negative. An upright aVR in sinus rhythm is a clue to lead reversal or dextrocardia." }
+];
+M({
+  id: "m5", num: "5", nav: "Leads", title: "Module 5: Leads & Axis", subtitle: "One heart, many viewpoints",
+  html: () => `
+${callout("scenario", "Clinical scenario", `<p>A 28-year-old presents two days after a long-haul flight with sudden shortness of breath and a heart rate of 112. The 12-lead shows a QRS that is negative in lead I and tall in lead III. Your senior says, "Look at the axis." What is she seeing?</p>`)}
+<h2 id="basics">The Basics</h2>
+<p>At any instant, the heart's electrical activity can be summarized as a single <b>vector</b>: a direction and a size. Each ECG lead is a measuring axis. A lead records the <b>projection</b> of the heart vector onto its own direction:</p>
+<p style="text-align:center" class="mono">amplitude in lead = |vector| × cos(angle between vector and lead)</p>
+<ul><li>Vector points toward the lead → <b>positive</b> deflection.</li><li>Points away → <b>negative</b>.</li><li>Perpendicular → small or <b>biphasic</b>.</li></ul>
+<p>The six limb leads form the <b>hexaxial reference system</b> in the frontal plane: I at 0°, II at +60°, III at +120°, aVF at +90°, aVL at −30°, aVR at −150°. The mean QRS direction is the <b>axis</b>. Normal is −30° to +90°.</p>
+<h2 id="interactive">Interactive: Rotate the Heart Vector</h2>
+<div class="widget" id="w5">
+  <div class="presets"><button class="pill c4" data-a="60">Normal (+60°)</button><button class="pill c5" data-a="-50">Left axis (−50°)</button><button class="pill c3" data-a="120">Right axis (+120°)</button><button class="pill c6" data-a="-130">Extreme (−130°)</button></div>
+  <div class="ctrls">${slider("m5a", "QRS axis (degrees)", -180, 180, 1, 60, "°")}</div>
+  <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:12px;align-items:center">
+    <div class="plotwrap" style="max-width:320px;justify-self:center;width:100%"><canvas class="plot" id="m5hex" data-h="300"></canvas></div>
+    <div class="minigrid" id="m5leads"></div>
+  </div>
+  <div class="readout" id="m5read"></div>
+</div>
+${callout("tip", "Try it", `<ul><li>Find the angle where lead I goes almost flat. It is +90°, perpendicular to lead I. On a real ECG that lead looks small or biphasic, and clinicians use this "isoelectric lead" trick to estimate the axis quickly.</li>
+<li>Click <b>Right axis</b>. Lead I flips negative and III becomes the tallest. That is the pattern from the scenario.</li>
+<li>Watch aVR as you move. It stays negative across the whole normal range.</li></ul>`)}
+<h2 id="clinical">Why Does This Matter Clinically?</h2>
+<div class="tablewrap"><table><thead><tr><th>Axis</th><th>Range</th><th>Common causes</th></tr></thead><tbody>
+<tr><td>Normal</td><td>−30° to +90°</td><td>Healthy adults</td></tr>
+<tr><td>Left axis deviation</td><td>−30° to −90°</td><td>Left anterior fascicular block, LVH, inferior MI</td></tr>
+<tr><td>Right axis deviation</td><td>+90° to 180°</td><td>Right ventricular strain (PE, COPD, pulmonary hypertension), lateral MI, normal in children</td></tr>
+<tr><td>Extreme axis</td><td>−90° to 180°</td><td>Ventricular rhythm, hyperkalemia, lead reversal</td></tr></tbody></table></div>
+<h2 id="quiz">Quiz: Check Your Understanding</h2>
+${quizHTML("q5", Q5)}
+<h2 id="summary">Summary</h2>
+<ul><li>Each lead measures the projection of one cardiac vector onto its own axis.</li><li>Positive = toward the lead, negative = away, biphasic = perpendicular.</li>
+<li>Lead I and aVF together give you the quadrant of the axis in seconds.</li><li>Axis deviation is a clue, not a diagnosis. Interpret it with the clinical story.</li></ul>`,
+  init() {
+    const leadsBox = $("#m5leads");
+    leadsBox.innerHTML = LEADS.map(([nm]) => `<div class="mini"><div class="t"><span>${nm}</span><span id="m5v-${nm}" class="mono"></span></div><canvas class="plot" id="m5c-${nm}" data-h="70"></canvas></div>`).join("");
+    const beat = synthECG({ hr: 60, fs: 400, dur: 1.0, hrv: 0, seed: 1 });
+    const draw = () => {
+      const a = val("m5a");
+      LEADS.forEach(([nm, la]) => {
+        const k = Math.cos((a - la) * Math.PI / 180);
+        const y = beat.y.map(v => v * k);
+        plot($("#m5c-" + nm), { series: [{ x: beat.t, y, color: k >= 0 ? "--trace" : "--trace2", w: 1.6 }], xlim: [0.1, 0.95], ylim: [-1.4, 1.4], left: 8, xt: 0, yt: 2, xfmt: () => "", yfmt: () => "" });
+        $("#m5v-" + nm).textContent = (k >= 0 ? "+" : "") + (k * 1.2).toFixed(2) + " mV";
+      });
+      drawHex(a);
+      const cls = a >= -30 && a <= 90 ? ["Normal axis", "good"] : a < -30 && a >= -90 ? ["Left axis deviation", "warn"] : a > 90 && a <= 180 ? ["Right axis deviation", "warn"] : ["Extreme axis", "bad"];
+      $("#m5read").innerHTML = stat("Axis", (a > 0 ? "+" : "") + a, "°") + `<span class="chip ${cls[1]}" style="align-self:center">${cls[0]}</span>`;
+      $$("#w5 .pill").forEach(x => x.setAttribute("aria-pressed", +x.dataset.a === a));
+    };
+    function drawHex(a) {
+      const cv = $("#m5hex"), dpr = devicePixelRatio || 1, W = cv.clientWidth || 300, H = 300; cv.style.height = H + "px"; cv.width = W * dpr; cv.height = H * dpr;
+      const g = cv.getContext("2d"); g.setTransform(dpr, 0, 0, dpr, 0, 0); g.clearRect(0, 0, W, H);
+      const cx = W / 2, cy = H / 2, R = Math.min(W, H) / 2 - 34; g.font = `700 13px ${css("--font-body")}`;
+      g.strokeStyle = css("--grid"); g.lineWidth = 1; g.beginPath(); g.arc(cx, cy, R, 0, 7); g.stroke();
+      // normal range wedge
+      g.fillStyle = css("--accent"); g.globalAlpha = .13; g.beginPath(); g.moveTo(cx, cy); g.arc(cx, cy, R, -30 * Math.PI / 180, 90 * Math.PI / 180); g.fill(); g.globalAlpha = 1;
+      LEADS.forEach(([nm, la]) => { const r = la * Math.PI / 180, ux = Math.cos(r), uy = Math.sin(r);
+        g.strokeStyle = css("--axis"); g.setLineDash([4, 4]); g.beginPath(); g.moveTo(cx - ux * R, cy - uy * R); g.lineTo(cx + ux * R, cy + uy * R); g.stroke(); g.setLineDash([]);
+        g.fillStyle = css("--fg"); g.textAlign = "center"; g.textBaseline = "middle"; g.fillText(nm, cx + ux * (R + 18), cy + uy * (R + 14)); });
+      const r = a * Math.PI / 180, ex = cx + Math.cos(r) * R * .85, ey = cy + Math.sin(r) * R * .85, col = css("--trace2");
+      g.strokeStyle = col; g.fillStyle = col; g.lineWidth = 3.5; g.beginPath(); g.moveTo(cx, cy); g.lineTo(ex, ey); g.stroke();
+      g.beginPath(); g.moveTo(ex + Math.cos(r) * 12, ey + Math.sin(r) * 12); g.lineTo(ex + Math.cos(r + 2.6) * 12, ey + Math.sin(r + 2.6) * 12); g.lineTo(ex + Math.cos(r - 2.6) * 12, ey + Math.sin(r - 2.6) * 12); g.fill();
+      g.fillStyle = css("--muted"); g.font = `12px ${css("--font-body")}`; g.textAlign = "left"; g.fillText("shaded = normal range", 6, H - 10);
+    }
+    cvHook($("#m5hex"), () => drawHex(val("m5a")));
+    $$("#w5 .pill").forEach(b => b.addEventListener("click", () => { setSlider("m5a", b.dataset.a); draw(); }));
+    bindSliders($("#w5"), draw); draw(); bindQuiz("q5", Q5);
+  }
+});
+/* ---------- Module 6 ---------- */
+const ART = {
+  clean: { label: "Clean", o: {}, desc: "A clean lead II for comparison. Flat baseline, crisp complexes." },
+  motion: { label: "Patient movement", o: { motion: 1.1, wander: 0.15 }, desc: "Large, slow excursions that line up with movement, not with the cardiac cycle. QRS complexes keep marching through at a steady rate underneath." },
+  tremor: { label: "Tremor / shivering", o: { emg: 0.13 }, desc: "Fast, irregular fuzz on the baseline. It can mimic atrial fibrillation or flutter waves, but the R–R intervals stay regular and the QRS rate does not change." },
+  mains: { label: "60 Hz interference", o: { mains: 0.22 }, desc: "A thick, regular 'buzz' on every part of the trace. Check grounding, cables and nearby equipment, or use the notch filter from Module 3." },
+  pop: { label: "Electrode pop", o: { pop: -1.6 }, desc: "A sudden step followed by a slow recovery. Usually a loose or drying electrode. It affects only the leads that use that electrode." },
+  swap: { label: "Arm leads reversed", o: { invert: true }, desc: "Lead I is upside down, including the P wave. In sinus rhythm, an inverted P in lead I is a red flag for reversed arm electrodes (or, rarely, dextrocardia). Re-check placement before diagnosing anything." }
+};
+const Q6 = [
+  { q: "A monitor alarms for 'V-tach'. The trace shows chaotic deflections, but you can still see normal QRS complexes marching through at a regular rate. Most likely?", a: ["Ventricular tachycardia", "Motion or tremor artifact", "Atrial fibrillation", "Asystole"], c: 1, why: "If native QRS complexes continue on time through the 'arrhythmia', it is artifact. Real VT replaces normal complexes. Always look at the patient first." },
+  { q: "In sinus rhythm, the P wave and QRS in lead I are both inverted. What should you do first?", a: ["Start anticoagulation", "Check electrode placement for reversed arm leads", "Order an echo for dextrocardia", "Nothing, this is normal"], c: 1, why: "Limb lead reversal is common and cheap to rule out. Dextrocardia is possible but much rarer. Re-check the electrodes before chasing a rare diagnosis." },
+  { q: "Which artifact can look like atrial fibrillation on a single lead?", a: ["Electrode pop", "Muscle tremor", "Baseline wander", "Lead reversal"], c: 1, why: "Tremor adds fine, irregular baseline activity that can resemble fibrillatory waves. The key difference: in tremor, the R–R intervals stay regular." }
+];
+M({
+  id: "m6", num: "6", nav: "Artifacts", title: "Module 6: Artifacts", subtitle: "When the signal lies",
+  html: () => `
+${callout("scenario", "Clinical scenario", `<p>A 79-year-old with Parkinson's disease is on telemetry after a hip fracture. At 03:00 the monitor alarms: "Ventricular tachycardia." The night nurse is already reaching for the crash cart. You glance at the screen and then at the patient, who is awake, talking and visibly shaking.</p>`)}
+<h2 id="basics">The Basics</h2>
+<p>An <b>artifact</b> is any part of the recording that does not come from the heart. Artifacts are the most common cause of false alarms on telemetry, and they occasionally lead to unnecessary procedures. Each has a signature you can learn to recognize, often faster than any algorithm.</p>
+<p>The single most useful rule: <b>real arrhythmias change the QRS rhythm. Most artifacts ride on top of it.</b></p>
+<h2 id="gallery">Interactive: Artifact Gallery</h2>
+<div class="widget" id="w6">
+  <div class="presets" id="m6btns">${Object.entries(ART).map(([k, v], i) => `<button class="pill c${(i % 6) + 1}" data-k="${k}" aria-pressed="${k === "clean"}">${v.label}</button>`).join("")}</div>
+  <div class="plotwrap"><canvas class="plot" id="m6plot" data-h="240"></canvas></div>
+  <p class="wnote" id="m6desc" style="margin:0"></p>
+</div>
+<h2 id="spot">Spot the Artifact</h2>
+<p>A random strip from the gallery. Name it.</p>
+<div class="widget" id="w6b">
+  <div class="plotwrap"><canvas class="plot" id="m6quiz" data-h="200"></canvas></div>
+  <div class="presets" id="m6ans">${Object.entries(ART).map(([k, v]) => `<button class="btn" data-k="${k}">${v.label}</button>`).join("")}</div>
+  <div class="readout"><div id="m6res" style="flex:1;min-width:200px"></div><button class="btn solid" id="m6next">New strip</button></div>
+</div>
+${callout("tip", "Try it", `<p>Get five in a row right. Then try to explain to a classmate <i>why</i> each one is not a real arrhythmia, using the R–R intervals as evidence.</p>`)}
+<h2 id="quiz">Quiz: Check Your Understanding</h2>
+${quizHTML("q6", Q6)}
+<h2 id="summary">Summary</h2>
+<ul><li>Artifacts come from motion, muscle, mains, electrodes and wiring, not the heart.</li><li>Check whether the native QRS rhythm continues underneath. If it does, suspect artifact.</li>
+<li>Inverted P and QRS in lead I during sinus rhythm: check the arm electrodes.</li><li>Treat the patient, not the monitor.</li></ul>`,
+  init() {
+    const make = (k, seed) => { const o = ART[k].o; const s = synthECG({ hr: 78, fs: 500, dur: 6, hrv: 0.01, seed, ...o }); if (o.invert) s.y = s.y.map(v => -v); return s; };
+    const show = k => { const s = make(k, 5); plot($("#m6plot"), { series: [{ x: s.t, y: s.y, color: "--paper-ink", w: 1.3 }], xlim: [0, 6], ylim: [-2.2, 2.2], paper: true, xlabel: "Time (s)", ylabel: "mV" }); $("#m6desc").innerHTML = `<b>${ART[k].label}.</b> ${ART[k].desc}`; $$("#m6btns .pill").forEach(b => b.setAttribute("aria-pressed", b.dataset.k === k)); };
+    $$("#m6btns .pill").forEach(b => b.addEventListener("click", () => show(b.dataset.k))); show("clean");
+    let cur = "motion", streak = 0, answered = false;
+    const next = () => { const keys = Object.keys(ART); let k; do { k = keys[Math.floor(Math.random() * keys.length)]; } while (k === cur); cur = k; answered = false;
+      const s = make(k, Math.floor(Math.random() * 1e6)); plot($("#m6quiz"), { series: [{ x: s.t, y: s.y, color: "--paper-ink", w: 1.3 }], xlim: [0, 6], ylim: [-2.2, 2.2], paper: true, xlabel: "Time (s)" }); $("#m6res").innerHTML = `<span style="color:var(--muted)">Pick an answer. Streak: <b>${streak}</b></span>`; };
+    $$("#m6ans .btn").forEach(b => b.addEventListener("click", () => { if (answered) return; answered = true; const ok = b.dataset.k === cur; streak = ok ? streak + 1 : 0;
+      $("#m6res").innerHTML = ok ? `<span class="chip good">Correct</span> Streak: <b>${streak}</b>` : `<span class="chip bad">Not quite</span> It was <b>${ART[cur].label}</b>. Streak reset.`; }));
+    $("#m6next").addEventListener("click", next); next(); bindQuiz("q6", Q6);
+  }
+});
+
+/* ---------- Module 7 ---------- */
+const Q7 = [
+  { q: "Why does a QRS detector square the derivative of the signal?", a: ["To remove the P wave completely", "To make all slopes positive and exaggerate steep ones like the QRS", "To convert mV to bpm", "To filter 60 Hz"], c: 1, why: "The QRS has the steepest slopes in the ECG. Differentiating highlights slope, and squaring makes everything positive while amplifying big slopes far more than small ones (T waves, noise)." },
+  { q: "During intense exercise, what happens to RMSSD (a measure of beat-to-beat variability)?", a: ["It rises sharply", "It falls", "It stays the same", "It becomes negative"], c: 1, why: "Exercise withdraws vagal (parasympathetic) tone, which is what drives fast beat-to-beat variation. Heart rate rises and RMSSD falls." },
+  { q: "The R–R tachogram jumps around randomly with no pattern, and P waves are absent. Most likely rhythm?", a: ["Sinus arrhythmia", "Atrial fibrillation", "Sinus tachycardia", "First-degree AV block"], c: 1, why: "An 'irregularly irregular' rhythm without P waves is the hallmark of atrial fibrillation. Sinus arrhythmia varies smoothly with breathing and keeps its P waves." }
+];
+M({
+  id: "m7", num: "7", nav: "Heart Rate & HRV", title: "Module 7: Heart Rate & HRV", subtitle: "Teaching a computer to find every beat",
+  html: () => `
+${callout("scenario", "Clinical scenario", `<p>A patient's smartwatch sent an "irregular rhythm" notification. She brings you the exported data. Before trusting the alert, you want to know how the watch decided where each heartbeat was, and what "irregular" means in numbers.</p>`)}
+<h2 id="basics">The Basics</h2>
+<p>Almost every ECG product (monitors, Holters, wearables) starts with one task: <b>find each R peak</b>. Once you have the R-peak times, everything else follows:</p>
+<ul><li><b>R–R interval</b> = time between consecutive beats. Heart rate = 60 ÷ RR.</li>
+<li><b>Tachogram</b> = RR plotted beat by beat. Patterns here reveal rhythm.</li>
+<li><b>HRV</b> (heart rate variability): <b>SDNN</b> is the standard deviation of RR intervals. <b>RMSSD</b> is the root-mean-square of successive differences and tracks vagal tone.</li></ul>
+<p>The classic detector (the Pan–Tompkins approach) works in four steps: <b>band-pass</b> 5–15 Hz → <b>differentiate</b> → <b>square</b> → <b>moving-window integrate</b>. Then compare against a threshold.</p>
+<h2 id="interactive">Interactive: Build a Beat Detector</h2>
+<div class="widget" id="w7">
+  <div class="presets"><button class="pill c4" data-p="rest" aria-pressed="true">Resting (65 bpm)</button><button class="pill c3" data-p="ex">Exercise (140 bpm)</button><button class="pill c6" data-p="af">Atrial fibrillation</button><button class="pill c2" data-p="noisy">Noisy recording</button></div>
+  <div class="ctrls">${slider("m7th", "Detection threshold (% of max)", 5, 90, 1, 30, "%")}</div>
+  <div class="plotwrap"><canvas class="plot" id="m7ecg" data-h="200"></canvas></div>
+  <div class="plotwrap"><canvas class="plot" id="m7env" data-h="160"></canvas></div>
+  <div class="plotwrap"><canvas class="plot" id="m7rr" data-h="170"></canvas></div>
+  <div class="readout" id="m7read"></div>
+</div>
+${callout("tip", "Try it", `<ul><li>Drop the threshold to <b>5%</b>. False beats appear (often on T waves). Raise it to <b>90%</b>. Real beats get missed. Find the range that works.</li>
+<li>Pick <b>Noisy recording</b> and look for the best threshold. Real algorithms adapt the threshold beat by beat for exactly this reason.</li>
+<li>Compare the tachograms for <b>Resting</b> and <b>Atrial fibrillation</b>. The difference is obvious in a plot, even before any statistics.</li></ul>`)}
+<h2 id="clinical">Why Does This Matter Clinically?</h2>
+<p>Missed and extra beats corrupt every number downstream: heart rate, rhythm calls, HRV. When a device report looks odd, ask what the detector saw. Low HRV after a heart attack is linked to worse outcomes, and reduced HRV is studied as an early marker of sepsis and of autonomic neuropathy in diabetes.</p>
+<h2 id="quiz">Quiz: Check Your Understanding</h2>
+${quizHTML("q7", Q7)}
+<h2 id="summary">Summary</h2>
+<ul><li>R-peak detection is the foundation of every automated ECG metric.</li><li>Band-pass, differentiate, square and integrate turn the QRS into an easy-to-threshold bump.</li>
+<li>The threshold trades missed beats against false beats.</li><li>RR intervals give heart rate, the tachogram shows rhythm, and SDNN and RMSSD quantify variability.</li></ul>`,
+  init() {
+    const fs = 250, presets = { rest: { hr: 65, hrv: 0.04 }, ex: { hr: 140, hrv: 0.008 }, af: { hr: 95, rhythm: "af" }, noisy: { hr: 75, hrv: 0.03, emg: 0.12, wander: 0.35, motion: 0.7 } };
+    let cur = "rest";
+    const draw = () => {
+      const s = synthECG({ fs, dur: 20, seed: 42, ...presets[cur] });
+      let b = filtfilt(biquad("hp", 5, fs), s.y); b = filtfilt(biquad("lp", 15, fs), b);
+      const d = new Float64Array(b.length); for (let i = 2; i < b.length - 2; i++) d[i] = (-b[i - 2] - 2 * b[i - 1] + 2 * b[i + 1] + b[i + 2]) / 8 * fs;
+      const sq = d.map(v => v * v), win = Math.round(0.15 * fs), env = new Float64Array(sq.length); let acc = 0;
+      for (let i = 0; i < sq.length; i++) { acc += sq[i]; if (i >= win) acc -= sq[i - win]; env[i] = acc / win; }
+      const mx = Math.max(...env), th = val("m7th") / 100 * mx, peaks = [];
+      for (let i = 1; i < env.length - 1; i++) {
+        if (env[i] > th && env[i] >= env[i - 1] && env[i] > env[i + 1]) {
+          let bi = Math.max(0, i - win), bv = -Infinity; for (let j = Math.max(0, i - win); j <= i; j++) if (s.y[j] > bv) { bv = s.y[j]; bi = j; }
+          if (!peaks.length || (bi - peaks[peaks.length - 1]) / fs > 0.2) peaks.push(bi); else if (s.y[bi] > s.y[peaks[peaks.length - 1]]) peaks[peaks.length - 1] = bi;
+        }
+      }
+      const pt = peaks.map(i => s.t[i]);
+      plot($("#m7ecg"), { title: "ECG with detected beats", series: [{ x: s.t, y: s.y, color: "--trace", w: 1.1 }], markers: peaks.map(i => ({ x: s.t[i], y: s.y[i], color: "--trace2", shape: "tri" })), xlim: [0, 10], ylim: [-1.8, 2.4], ylabel: "mV" });
+      plot($("#m7env"), { title: "Detector output (band-pass → derivative → square → integrate)", series: [{ x: s.t, y: Array.from(env, v => v / mx), color: "--trace3", w: 1.2 }], hlines: [{ y: th / mx, color: "--trace2", label: "threshold" }], xlim: [0, 10], ylim: [0, 1.05], xlabel: "Time (s)", yfmt: v => v.toFixed(1) });
+      const rr = []; for (let i = 1; i < pt.length; i++) rr.push((pt[i] - pt[i - 1]) * 1000);
+      plot($("#m7rr"), { title: "Tachogram (R–R interval per beat, full 20 s)", series: [{ x: rr.map((_, i) => i + 1), y: rr, color: "--trace4", w: 1.6 }, { x: rr.map((_, i) => i + 1), y: rr, color: "--trace4", dots: true, r: 3 }], xlim: [0, Math.max(10, rr.length + 1)], ylim: [200, 1400], xlabel: "Beat number", ylabel: "RR (ms)", left: 62 });
+      const m = rr.reduce((a, b) => a + b, 0) / (rr.length || 1), sd = Math.sqrt(rr.reduce((a, b) => a + (b - m) ** 2, 0) / Math.max(1, rr.length - 1));
+      let ds = 0; for (let i = 1; i < rr.length; i++) ds += (rr[i] - rr[i - 1]) ** 2; const rmssd = Math.sqrt(ds / Math.max(1, rr.length - 1));
+      const truth = s.beats.length, found = peaks.length;
+      $("#m7read").innerHTML = stat("Heart rate", fmt(60000 / m, 0), " bpm") + stat("SDNN", fmt(sd, 0), " ms") + stat("RMSSD", fmt(rmssd, 0), " ms") + stat("Beats found / true", `${found} / ${truth}`) + `<span class="chip ${found === truth ? "good" : "bad"}" style="align-self:center">${found === truth ? "All beats detected" : found > truth ? "False detections" : "Missed beats"}</span>`;
+    };
+    $$("#w7 .pill").forEach(b => b.addEventListener("click", () => { cur = b.dataset.p; $$("#w7 .pill").forEach(x => x.setAttribute("aria-pressed", x === b)); draw(); }));
+    bindSliders($("#w7"), draw); draw(); bindQuiz("q7", Q7);
+  }
+});
+
+/* ---------- Module 8: Challenge ---------- */
+const RHYTHMS = { nsr: "Normal sinus rhythm", brady: "Sinus bradycardia", tachy: "Sinus tachycardia", af: "Atrial fibrillation", pvc: "Sinus rhythm with PVCs", art: "Artifact (underlying sinus rhythm)" };
+const CASES = [
+  { title: "Pre-op clearance, 45-year-old", ans: "nsr", o: { hr: 74, hrv: 0.03, seed: 101 } },
+  { title: "Marathon runner, routine check", ans: "brady", o: { hr: 48, hrv: 0.05, seed: 202 } },
+  { title: "Febrile ED patient, 39.4 °C", ans: "tachy", o: { hr: 122, hrv: 0.01, seed: 303 } },
+  { title: "71-year-old with palpitations", ans: "af", o: { hr: 105, rhythm: "af", seed: 404 } },
+  { title: "Post-op day 2, low potassium", ans: "pvc", o: { hr: 80, rhythm: "pvc", pvcEvery: 4, hrv: 0.01, seed: 505 } },
+  { title: "Telemetry alarm, patient shivering", ans: "art", o: { hr: 84, hrv: 0.01, emg: 0.16, motion: 0.6, seed: 606 } }
+];
+M({
+  id: "m8", num: "8", nav: "Challenge", title: "Module 8: The Challenge", subtitle: "Six strips. Your read. Graded.",
+  html: () => `
+${callout("scenario", "Your shift", `<p>You are covering the cardiology consult pager. Six rhythm strips come in. For each one, estimate the heart rate and name the rhythm. Every strip is 6 seconds of lead II at 25 mm/s.</p>`)}
+<h2 id="rules">How It's Graded</h2>
+<ul><li><b>Heart rate</b> (1 point): within ±15% of the true average rate.</li><li><b>Rhythm</b> (1 point): correct name.</li><li>Total: 12 points. Aim for 10 or more.</li></ul>
+${callout("info", "The 6-second method", `<p>For a quick rate on any rhythm, regular or not: count the QRS complexes in a 6-second strip and multiply by 10. For regular rhythms, 300 ÷ large boxes between R waves is more precise.</p>`)}
+<h2 id="cases">The Strips</h2>
+<div id="m8cases">${CASES.map((c, i) => `<div class="case" id="case${i}"><div class="case-head"><b>Strip ${i + 1}: ${c.title}</b><span id="case${i}-chip"></span></div>
+<div class="plotwrap"><canvas class="plot" id="case${i}-cv" data-h="170"></canvas></div>
+<div class="case-form"><label for="case${i}-hr">Heart rate (bpm)<input id="case${i}-hr" type="number" inputmode="numeric" min="20" max="250" placeholder="e.g. 80"></label>
+<label for="case${i}-rh">Rhythm<select id="case${i}-rh"><option value="">Choose…</option>${Object.entries(RHYTHMS).map(([k, v]) => `<option value="${k}">${v}</option>`).join("")}</select></label></div>
+<div class="res" id="case${i}-res"></div></div>`).join("")}</div>
+<div class="scorebar"><span id="m8score">Fill in all six strips, then grade.</span><span style="display:flex;gap:8px"><button class="btn" id="m8reset" style="color:#fff;border-color:#fff">Reset</button><button class="btn solid" id="m8grade">Grade my answers</button></span></div>
+<h2 id="beyond">Going Further: Code It</h2>
+<p>The full version of this challenge asks you to write a detector yourself. A minimal Python starting point (NumPy and SciPy) is below. Ask an AI assistant to help extend it, then check its output against your own reads above.</p>
+<pre><code>import numpy as np
+from scipy.signal import butter, filtfilt, find_peaks
+
+def detect_r_peaks(ecg, fs):
+    b, a = butter(2, [5, 15], btype="band", fs=fs)   # QRS band
+    x = filtfilt(b, a, ecg)
+    x = np.diff(x) ** 2                              # slope, squared
+    win = int(0.15 * fs)
+    env = np.convolve(x, np.ones(win) / win, "same") # integrate
+    peaks, _ = find_peaks(env, height=0.3 * env.max(), distance=int(0.2 * fs))
+    return peaks
+
+def heart_rate(peaks, fs):
+    rr = np.diff(peaks) / fs
+    return 60 / rr.mean(), rr</code></pre>
+<h2 id="summary">Summary</h2>
+<p>You just did, by eye, what an automated ECG system does: find beats, measure intervals, judge regularity, look for P waves, and rule out artifact. Every module in this course is one of those steps.</p>`,
+  init() {
+    const strips = CASES.map(c => synthECG({ fs: 500, dur: 6, ...c.o }));
+    CASES.forEach((c, i) => plot($(`#case${i}-cv`), { series: [{ x: strips[i].t, y: strips[i].y, color: "--paper-ink", w: 1.3 }], xlim: [0, 6], ylim: [-1.2, 2.1], paper: true, xt: 6, yt: 3, left: 36 }));
+    const trueHR = strips.map(s => { const b = s.beats; return 60 * (b.length - 1) / (b[b.length - 1] - b[0]); });
+    $("#m8grade").addEventListener("click", () => {
+      let tot = 0;
+      CASES.forEach((c, i) => {
+        const hr = +$(`#case${i}-hr`).value, rh = $(`#case${i}-rh`).value, th = trueHR[i];
+        const okHR = hr > 0 && Math.abs(hr - th) / th <= 0.15, okR = rh === c.ans; tot += okHR + okR;
+        $(`#case${i}-chip`).innerHTML = `<span class="chip ${okHR && okR ? "good" : okHR || okR ? "warn" : "bad"}">${okHR + okR} / 2</span>`;
+        $(`#case${i}-res`).innerHTML = `Rate: ${okHR ? "✓" : "✗"} true ≈ <b>${th.toFixed(0)} bpm</b> · Rhythm: ${okR ? "✓" : "✗"} <b>${RHYTHMS[c.ans]}</b>`;
+      });
+      $("#m8score").innerHTML = `Score: <b>${tot} / 12</b>${tot >= 10 ? " · Excellent read." : tot >= 7 ? " · Solid. Review the ones you missed." : " · Revisit Modules 1, 6 and 7."}`;
+    });
+    $("#m8reset").addEventListener("click", () => { CASES.forEach((c, i) => { $(`#case${i}-hr`).value = ""; $(`#case${i}-rh`).value = ""; $(`#case${i}-chip`).innerHTML = ""; $(`#case${i}-res`).innerHTML = ""; }); $("#m8score").textContent = "Fill in all six strips, then grade."; });
+  }
+});
+
+/* ---------- Homework ---------- */
+const HW = [
+  ["1", "Paper", "On a 25 mm/s strip, the R–R interval is 18 small boxes. Calculate the heart rate two ways (1500 rule and seconds per beat).", "1500 ÷ 18 ≈ 83 bpm. 18 × 0.04 s = 0.72 s; 60 ÷ 0.72 ≈ 83 bpm."],
+  ["1", "Morphology", "Use the Module 1 widget to create first-degree AV block with a normal rate. Report the PR you chose and explain the physiology in two sentences.", "Any PR &gt; 200 ms with HR 60–100. The AV node delays conduction, but every atrial impulse still reaches the ventricles."],
+  ["2", "Nyquist", "A Holter samples at 128 Hz. What is the highest frequency it can represent? Would you trust it to measure a 100 ms QRS to within 5 ms? Explain.", "64 Hz. Samples are 7.8 ms apart, so a single-sample error already exceeds 5 ms."],
+  ["2", "Aliasing", "Using the aliasing widget, find the sampling rate where 60 Hz hum appears at exactly 20 Hz. Then work out one more rate, below the slider range, that gives the same result.", "80 Hz on the slider (80 − 60 = 20). Below the range, 40 Hz also works (60 − 40 = 20)."],
+  ["3", "Filters", "Set Monitor mode, then Diagnostic mode, with all noise on. Which noise remains in each? Which mode would you use for ST analysis and why?", "Diagnostic mode passes more EMG noise and some wander; monitor mode is cleaner but distorts ST. Use diagnostic bandwidth for ST analysis."],
+  ["4", "Spectrum", "With heart rate at 90 bpm, list the frequencies of the first three spectral peaks. Then turn on muscle noise and describe how the spectrum changes.", "1.5, 3.0 and 4.5 Hz. Muscle noise raises the floor broadly above ~20 Hz rather than adding a line."],
+  ["5", "Axis", "Lead I is −0.6 mV and aVF is +0.9 mV. Estimate the axis using the widget and name the category. Give one clinical cause.", "About +120°: right axis deviation. Causes include RV strain from pulmonary embolism or COPD."],
+  ["6", "Artifacts", "Describe how you would distinguish tremor artifact from atrial fibrillation on a single lead. Name two features.", "Regular R–R intervals and visible P waves in between suggest tremor; AF is irregularly irregular without P waves."],
+  ["7", "Detection", "For the Noisy preset, find the threshold range in which all beats are detected. Explain why too low a threshold produces extra beats.", "Answers vary by range. Low thresholds let T waves and motion bumps in the envelope cross the line."],
+  ["7", "HRV", "Compare SDNN and RMSSD for Resting vs Exercise. Which changes more, and what does that suggest physiologically?", "Both fall with exercise; RMSSD falls most, consistent with vagal withdrawal."],
+  ["8", "Synthesis", "Pick one strip from the Challenge you got wrong (or the hardest one). Write the reasoning a cardiologist would use, step by step: rate, regularity, P waves, QRS width, artifact.", "Open-ended; graded on systematic approach."]
+];
+M({
+  id: "hw", num: "", nav: "Homework", title: "Homework", subtitle: "Eleven problems covering modules 1–8",
+  html: () => `
+<p>Keep this site open while you work. Every problem can be solved by reading the modules and using the widgets. Hints are hidden under each problem. Try first.</p>
+<h2 id="problems">Problems</h2>
+${HW.map((h, i) => `<div class="problem"><div><span class="pn">Problem ${i + 1}</span> <span style="color:var(--muted)">· Module ${h[0]} · ${h[1]}</span></div><p style="margin:6px 0 0">${h[2]}</p><details class="hint"><summary>Show answer key</summary><p style="margin:6px 0 0">${h[3]}</p></details></div>`).join("")}
+<h2 id="submit">Submitting</h2>
+<p>Submit answers as a single PDF with screenshots of any widget settings you used as evidence.</p>`,
+  init() {}
+});
+
+/* ---------- Home ---------- */
+const DESCS = {
+  m1: "What the ECG measures and how each wave maps to physiology.",
+  m2: "Sampling rates, Nyquist, and why 60 Hz can turn into a ghost.",
+  m3: "Removing wander, hum and muscle noise without faking an ST change.",
+  m4: "The FFT: heart rate, harmonics and noise as a spectrum.",
+  m5: "Twelve viewpoints of one vector. Find the axis in seconds.",
+  m6: "Motion, tremor, pops and reversed leads. When the signal lies.",
+  m7: "R-peak detection, tachograms, SDNN and RMSSD.",
+  m8: "Six real-world strips. Rate, rhythm, graded."
+};
+function homeHTML() {
+  return `<h1>ECG &amp; Biosignals 101</h1><p class="subtitle">An interactive tutorial for Texas A&amp;M EnMed students</p>
+<h2 id="welcome">Welcome</h2>
+<p>As an EnMed student you are earning an MD and a Master of Engineering at the same time, so your time is tight. This course is built for that: short modules, real clinical framing, and engineering ideas you can see and touch.</p>
+<p>You already know how the heart works. You will also spend your career reading signals that machines have recorded, sampled, filtered and analyzed before you ever see them. This short course shows you what those machines are doing, so you can trust the output when it is right and catch it when it is wrong.</p>
+<p>No prior signal-processing background is needed. Every concept comes with a widget you can play with.</p>
+<h2 id="how-this-works">How This Works</h2>
+<ol><li><b>Clinical scenario.</b> Each module opens with a patient problem.</li><li><b>Interactive widgets.</b> Drag sliders and toggle noise. The ECG responds in real time.</li><li><b>Try it.</b> Short guided experiments point you at the key insight.</li><li><b>Quiz.</b> Three questions with instant feedback.</li><li><b>The Challenge.</b> Module 8 is a graded set of rhythm strips.</li><li><b>Clinical Case Library.</b> Module 9 has 16 real clinical cases, each with a model you can change.</li></ol>
+<h2 id="modules">Modules</h2>
+<div class="module-grid">${MODULES.filter(m => m.id !== "hw").map(m => `<a class="module-card ${m.id === "m8" ? "challenge" : ""}" href="#${m.id}"><span class="module-number">0${m.num}</span><span class="module-title">${m.title.replace(/^Module \d+: /, "")}</span><span class="module-desc">${DESCS[m.id]}</span></a>`).join("")}</div>
+<h2 id="what-youll-need">What You'll Need</h2>
+<ul><li>A web browser. Everything runs on this page; nothing to install.</li><li>About 20–30 minutes per module.</li><li>For the optional coding extension in Module 8: Python with NumPy and SciPy, and a willingness to ask an AI for help.</li></ul>
+<h2 id="homework">Homework</h2>
+<p>A self-paced problem set covering modules 1–8, designed to be solved with the widgets.</p>
+<a class="hw-card" href="#hw"><span class="k">PROBLEM SET</span><span class="t">Open Homework</span><span class="d">11 problems · answer keys included</span></a>
+<p style="margin-top:22px">Let's begin.</p>
+<p><a class="btn solid" href="#m1" style="text-decoration:none;display:inline-block">Begin Module 1 →</a></p>`;
+}
+
+
+/* ================= ECG case library ================= */
+function addBumps(s, list) { // list: [{off, sd, a, every?}] relative to each beat time
+  for (const b of s.beats) for (const w of list) { const c = b + w.off, k0 = Math.max(0, Math.floor((c - 5 * w.sd) * s.fs)), k1 = Math.min(s.y.length - 1, Math.ceil((c + 5 * w.sd) * s.fs));
+    for (let k = k0; k <= k1; k++) { const z = (s.t[k] - c) / w.sd; s.y[k] += w.a * Math.exp(-0.5 * z * z); } }
+  return s;
+}
+function paperPlot(cv, s, x1, ylim = [-0.8, 2.0], extra = {}) { plot(cv, { series: [{ x: s.t, y: s.y, color: "--paper-ink", w: 1.5 }], xlim: [0, x1], ylim, paper: true, xlabel: "Time (s)", ylabel: "mV", xt: 8, yt: 5, ...extra }); }
+
+const ECG_CASES = [
+{ title: "Hyperkalemia in kidney failure", system: "Renal / Cardiac", concepts: ["Membrane potential", "Electrolytes"], hook: "Why potassium reshapes the T wave, then the QRS.",
+  present: "A 63-year-old on hemodialysis missed two sessions. She feels weak and her legs are heavy. Point-of-care potassium is pending.",
+  md: "Peaked T waves first, then flattened P waves, then a widening QRS. If untreated, a sine-wave pattern and cardiac arrest.",
+  eng: "The resting membrane potential is set mostly by the potassium gradient. Raise outside K⁺ and the cell sits closer to threshold. Partly depolarized cells inactivate sodium channels, so conduction slows (wide QRS) while repolarization speeds up (tall, narrow T).",
+  eq: "E_K = 61.5 · log10([K]out / [K]in)  mV   ([K]in ≈ 140 mM)",
+  ctrls: [["k", "Serum K⁺ (mmol/L)", 3.5, 9, 0.1, 4.2]], presets: [["Normal 4.2", { k: 4.2 }], ["Mild 6.0", { k: 6 }], ["Severe 7.5", { k: 7.5 }], ["Critical 8.5", { k: 8.5 }]],
+  render(v, cv, out) { const k = v.k, ex = Math.max(0, k - 5);
+    const s = synthECG({ hr: 75, dur: 4, fs: 500, hrv: 0.003, tAmp: 0.3 + ex * 0.24, tW: Math.max(0.028, 0.045 - ex * 0.005), qrsW: (90 + Math.max(0, k - 6.5) * 35) / 1000, pAmp: 0.15 * clamp(1 - (k - 6) / 2.5, 0, 1), seed: 4 });
+    paperPlot(cv, s, 4, [-0.8, 2.0]); const ek = 61.5 * Math.log10(k / 140);
+    out.innerHTML = stat("E_K", fmt(ek, 0), " mV") + stat("Shift vs normal", fmt(ek - 61.5 * Math.log10(4.2 / 140), 1), " mV") + (k >= 7 ? chip("Emergency: treat now", "bad") : k >= 5.5 ? chip("Hyperkalemia", "warn") : chip("Normal range", "good")); },
+  pearl: "IV calcium works within minutes because it raises the threshold potential back away from the resting potential. It treats the ECG, not the potassium. Insulin and dialysis lower the potassium itself." },
+
+{ title: "Hypokalemia and the U wave", system: "Cardiac", concepts: ["Membrane potential", "Electrolytes"], hook: "Low potassium flattens T and reveals a hidden wave.",
+  present: "A 34-year-old with three days of vomiting and diarrhea feels palpitations. She is taking a loop diuretic.",
+  md: "T waves flatten, ST segments sag and a U wave appears after the T. Risk of torsades rises, especially with QT-prolonging drugs.",
+  eng: "Low extracellular K⁺ reduces potassium channel conductance, so repolarization is slower and less uniform. The repolarization signal spreads out in time: less T-wave amplitude, more late energy (the U wave). Think of a pulse being low-pass filtered and smeared.",
+  ctrls: [["k", "Serum K⁺ (mmol/L)", 1.8, 4.5, 0.1, 4.0]], presets: [["Normal 4.0", { k: 4 }], ["Mild 3.0", { k: 3 }], ["Severe 2.2", { k: 2.2 }]],
+  render(v, cv, out) { const d = Math.max(0, 3.8 - v.k);
+    const s = addBumps(synthECG({ hr: 72, dur: 4, fs: 500, hrv: 0.003, tAmp: Math.max(0.04, 0.32 - d * 0.16), tW: 0.05 + d * 0.01, seed: 5 }), [{ off: 0.46, sd: 0.04, a: 0.02 + d * 0.09 }]);
+    paperPlot(cv, s, 4, [-0.8, 1.8]);
+    out.innerHTML = stat("Serum K⁺", fmt(v.k, 1), " mmol/L") + (v.k < 2.5 ? chip("Severe: monitor, replace K⁺ and Mg²⁺", "bad") : v.k < 3.5 ? chip("Hypokalemia: U waves", "warn") : chip("Normal", "good")); },
+  pearl: "Replace magnesium too. Without it, the kidney keeps wasting potassium and replacement fails." },
+
+{ title: "Long QT from a new antibiotic", system: "Pharmacology", concepts: ["Models & assumptions", "Rate correction"], hook: "Which QT correction formula should you trust?",
+  present: "A 71-year-old admitted for pneumonia starts a fluoroquinolone. Day 2 ECG: QT 440 ms at a heart rate of 110.",
+  md: "QTc above 500 ms means a high risk of torsades de pointes. You may need to stop the drug and correct electrolytes.",
+  eng: "QT naturally shortens as heart rate rises, so we normalize it with a model. Bazett assumes QT scales with √RR and over-corrects at fast rates. Fridericia uses the cube root and is more stable. A risk threshold is only as good as the model behind it.",
+  eq: "QTc_Bazett = QT / √RR      QTc_Fridericia = QT / RR^(1/3)   (RR in s)",
+  ctrls: [["qt", "Measured QT (ms)", 300, 560, 5, 440], ["hr", "Heart rate (bpm)", 40, 150, 1, 110]],
+  render(v, cv, out) { const hrs = linspace(40, 150, 120), b = hrs.map(h => v.qt / Math.sqrt(60 / h)), f = hrs.map(h => v.qt / Math.cbrt(60 / h));
+    const rr = 60 / v.hr, qb = v.qt / Math.sqrt(rr), qf = v.qt / Math.cbrt(rr);
+    plot(cv, { series: [{ x: hrs, y: b, color: "--trace2", w: 2 }, { x: hrs, y: f, color: "--trace3", w: 2 }], markers: [{ x: v.hr, y: qb, color: "--trace2", label: "Bazett" }, { x: v.hr, y: qf, color: "--trace3", label: "Fridericia" }], hlines: [{ y: 500, color: "--bad", label: "500 ms" }], xlim: [40, 150], ylim: [300, 700], xlabel: "Heart rate (bpm)", ylabel: "QTc (ms)" });
+    out.innerHTML = stat("QTc Bazett", fmt(qb, 0), " ms") + stat("QTc Fridericia", fmt(qf, 0), " ms") + (qf > 500 ? chip("High risk", "bad") : qb > 500 ? chip("Formulas disagree", "warn") : chip("Below 500 ms", "good")); },
+  pearl: "At heart rates above about 90 bpm, many guidelines prefer Fridericia. Re-check QTc after the rate settles before stopping a needed drug." },
+
+{ title: "Acute STEMI: the injury current", system: "Cardiac", concepts: ["Filtering", "Bioelectric sources"], hook: "ST elevation is a near-DC signal. Filters can bend it.",
+  present: "A 58-year-old has 40 minutes of crushing chest pain. The monitor shows ST changes. The cath lab team asks for a 12-lead.",
+  md: "ST elevation of 1 mm or more in two contiguous leads, with symptoms, means occlusion until proven otherwise. Door-to-balloon time matters.",
+  eng: "Injured myocardium cannot fully polarize, so a current flows between injured and healthy tissue. That current shifts the baseline for part of the cycle, which is a very low-frequency feature. An aggressive high-pass filter treats it like drift and distorts it.",
+  ctrls: [["st", "True ST elevation (mm)", 0, 4, 0.5, 2.5], ["hp", "High-pass cutoff (Hz)", 0.05, 1.5, 0.05, 0.05]], presets: [["Diagnostic 0.05 Hz", { hp: 0.05 }], ["Monitor 0.5 Hz", { hp: 0.5 }], ["Aggressive 1.5 Hz", { hp: 1.5 }]],
+  render(v, cv, out) { const s = synthECG({ hr: 80, dur: 5, fs: 500, hrv: 0.003, seed: 8 }), st = v.st / 10;
+    for (const b of s.beats) for (let k = 0; k < s.y.length; k++) { const u = s.t[k] - b; if (u > 0.02 && u < 0.36) s.y[k] += st * Math.min(1, (u - 0.02) / 0.02) * Math.min(1, (0.36 - u) / 0.08); }
+    const y = hpFirstSafe(Array.from(s.y), v.hp, s.fs);
+    const meas = []; for (const b of s.beats.slice(1, -1)) { const kj = Math.round((b + 0.08) * s.fs), kb = Math.round((b - 0.06) * s.fs); meas.push(y[kj] - y[kb]); }
+    const m = meas.reduce((a, b) => a + b, 0) / meas.length * 10;
+    plot(cv, { series: [{ x: s.t, y: s.y, color: "--axis", w: 1, dash: [4, 3] }, { x: s.t, y, color: "--paper-ink", w: 1.5 }], xlim: [0, 5], ylim: [-0.8, 2], paper: true, xlabel: "Time (s)  ·  dashed = true signal", ylabel: "mV" });
+    out.innerHTML = stat("True ST", fmt(v.st, 1), " mm") + stat("Measured ST", fmt(m, 1), " mm") + (Math.abs(m - v.st) > 0.5 ? chip("Filter distorting ST", "bad") : chip("Faithful", "good")); },
+  pearl: "If the monitor and the 12-lead disagree about ST segments, trust the 12-lead in diagnostic mode, and treat the patient in front of you." },
+
+{ title: "Atrial fibrillation and stroke risk", system: "Cardiac / Neuro", concepts: ["Randomness", "Detection"], hook: "An irregular rhythm is a statistical signature.",
+  present: "A 76-year-old with hypertension has an irregular pulse at a routine visit. She has no symptoms.",
+  md: "Irregularly irregular rhythm without P waves. Loss of atrial contraction leads to blood stasis in the left atrial appendage, clot, and stroke. Anticoagulation decisions use CHA₂DS₂-VASc.",
+  eng: "Sinus rhythm is nearly periodic. AF R–R intervals behave like random draws. Detectors measure irregularity statistically, for example the coefficient of variation of RR intervals. The stroke mechanism is also physics: no atrial kick, low flow velocity in a blind pouch, and stagnant blood clots.",
+  eq: "CV = SD(RR) / mean(RR)",
+  ctrls: [["irr", "Rhythm irregularity (%)", 0, 100, 1, 10]], presets: [["Sinus", { irr: 3 }], ["Frequent ectopy", { irr: 35 }], ["Atrial fibrillation", { irr: 90 }]],
+  render(v, cv, out) { const r = rng(17), rr = []; for (let i = 0; i < 60; i++) rr.push(800 * (1 + (v.irr / 100) * 0.5 * (r() * 2 - 1) + 0.02 * gauss(r)));
+    const m = rr.reduce((a, b) => a + b) / rr.length, sd = Math.sqrt(rr.reduce((a, b) => a + (b - m) ** 2, 0) / (rr.length - 1)), cv_ = 100 * sd / m;
+    plot(cv, { series: [{ x: rr.map((_, i) => i + 1), y: rr, color: "--trace", w: 1.5 }, { x: rr.map((_, i) => i + 1), y: rr, color: "--trace", dots: true, r: 3 }], xlim: [0, 61], ylim: [300, 1300], xlabel: "Beat number", ylabel: "RR (ms)", left: 58 });
+    out.innerHTML = stat("Mean HR", fmt(60000 / m, 0), " bpm") + stat("RR CV", fmt(cv_, 1), " %") + (cv_ > 12 ? chip("Detector: irregular, suspect AF", "bad") : chip("Detector: regular", "good")); },
+  pearl: "Irregular rhythm alone is not AF. Frequent ectopic beats also raise variability. Confirm with an ECG showing absent P waves." },
+
+{ title: "Complete heart block", system: "Cardiac", concepts: ["Oscillators", "Coupling"], hook: "Two pacemakers, no connection.",
+  present: "An 82-year-old fainted in church. Pulse is 36 and regular. He looks pale but is talking.",
+  md: "P waves march at their own rate, QRS complexes at a slower, independent rate. PR intervals vary randomly. Needs a pacemaker.",
+  eng: "The heart has a hierarchy of oscillators. Normally the fast sinus node drives the ventricles through the AV node (a coupled system). Cut the coupling and each oscillator runs at its own natural frequency. The ventricular escape oscillator is slow, so cardiac output falls.",
+  ctrls: [["a", "Atrial (sinus) rate (bpm)", 50, 120, 1, 78], ["v", "Ventricular escape rate (bpm)", 20, 60, 1, 36]],
+  render(v, cv, out) { const fs = 500, dur = 8, n = fs * dur, t = Array.from({ length: n }, (_, k) => k / fs), y = new Float64Array(n);
+    const add = (c, sd, a) => { for (let k = Math.max(0, Math.floor((c - 5 * sd) * fs)); k < Math.min(n, (c + 5 * sd) * fs); k++) { const z = (t[k] - c) / sd; y[k] += a * Math.exp(-0.5 * z * z); } };
+    for (let c = 0.2; c < dur; c += 60 / v.a) add(c, 0.022, 0.15);
+    for (let c = 0.55; c < dur; c += 60 / v.v) { add(c, 0.018, 1.1); add(c + 0.04, 0.02, -0.4); add(c + 0.36, 0.06, 0.3); }
+    plot(cv, { series: [{ x: t, y, color: "--paper-ink", w: 1.4 }], xlim: [0, dur], ylim: [-0.8, 1.6], paper: true, xlabel: "Time (s)", ylabel: "mV" });
+    out.innerHTML = stat("P waves / min", v.a) + stat("QRS / min", v.v) + stat("Ratio", fmt(v.a / v.v, 2)) + chip(v.v < 40 ? "Low output: pace" : "AV dissociation", v.v < 40 ? "bad" : "warn"); },
+  pearl: "Look for P waves hidden inside QRS complexes and T waves. Marching them out with calipers proves dissociation." },
+
+{ title: "Pacemaker threshold and battery life", system: "Devices", concepts: ["Strength–duration", "Energy"], hook: "Every extra volt costs years of battery.",
+  present: "A device clinic check on a 70-year-old with a 6-year-old pacemaker. The battery indicator shows about 2 years left. The rep suggests reprogramming.",
+  md: "The pacing threshold is the smallest output that captures the heart. Output is programmed with a safety margin above threshold.",
+  eng: "Myocardium follows the strength–duration law: shorter pulses need higher voltage. Each pulse costs energy V²/R × width. Doubling the voltage quadruples the energy, so margin has a real price in battery life.",
+  eq: "V_threshold = Rheobase · (1 + Chronaxie / PW)      E = V² · PW / R",
+  ctrls: [["V", "Output (V)", 0.5, 5, 0.1, 2.5], ["pw", "Pulse width (ms)", 0.1, 1.5, 0.05, 0.4], ["R", "Lead impedance (Ω)", 300, 1500, 10, 600]],
+  render(v, cv, out) { const rb = 0.5, ch = 0.45, pws = linspace(0.1, 1.5, 100), th = pws.map(p => rb * (1 + ch / p)), vth = rb * (1 + ch / v.pw), cap = v.V >= vth;
+    const E = v.V * v.V / v.R * v.pw / 1000 * 1e6, perDay = (E / 0.5) * 86400 / 1e6 + 1.2, yrs = 10000 / perDay / 365;
+    plot(cv, { series: [{ x: pws, y: th, color: "--trace3", w: 2 }], bands: [], markers: [{ x: v.pw, y: v.V, color: cap ? "--good" : "--bad", r: 6, label: cap ? "capture" : "no capture" }], xlim: [0.1, 1.5], ylim: [0, 5], xlabel: "Pulse width (ms)", ylabel: "Voltage (V)", annots: [{ x: 1.0, y: 1.3, text: "threshold curve", color: "--trace3" }] });
+    out.innerHTML = stat("Threshold at this width", fmt(vth, 2), " V") + stat("Safety margin", fmt(v.V / vth, 1), "×") + stat("Energy / pulse", fmt(E, 1), " µJ") + stat("Rough battery life", fmt(yrs, 1), " yr") + chip(cap ? "Capture" : "Loss of capture", cap ? "good" : "bad"); },
+  pearl: "A common programming rule is a 2× voltage safety margin. Rising lead impedance can mean a conductor fracture; falling impedance can mean an insulation break." },
+
+{ title: "Defibrillation and chest impedance", system: "Emergency", concepts: ["Ohm's law", "Energy"], hook: "Joules are on the dial. Amps defibrillate.",
+  present: "Ventricular fibrillation in a 120 kg man. The first 200 J shock fails. The pads were placed over a hairy, sweaty chest.",
+  md: "Shock early, minimize pauses in compressions, and escalate energy if the first shock fails. Pad position and contact matter.",
+  eng: "The defibrillator stores energy in a capacitor, but the heart responds to current. Current = voltage ÷ impedance. A high transthoracic impedance (poor contact, large chest, air) reduces current for the same joules. Modern biphasic devices measure impedance and adjust the waveform.",
+  eq: "E = ½·C·V²   →   I_peak ≈ √(2E/C) / R",
+  ctrls: [["E", "Selected energy (J)", 120, 360, 10, 200], ["R", "Transthoracic impedance (Ω)", 25, 180, 1, 75]], presets: [["Good contact (60 Ω)", { R: 60 }], ["Average (75 Ω)", { R: 75 }], ["Poor contact (140 Ω)", { R: 140 }]],
+  render(v, cv, out) { const C = 150e-6, V = Math.sqrt(2 * v.E / C), Rs = linspace(25, 180, 100);
+    plot(cv, { series: [{ x: Rs, y: Rs.map(r => V / r), color: "--trace", w: 2 }], markers: [{ x: v.R, y: V / v.R, color: "--trace2", r: 6 }], xlim: [25, 180], ylim: [0, 80], xlabel: "Impedance (Ω)", ylabel: "Peak current (A)" });
+    out.innerHTML = stat("Capacitor voltage", fmt(V, 0), " V") + stat("Peak current", fmt(V / v.R, 1), " A") + (v.R > 120 ? chip("High impedance: fix pad contact", "warn") : chip("Acceptable contact", "good")); },
+  pearl: "Simple fixes lower impedance: firm pad pressure, shave or dry the chest, use fresh pads, and avoid placing pads over breast tissue." },
+
+{ title: "The fitness tracker that counts steps as heartbeats", system: "Wearables", concepts: ["Spectrum", "Filtering"], hook: "When noise sits in the same band as the signal.",
+  present: "A runner says her watch shows a heart rate of 165 during easy jogs. A chest strap shows 142.",
+  md: "Wrist optical heart rate is unreliable during rhythmic exercise. The error is not random; it locks onto something.",
+  eng: "Arm swing modulates the optical signal at the running cadence. If cadence and heart rate fall at similar frequencies, both appear as peaks in the same spectral band and a filter cannot separate them. Devices use an accelerometer as a noise reference (adaptive filtering) to subtract the motion peak.",
+  ctrls: [["hr", "True heart rate (bpm)", 60, 190, 1, 142], ["cad", "Running cadence (steps/min)", 60, 190, 1, 165], ["mot", "Motion strength", 0, 2, 0.05, 1.2]],
+  render(v, cv, out) { const fs = 50, n = 1024, t = linspace(0, (n - 1) / fs, n), r = rng(3);
+    const y = t.map(x => Math.sin(2 * Math.PI * v.hr / 60 * x) + v.mot * Math.sin(2 * Math.PI * v.cad / 60 * x + 1) + 0.3 * gauss(r));
+    const { f, p } = fftMag(y, fs); const fb = f.map(x => x * 60);
+    let bi = 1; for (let i = 1; i < p.length; i++) if (fb[i] > 40 && fb[i] < 220 && p[i] > p[bi]) bi = i;
+    plot(cv, { series: [{ x: fb, y: p, color: "--trace3", w: 1.8 }], markers: [{ x: v.hr, y: 0.02, color: "--good", shape: "tri", label: "true HR" }], xlim: [40, 220], ylim: [0, Math.max(1.2, Math.max(...p) * 1.15)], xlabel: "Frequency (beats or steps per minute)", ylabel: "Amplitude" });
+    const est = fb[bi], bad = Math.abs(est - v.hr) > 5;
+    out.innerHTML = stat("Watch reports", fmt(est, 0), " bpm") + stat("Error", fmt(est - v.hr, 0), " bpm") + chip(bad ? "Locked on cadence" : "Correct", bad ? "bad" : "good"); },
+  pearl: "For exercise testing or rhythm questions, use a chest strap or an ECG. Wrist optical sensors are best at rest." },
+
+{ title: "60 Hz noise from a dried-out electrode", system: "Instrumentation", concepts: ["Differential amplifier", "Impedance"], hook: "One bad electrode turns common-mode noise into signal.",
+  present: "A Holter recording from an ICU patient is buried in 60 Hz hum, but only on one channel. The tech re-preps the skin and the noise disappears.",
+  md: "Hum on one lead suggests a local electrode problem rather than a room problem.",
+  eng: "The body picks up mains voltage equally everywhere (common mode). A differential amplifier subtracts two electrodes, so equal noise cancels. But electrode impedance and amplifier input impedance form a voltage divider. If the two electrodes differ in impedance, the noise no longer cancels: common mode becomes differential.",
+  eq: "V_noise ≈ V_cm · ΔZ_electrode / Z_in  +  V_cm / CMRR",
+  ctrls: [["vcm", "Common-mode pickup (V)", 0.05, 2, 0.05, 0.5], ["dz", "Electrode impedance mismatch (kΩ)", 0, 200, 1, 80], ["zin", "Amplifier input impedance (MΩ)", 1, 1000, 1, 10]],
+  render(v, cv, out) { const vn = v.vcm * (v.dz * 1e3) / (v.zin * 1e6) + v.vcm / 1e5, s = synthECG({ hr: 70, dur: 3, fs: 1000, hrv: 0, seed: 9 });
+    const y = s.y.map((x, k) => x + vn * Math.sin(2 * Math.PI * 60 * s.t[k]));
+    plot(cv, { series: [{ x: s.t, y, color: "--trace", w: 1 }], xlim: [0, 3], ylim: [-1.5, 2.2], xlabel: "Time (s)", ylabel: "mV" });
+    out.innerHTML = stat("Hum amplitude", fmt(vn * 1000, 2), " mV") + stat("vs R wave", fmt(100 * vn * 1000 / 1.2, 0), " %") + chip(vn * 1000 > 0.1 ? "Visible interference" : "Clean", vn * 1000 > 0.1 ? "bad" : "good"); },
+  pearl: "Skin prep (abrade, clean, fresh gel) lowers and matches electrode impedance. It fixes more noise than any filter." },
+
+{ title: "Low voltage and electrical alternans", system: "Cardiac", concepts: ["Volume conductor", "Geometry"], hook: "Fluid around the heart shorts and shakes the signal.",
+  present: "A 45-year-old with lung cancer has worsening breathlessness, distended neck veins and a heart rate of 118. Heart sounds are muffled.",
+  md: "Low QRS voltage, tachycardia, and beat-to-beat alternation in QRS height suggest a large pericardial effusion, possibly tamponade.",
+  eng: "The ECG is measured through a volume conductor. Conductive fluid around the heart shunts current and increases the distance to the electrodes, so voltage falls. In a large effusion, the heart swings back and forth inside the fluid, so its electrical axis changes every other beat: alternans. (Amplitudes here are illustrative.)",
+  ctrls: [["d", "Effusion thickness (mm)", 0, 35, 1, 0]], presets: [["None", { d: 0 }], ["Moderate 15 mm", { d: 15 }], ["Large 28 mm", { d: 28 }]],
+  render(v, cv, out) { const sc = Math.exp(-v.d / 22), s = synthECG({ hr: 72 + v.d * 1.5, dur: 5, fs: 500, hrv: 0, scale: sc, seed: 12 });
+    if (v.d > 20) { const alt = 0.3 * (v.d - 20) / 15; s.beats.forEach((b, i) => { if (i % 2) for (let k = 0; k < s.y.length; k++) if (Math.abs(s.t[k] - b) < 0.06) s.y[k] *= (1 - alt); }); }
+    paperPlot(cv, s, 5, [-0.6, 1.6]);
+    out.innerHTML = stat("R amplitude", fmt(1.2 * sc, 2), " mV") + stat("Heart rate", fmt(72 + v.d * 1.5, 0), " bpm") + (1.2 * sc < 0.5 ? chip("Low voltage", "bad") : chip("Normal voltage", "good")) + (v.d > 20 ? chip("Alternans", "bad") : ""); },
+  pearl: "Low voltage has other causes with the same physics: obesity, emphysema (air insulates) and infiltrative cardiomyopathy." },
+
+{ title: "Respiratory sinus arrhythmia", system: "Autonomic", concepts: ["Modulation", "HRV"], hook: "Breathing frequency-modulates the heart.",
+  present: "A healthy 19-year-old's ECG is flagged 'sinus arrhythmia.' Her parents are worried.",
+  md: "Heart rate rises on inspiration and falls on expiration. Normal and a sign of good vagal tone. It disappears with autonomic neuropathy, for example in long-standing diabetes.",
+  eng: "Breathing frequency-modulates the heart rate, like FM radio. The RR tachogram oscillates at the breathing frequency (the HF band, 0.15–0.4 Hz). Slow breathing near 6 breaths/min resonates with the baroreflex and maximizes the swing.",
+  ctrls: [["br", "Breathing rate (breaths/min)", 5, 24, 1, 12], ["vag", "Vagal tone (RSA amplitude, ms)", 0, 150, 5, 80], ["hr", "Mean heart rate (bpm)", 50, 110, 1, 65]],
+  render(v, cv, out) { const fb = v.br / 60, gain = v.vag * (1 + 0.8 * Math.exp(-((v.br - 6) ** 2) / 8)), rr0 = 60000 / v.hr, rr = []; let t = 0;
+    while (t < 60) { const x = rr0 + gain / 2 * Math.sin(2 * Math.PI * fb * t); rr.push([t, x]); t += x / 1000; }
+    plot(cv, { series: [{ x: rr.map(a => a[0]), y: rr.map(a => a[1]), color: "--trace", w: 1.8 }], xlim: [0, 60], ylim: [rr0 - 220, rr0 + 220], xlabel: "Time (s)", ylabel: "RR (ms)", left: 58 });
+    out.innerHTML = stat("Breathing frequency", fmt(fb, 2), " Hz") + stat("RR swing", fmt(gain, 0), " ms") + chip(fb >= 0.15 ? "HF band" : "Below HF band (LF)", "warn"); },
+  pearl: "Loss of RSA in a diabetic patient is an early sign of cardiac autonomic neuropathy and is associated with higher cardiovascular risk." },
+
+{ title: "Accidental hypothermia and the Osborn wave", system: "Environmental", concepts: ["Temperature kinetics", "Rate"], hook: "Cold slows every ion channel at once.",
+  present: "A 60-year-old found outdoors after a winter night. Core temperature 29 °C. Pulse slow, blood pressure low.",
+  md: "Bradycardia, prolonged intervals, shivering artifact and a J (Osborn) wave at the end of the QRS. Arrhythmia risk rises below 30 °C.",
+  eng: "Ion channel kinetics depend on temperature. Biological rates roughly halve for every 10 °C drop (Q10 ≈ 2). Every process slows: pacemaker rate, conduction and repolarization. A transient outward current that becomes prominent in the cold produces the J wave.",
+  eq: "rate(T) = rate(37 °C) · Q10^((T − 37) / 10)",
+  ctrls: [["T", "Core temperature (°C)", 24, 37, 0.5, 37]], presets: [["Normal 37 °C", { T: 37 }], ["Mild 33 °C", { T: 33 }], ["Moderate 30 °C", { T: 30 }], ["Severe 26 °C", { T: 26 }]],
+  render(v, cv, out) { const f = Math.pow(2, (v.T - 37) / 10), hr = 75 * f, j = Math.max(0, 33.5 - v.T) * 0.06;
+    const s = addBumps(synthECG({ hr, dur: 5, fs: 500, hrv: 0, tPos: 0.28 / Math.sqrt(f), qrsW: 0.09 / Math.pow(f, 0.5), seed: 13, emg: v.T > 31 && v.T < 35.5 ? 0.04 : 0 }), [{ off: 0.05, sd: 0.016, a: j }]);
+    paperPlot(cv, s, 5, [-0.8, 1.8]);
+    out.innerHTML = stat("Heart rate", fmt(hr, 0), " bpm") + stat("Rate factor", fmt(f, 2), "×") + stat("J wave", fmt(j * 10, 1), " mm") + chip(v.T < 30 ? "Severe: VF risk" : v.T < 35 ? "Hypothermia" : "Normothermic", v.T < 30 ? "bad" : v.T < 35 ? "warn" : "good"); },
+  pearl: "Handle severely hypothermic patients gently; rough movement can trigger VF. 'Not dead until warm and dead.'" },
+
+{ title: "Smartwatch AF alerts: who should worry?", system: "Screening", concepts: ["Detection", "Bayes"], hook: "Same algorithm, very different meaning by population.",
+  present: "A healthy 28-year-old and a 78-year-old with hypertension both receive an irregular rhythm notification on the same watch.",
+  md: "Positive predictive value depends on how common the disease is in the person tested. Confirm with an ECG.",
+  eng: "Every detector trades sensitivity against specificity. When the condition is rare, even a very specific test produces mostly false alarms. This is Bayes' theorem.",
+  eq: "PPV = Sens·Prev / (Sens·Prev + (1 − Spec)·(1 − Prev))",
+  ctrls: [["sens", "Sensitivity (%)", 70, 100, 0.5, 95], ["spec", "Specificity (%)", 90, 99.9, 0.1, 98], ["prev", "Prevalence in group (%)", 0.1, 20, 0.1, 1]], presets: [["Young adults (0.2%)", { prev: 0.2 }], ["Age 65+ (5%)", { prev: 5 }], ["High-risk clinic (15%)", { prev: 15 }]],
+  render(v, cv, out) { const se = v.sens / 100, sp = v.spec / 100, ppv = p => se * p / (se * p + (1 - sp) * (1 - p)), xs = linspace(0.001, 0.2, 150), p = v.prev / 100;
+    plot(cv, { series: [{ x: xs.map(x => x * 100), y: xs.map(x => ppv(x) * 100), color: "--trace", w: 2 }], markers: [{ x: v.prev, y: ppv(p) * 100, color: "--trace2", r: 6 }], xlim: [0, 20], ylim: [0, 100], xlabel: "Prevalence (%)", ylabel: "PPV (%)" });
+    const fa = (1 - sp) * (1 - p) * 1000, tp = se * p * 1000;
+    out.innerHTML = stat("PPV", fmt(ppv(p) * 100, 0), " %") + stat("True alerts / 1000", fmt(tp, 1)) + stat("False alerts / 1000", fmt(fa, 1)); },
+  pearl: "Screening low-risk populations generates many false positives. Confirm before anticoagulating." },
+
+{ title: "Implantable loop recorder memory budget", system: "Devices", concepts: ["Sampling", "Data budget"], hook: "Why the device cannot record everything.",
+  present: "A patient with recurrent unexplained fainting gets a loop recorder for up to 3 years. She asks whether it records every heartbeat.",
+  md: "Loop recorders store episodes: automatically detected events and patient-triggered recordings around a symptom.",
+  eng: "Continuous storage = sample rate × bits per sample × time. A tiny implant has very little memory and must spend battery to transmit data. So the device runs a detector and only saves windows around events. Detection quality now decides what the doctor sees.",
+  eq: "Bytes = fs · (bits / 8) · 86,400 s/day · days",
+  ctrls: [["fs", "Sampling rate (Hz)", 64, 512, 16, 256], ["bits", "Bits per sample", 8, 16, 1, 12], ["days", "Monitoring duration (days)", 30, 1095, 5, 1095], ["mem", "Device memory (MB)", 1, 64, 1, 16]],
+  render(v, cv, out) { const per = v.fs * v.bits / 8 * 86400 / 1e6, ds = linspace(0, v.days, 100);
+    plot(cv, { series: [{ x: ds, y: ds.map(d => per * d / 1000), color: "--trace", w: 2 }], hlines: [{ y: v.mem / 1000, color: "--trace2", label: "device memory" }], xlim: [0, v.days], ylim: [0, Math.max(0.05, per * v.days / 1000)], xlabel: "Days", ylabel: "Continuous data (GB)" });
+    const mins = v.mem / per * 1440;
+    out.innerHTML = stat("Per day", fmt(per, 1), " MB") + stat("Total continuous", fmt(per * v.days / 1000, 1), " GB") + stat("Memory holds", fmt(mins, 0), " min") + chip("Must store episodes only", "warn"); },
+  pearl: "Teach patients to trigger a recording during symptoms. Correlating symptoms with rhythm is the device's main job." },
+
+{ title: "Calcium and the length of the ST segment", system: "Electrolytes", concepts: ["Membrane potential", "Electrolytes"], hook: "Calcium stretches or squeezes the plateau phase.",
+  present: "A 50-year-old after thyroid surgery has tingling around the mouth and hand cramps on day 1.",
+  md: "Hypocalcemia (common after thyroid or parathyroid surgery) prolongs the QT by lengthening the ST segment. Hypercalcemia shortens it.",
+  eng: "The ventricular action potential has a plateau held up by calcium inflow. Low extracellular calcium changes how long the plateau lasts, so the time from QRS to T wave (the ST segment) lengthens. The T wave itself keeps its shape; it just arrives later.",
+  ctrls: [["ca", "Total calcium (mg/dL)", 6, 14, 0.1, 9.5]], presets: [["Low 6.8", { ca: 6.8 }], ["Normal 9.5", { ca: 9.5 }], ["High 13", { ca: 13 }]],
+  render(v, cv, out) { const tp = clamp(0.28 + (9.5 - v.ca) * 0.025, 0.18, 0.42), s = synthECG({ hr: 70, dur: 4, fs: 500, hrv: 0, tPos: tp, seed: 14 });
+    paperPlot(cv, s, 4, [-0.8, 1.8]); const qt = (tp * Math.sqrt(60 / 70) + 0.1) * 1000;
+    out.innerHTML = stat("Approx. QT", fmt(qt, 0), " ms") + chip(v.ca < 8.5 ? "Long ST/QT" : v.ca > 10.5 ? "Short QT" : "Normal", v.ca < 8.5 || v.ca > 10.5 ? "warn" : "good"); },
+  pearl: "Check ionized calcium and correct magnesium. Total calcium is misleading when albumin is low." }
+];
+
+const COURSE_TITLE = "ECG & Biosignals 101";
+MODULES.splice(MODULES.findIndex(m => m.id === "hw"), 0, caseLibraryModule({ id: "m9", num: "9", cases: ECG_CASES,
+  intro: "Sixteen real clinical situations where signal and circuit thinking explains what you see: electrolytes, drugs, devices, wearables, instrumentation and screening." }));
+DESCS.m9 = "16 interactive clinical cases: potassium, QT drugs, pacemakers, defibrillation, wearables, screening.";
+
+/* ================= router ================= */
+function navHTML(active) {
+  return `<a href="#home" class="${active === "home" ? "active" : ""}"><span>Home</span></a>` + MODULES.map(m => `<a href="#${m.id}" class="${active === m.id ? "active" : ""}">${m.num ? `<span class="n">${m.num}.</span>` : ""}<span>${m.nav}</span></a>`).join("");
+}
+let tocObs;
+function buildTOC() {
+  const hs = $$("#main h2[id]"); const toc = $("#toc");
+  if (!hs.length) { toc.innerHTML = ""; return; }
+  toc.innerHTML = `<h2>On this page</h2><ul>${hs.map(h => `<li><a href="#${h.id}" data-target="${h.id}">${h.textContent}</a></li>`).join("")}</ul>`;
+  $$("a", toc).forEach(a => a.addEventListener("click", e => { e.preventDefault(); document.getElementById(a.dataset.target).scrollIntoView({ block: "start" }); }));
+  if (tocObs) tocObs.disconnect();
+  tocObs = new IntersectionObserver(es => { es.forEach(e => { if (e.isIntersecting) { $$("a", toc).forEach(a => a.classList.toggle("on", a.dataset.target === e.target.id)); } }); }, { rootMargin: "-80px 0px -70% 0px" });
+  hs.forEach(h => tocObs.observe(h));
+}
+function route() {
+  let id = (location.hash || "#home").slice(1);
+  const m = MODULES.find(x => x.id === id);
+  if (!m && id !== "home") { // in-page anchor on home or unknown -> home
+    if (!document.getElementById(id)) id = "home"; else return;
+  }
+  PLOTS.clear(); CUSTOM.clear();
+  $("#navlinks").innerHTML = navHTML(m ? m.id : "home");
+  const main = $("#main");
+  if (!m) { main.innerHTML = homeHTML(); document.title = COURSE_TITLE; }
+  else {
+    const i = MODULES.indexOf(m), prev = MODULES[i - 1], next = MODULES[i + 1];
+    main.innerHTML = `<h1>${m.title}</h1><p class="subtitle">${m.subtitle}</p>${m.html()}
+<nav class="module-nav" aria-label="Module navigation"><a href="#${prev ? prev.id : "home"}">← ${prev ? prev.title.replace(/^Module (\d+): .*/, "Module $1") : "Home"}</a>${next ? `<a href="#${next.id}">${next.id === "hw" ? "Homework" : next.title.replace(/^Module (\d+): .*/, "Module $1")} →</a>` : `<a href="#home">Home →</a>`}</nav>`;
+    m.init();
+  }
+  buildTOC(); window.scrollTo(0, 0);
+  const act = $("#navlinks a.active"); if (act) act.scrollIntoView({ block: "nearest", inline: "center" });
+}
+window.addEventListener("hashchange", route);
+$("#themeBtn").addEventListener("click", () => {
+  const r = document.documentElement, cur = r.dataset.theme || (matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light");
+  r.dataset.theme = cur === "dark" ? "light" : "dark"; setTimeout(() => { redrawAll(); for (const cv of [...CUSTOM]) if (cv.isConnected) cv._custom(); }, 20);
+});
+route();
+
+</script>
+</body></html>

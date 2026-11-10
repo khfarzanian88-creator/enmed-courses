@@ -1,0 +1,1203 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<style>:root{color-scheme:light;padding-top:env(safe-area-inset-top);padding-bottom:env(safe-area-inset-bottom)}body{margin:0}img{max-width:100%}[hidden]{display:none!important}</style>
+<title>Biomechanics &amp; Biomaterials 101</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,400;0,600;0,700;1,400&family=Work+Sans:wght@500;600;700;800&family=JetBrains+Mono:wght@400;600&display=swap">
+<style>
+/* Layout: Texas A&M maroon utility bar · white program header · module tab row · reading column (~740px) + sticky "On this page" rail */
+:root{
+  --bg:#ffffff; --fg:#1f1f1f; --muted:#5c5656; --rule:#e2dddd;
+  --maroon:#500000; --maroon-2:#732f2f; --nav:#500000; --nav-fg:#ffffff; --nav-dim:#e8d6d6;
+  --hdr:#ffffff; --hdr-fg:#1f1f1f; --hdr-rule:#d1d1d1;
+  --accent:#500000; --accent-ink:#500000; --link:#500000;
+  --panel:#f6f6f6; --card:#ffffff; --card-border:#d9d4d4;
+  --info:#3e5a7a; --info-bg:#eef2f6;
+  --tip:#500000; --tip-bg:#f7efef;
+  --warn:#9a6a00; --warn-bg:#fbf4e4;
+  --bad:#b3242b; --good:#2e7d4f;
+  --trace:#500000; --trace2:#c0392b; --trace3:#3e5a7a; --trace4:#9a6a00;
+  --grid:#ebe7e7; --axis:#7a7373;
+  --paper:#fffafa; --paper-minor:#f2d2d2; --paper-major:#e3a1a1; --paper-ink:#1c1c1c;
+  --banner-bg:#3e5a7a; --banner-fg:#ffffff;
+  --font-body:"Open Sans",Arial,"Helvetica Neue",sans-serif;
+  --font-head:"Work Sans","Open Sans",Arial,sans-serif;
+  --font-mono:"JetBrains Mono",ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
+  --bg:#141213; --fg:#ece7e7; --muted:#a79d9d; --rule:#2e2828;
+  --maroon:#500000; --maroon-2:#8a3a3a; --nav:#3a0000; --nav-fg:#ffffff; --nav-dim:#d9bdbd;
+  --hdr:#1b1818; --hdr-fg:#ece7e7; --hdr-rule:#332b2b;
+  --accent:#d39a9a; --accent-ink:#e2adad; --link:#e2adad;
+  --panel:#1d1a1a; --card:#191616; --card-border:#342c2c;
+  --info:#8fb0d4; --info-bg:#1a222c;
+  --tip:#d39a9a; --tip-bg:#2a1a1a;
+  --warn:#e2b45a; --warn-bg:#2e2512;
+  --bad:#f07a7a; --good:#5fcf8e;
+  --trace:#e7a3a3; --trace2:#f07a7a; --trace3:#8fb0d4; --trace4:#e2b45a;
+  --grid:#2a2525; --axis:#857b7b;
+  --paper:#1d1617; --paper-minor:#3b2628; --paper-major:#653438; --paper-ink:#f1e9e9;
+  --banner-bg:#22303f; --banner-fg:#eaf0f6;
+  color-scheme:dark;
+}}
+:root[data-theme="dark"]{
+  --bg:#141213; --fg:#ece7e7; --muted:#a79d9d; --rule:#2e2828;
+  --maroon:#500000; --maroon-2:#8a3a3a; --nav:#3a0000; --nav-fg:#ffffff; --nav-dim:#d9bdbd;
+  --hdr:#1b1818; --hdr-fg:#ece7e7; --hdr-rule:#332b2b;
+  --accent:#d39a9a; --accent-ink:#e2adad; --link:#e2adad;
+  --panel:#1d1a1a; --card:#191616; --card-border:#342c2c;
+  --info:#8fb0d4; --info-bg:#1a222c;
+  --tip:#d39a9a; --tip-bg:#2a1a1a;
+  --warn:#e2b45a; --warn-bg:#2e2512;
+  --bad:#f07a7a; --good:#5fcf8e;
+  --trace:#e7a3a3; --trace2:#f07a7a; --trace3:#8fb0d4; --trace4:#e2b45a;
+  --grid:#2a2525; --axis:#857b7b;
+  --paper:#1d1617; --paper-minor:#3b2628; --paper-major:#653438; --paper-ink:#f1e9e9;
+  --banner-bg:#22303f; --banner-fg:#eaf0f6;
+  color-scheme:dark;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+@media (prefers-reduced-motion: reduce){html{scroll-behavior:auto}}
+body{background:var(--bg);color:var(--fg);font-family:var(--font-body);font-size:17px;line-height:1.6}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:60;background:var(--hdr)}
+a{color:var(--link)}
+a:focus-visible,button:focus-visible,input:focus-visible,select:focus-visible,summary:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+
+/* ---------- header ---------- */
+.util{background:var(--nav);color:var(--nav-fg);font-family:var(--font-head);font-weight:700;font-size:13px;letter-spacing:.8px;text-transform:uppercase;
+  padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+.util-inner{max-width:1180px;margin:0 auto;display:flex;justify-content:space-between;align-items:center;gap:12px;min-height:38px}
+.theme-btn{flex:none;background:none;border:1px solid rgba(255,255,255,.4);color:var(--nav-fg);border-radius:3px;padding:3px 9px;font:inherit;font-size:12px;cursor:pointer}
+.prog{background:var(--hdr);color:var(--hdr-fg);border-bottom:1px solid var(--hdr-rule);
+  padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+.prog-inner{max-width:1180px;margin:0 auto;display:flex;align-items:center;gap:14px;padding-block:14px;flex-wrap:wrap}
+.mark{min-width:44px;height:44px;padding:0 9px;background:var(--maroon);color:#fff;display:grid;place-items:center;font-family:var(--font-head);font-weight:800;font-size:15px;letter-spacing:.5px;flex:none;text-decoration:none}
+.prog-txt{display:flex;flex-direction:column;line-height:1.2;text-decoration:none;color:inherit;min-width:0}
+.prog-txt .u{font-family:var(--font-head);font-size:12px;font-weight:700;letter-spacing:.8px;text-transform:uppercase}
+.prog-txt .p{font-family:var(--font-head);font-size:20px;font-weight:500}
+.prog-course{margin-left:auto;font-family:var(--font-head);font-weight:700;color:var(--accent-ink);font-size:15px}
+.topnav{position:sticky;top:env(safe-area-inset-top,0px);z-index:50;background:var(--hdr);border-bottom:1px solid var(--hdr-rule);box-shadow:0 1px 3px rgba(0,0,0,.06);
+  padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+.topnav-inner{max-width:1180px;margin:0 auto;display:flex;align-items:center;min-height:48px}
+.navlinks{display:flex;gap:2px;overflow-x:auto;scrollbar-width:thin;flex:1;min-width:0}
+.navlinks a{color:var(--hdr-fg);text-decoration:none;font-family:var(--font-head);font-weight:600;font-size:14.5px;padding:13px 10px 11px;white-space:nowrap;border-bottom:3px solid transparent}
+.navlinks a .n{color:var(--muted);margin-right:3px}
+.navlinks a:hover{color:var(--accent-ink)}
+.navlinks a.active{color:var(--accent-ink);border-bottom-color:var(--accent)}
+.banner{background:var(--banner-bg);color:var(--banner-fg);font-size:14px;line-height:1.45;
+  padding-block:9px;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+.banner-inner{max-width:1180px;margin:0 auto}
+.banner a{color:inherit;font-weight:700}
+.banner b{font-family:var(--font-head);text-transform:uppercase;letter-spacing:.6px}
+
+/* ---------- page layout ---------- */
+.page{max-width:1180px;margin:0 auto;display:grid;grid-template-columns:minmax(0,1fr);gap:40px;
+  padding-block:36px 80px;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+@media (min-width:1000px){.page{grid-template-columns:minmax(0,740px) 230px;justify-content:center}}
+main{min-width:0}
+.toc{display:none}
+@media (min-width:1000px){.toc{display:block;position:sticky;top:72px;align-self:start;font-size:14px}}
+.toc h2{font-size:13px;font-weight:700;text-transform:uppercase;letter-spacing:.8px;border:0;margin:0 0 8px;color:var(--fg)}
+.toc ul{list-style:none;margin:0;padding:0;border-left:1px solid var(--rule)}
+.toc li a{display:block;padding:4px 0 4px 12px;color:var(--muted);text-decoration:none;line-height:1.3;border-left:2px solid transparent;margin-left:-1px}
+.toc li a.on{color:var(--accent-ink);border-left-color:var(--accent)}
+
+h1{font-family:var(--font-head);font-size:clamp(30px,5vw,42px);font-weight:700;color:var(--accent-ink);line-height:1.15;margin:0 0 6px;text-wrap:balance}
+.subtitle{font-size:20px;color:var(--muted);margin:0 0 26px}
+h2{font-family:var(--font-head);font-size:27px;font-weight:600;line-height:1.2;margin:46px 0 14px;padding-bottom:8px;border-bottom:1px solid var(--rule);text-wrap:balance;scroll-margin-top:90px}
+h3{font-family:var(--font-head);font-size:19px;margin:28px 0 8px}
+p{margin:0 0 14px}
+ul,ol{padding-left:24px;margin:0 0 14px}
+li{margin-bottom:4px}
+code,.mono{font-family:var(--font-mono);font-size:.88em}
+pre{background:var(--panel);border:1px solid var(--card-border);border-radius:6px;padding:14px;overflow-x:auto;font-size:14px;line-height:1.5}
+table{border-collapse:collapse;font-size:15px;width:100%}
+.tablewrap{overflow-x:auto;margin:0 0 16px}
+th,td{border-bottom:1px solid var(--rule);padding:7px 10px;text-align:left;vertical-align:top}
+th{font-weight:700}
+td.num,th.num{text-align:right;font-variant-numeric:tabular-nums}
+
+/* ---------- callouts ---------- */
+.callout{border-left:5px solid var(--info);background:var(--info-bg);border-radius:4px;padding:14px 18px;margin:18px 0}
+.callout .lbl{font-size:13px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:var(--info);margin-bottom:6px;display:flex;gap:8px;align-items:center}
+.callout p:last-child,.callout ul:last-child{margin-bottom:0}
+.callout.tip{border-color:var(--tip);background:var(--tip-bg)}
+.callout.tip .lbl{color:var(--accent-ink)}
+.callout.warn{border-color:var(--warn);background:var(--warn-bg)}
+.callout.warn .lbl{color:var(--warn)}
+.callout.scenario p{font-style:italic}
+.ico{width:14px;height:14px;flex:none}
+
+/* ---------- widgets ---------- */
+.widget{border:1px solid var(--card-border);background:var(--card);border-radius:8px;padding:18px 20px;margin:18px 0;box-shadow:0 1px 3px rgba(0,0,0,.05)}
+.widget .wlabel{font-size:14px;font-weight:700;color:var(--muted);margin-bottom:8px}
+.presets{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:16px}
+.pill{border:none;border-radius:999px;padding:7px 16px;font:inherit;font-size:14px;cursor:pointer;color:#fff;background:var(--nav)}
+.pill.c1{background:#5b6236}.pill.c2{background:#332c2c}.pill.c3{background:#8f5d00}.pill.c4{background:#500000}.pill.c5{background:#3e5a7a}.pill.c6{background:#a7000c}
+.pill{border-radius:3px;font-family:var(--font-head);font-weight:600}
+.pill[aria-pressed="true"]{outline:3px solid var(--accent);outline-offset:2px}
+.ctrls{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:12px 22px;margin-bottom:12px}
+.ctrl label{display:block;font-size:15px;font-weight:700}
+.ctrl label output{color:var(--bad);font-weight:700;font-variant-numeric:tabular-nums}
+.ctrl input[type=range]{width:100%;accent-color:var(--info)}
+.toggles{display:flex;flex-wrap:wrap;gap:8px 18px;margin:4px 0 12px;font-size:15px}
+.toggles label{display:flex;gap:6px;align-items:center;cursor:pointer}
+.toggles input{accent-color:var(--info);width:16px;height:16px}
+.plot{width:100%;display:block;border-radius:4px}
+.plotwrap{background:var(--panel);border-radius:6px;padding:6px;margin:8px 0}
+.readout{display:flex;flex-wrap:wrap;gap:10px;margin:10px 0 2px}
+.stat{background:var(--panel);border:1px solid var(--card-border);border-radius:6px;padding:6px 12px;min-width:110px}
+.stat .k{font-size:12px;color:var(--muted);text-transform:uppercase;letter-spacing:.6px}
+.stat .v{font-size:20px;font-weight:700;font-variant-numeric:tabular-nums}
+.chip{display:inline-block;font-size:13px;font-weight:700;border-radius:999px;padding:2px 10px;border:1px solid currentColor}
+.chip.good{color:var(--good)}.chip.bad{color:var(--bad)}.chip.warn{color:var(--warn)}
+.wnote{font-size:15px;color:var(--muted);border-top:1px dashed var(--card-border);padding-top:10px;margin-top:10px}
+.btn{font:inherit;font-size:15px;border:1.5px solid var(--info);color:var(--info);background:transparent;border-radius:999px;padding:6px 16px;cursor:pointer}
+.btn.solid{background:var(--maroon);border-color:var(--maroon);color:#fff;border-radius:4px;font-weight:700;padding:9px 18px}
+.minigrid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}
+.mini{background:var(--panel);border-radius:6px;padding:6px 8px}
+.mini .t{font-size:13px;font-weight:700;display:flex;justify-content:space-between}
+
+/* ---------- quiz ---------- */
+.quiz{display:flex;flex-direction:column;gap:16px}
+.q{border:1px solid var(--card-border);border-radius:8px;padding:14px 18px;background:var(--card)}
+.q .qt{font-weight:700;margin-bottom:8px}
+.q label{display:flex;gap:10px;align-items:flex-start;padding:5px 6px;border-radius:4px;cursor:pointer}
+.q label:hover{background:var(--panel)}
+.q input{margin-top:6px;accent-color:var(--info)}
+.q .fb{margin-top:8px;font-size:15px;padding:8px 12px;border-radius:4px}
+.q .fb.ok{background:var(--tip-bg);color:var(--fg);border-left:4px solid var(--good)}
+.q .fb.no{background:var(--warn-bg);color:var(--fg);border-left:4px solid var(--bad)}
+
+/* ---------- home ---------- */
+.module-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(210px,1fr));gap:14px;margin:16px 0}
+.module-card{border-top:4px solid var(--maroon) !important;display:flex;flex-direction:column;gap:4px;border:1px solid var(--card-border);border-radius:8px;padding:16px;text-decoration:none;color:var(--fg);background:var(--card);transition:border-color .15s,transform .15s}
+.module-card:hover{border-color:var(--maroon-2);transform:translateY(-2px)}
+@media (prefers-reduced-motion: reduce){.module-card{transition:none}.module-card:hover{transform:none}}
+.module-number{font-family:var(--font-head);font-size:28px;font-weight:800;color:var(--accent-ink);line-height:1}
+.module-title{font-weight:700;font-size:17px}
+.module-desc{font-size:14.5px;color:var(--muted);line-height:1.45}
+.module-card.challenge{border-color:var(--warn);background:var(--warn-bg)}
+.module-card.challenge .module-number{color:var(--warn)}
+.hw-card{display:inline-flex;flex-direction:column;border:1px solid var(--info);border-radius:8px;padding:14px 18px;max-width:280px;text-decoration:none;color:var(--fg)}
+.hw-card .k{font-size:12px;font-weight:700;color:var(--info);letter-spacing:1px}
+.hw-card .t{font-weight:700;font-size:17px}
+.hw-card .d{font-size:14px;color:var(--muted)}
+.module-nav{display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;border-top:1px solid var(--rule);margin-top:48px;padding-top:20px}
+.module-nav a{text-decoration:none}
+.footer{text-align:center;color:var(--muted);font-size:14px;padding-block:0 40px;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+details.hint{margin-top:8px;font-size:15px}
+details.hint summary{cursor:pointer;color:var(--link);font-weight:700}
+.problem{border-bottom:1px solid var(--rule);padding:12px 0}
+.problem .pn{font-weight:900;color:var(--accent-ink)}
+.case{border:1px solid var(--card-border);border-radius:8px;padding:14px 16px;margin:16px 0;background:var(--card)}
+.case-head{display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap;margin-bottom:6px}
+.case-head b{font-size:17px}
+.case-form{display:flex;flex-wrap:wrap;gap:10px 18px;align-items:end;margin-top:8px}
+.case-form label{font-size:14px;font-weight:700;display:flex;flex-direction:column;gap:4px}
+.case-form input,.case-form select{font:inherit;font-size:15px;padding:6px 8px;border:1px solid var(--card-border);border-radius:4px;background:var(--bg);color:var(--fg)}
+.case-form input{width:110px}
+.case .res{font-size:15px;margin-top:8px}
+.scorebar{position:sticky;bottom:12px;margin-top:20px;background:var(--maroon);color:#fff;border-radius:8px;padding:12px 16px;display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap}
+.scorebar .btn.solid{background:#fff;border-color:#fff;color:#500000}
+
+.util-right{display:flex;align-items:center;gap:14px;min-width:0}
+.courses{display:flex;gap:4px;overflow-x:auto;scrollbar-width:none}
+.courses a{color:var(--nav-dim);text-decoration:none;white-space:nowrap;padding:4px 7px;font-size:12px}
+.courses a:hover{color:#fff}.courses a.cur{color:#fff;border-bottom:2px solid #fff}
+@media (max-width:640px){.courses{display:none}}
+/* ---------- case library ---------- */
+.cl-filters{display:flex;flex-wrap:wrap;gap:6px;margin:10px 0}
+.cl-chip{font:inherit;font-size:13px;font-weight:600;border:1px solid var(--card-border);background:var(--card);color:var(--fg);border-radius:999px;padding:4px 12px;cursor:pointer}
+.cl-chip[aria-pressed="true"]{background:var(--maroon);border-color:var(--maroon);color:#fff}
+.cl-search{font:inherit;font-size:15px;padding:7px 10px;border:1px solid var(--card-border);border-radius:4px;background:var(--bg);color:var(--fg);width:100%;max-width:340px}
+.cl-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:10px;margin:12px 0}
+.cl-card{text-align:left;font:inherit;border:1px solid var(--card-border);border-left:4px solid var(--maroon);background:var(--card);color:var(--fg);border-radius:6px;padding:10px 12px;cursor:pointer;display:flex;flex-direction:column;gap:3px}
+.cl-card:hover{border-color:var(--maroon-2)}
+.cl-card[aria-current="true"]{background:var(--tip-bg)}
+.cl-card .n{font-family:var(--font-head);font-weight:800;color:var(--accent-ink);font-size:13px}
+.cl-card .t{font-weight:700;font-size:15px;line-height:1.3}
+.cl-card .s{font-size:12.5px;color:var(--muted)}
+.cl-detail{border:1px solid var(--card-border);border-radius:8px;background:var(--card);padding:18px 20px;margin:14px 0;scroll-margin-top:70px}
+.cl-detail h3{margin:0 0 4px;font-size:22px;color:var(--accent-ink)}
+.cl-tags{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:10px}
+.cl-tag{font-size:12px;font-weight:700;border-radius:3px;padding:2px 8px;background:var(--panel);color:var(--muted);border:1px solid var(--card-border)}
+.cl-two{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:12px;margin:12px 0}
+.cl-box{background:var(--panel);border-radius:6px;padding:12px 14px;font-size:15.5px}
+.cl-box .h{font-family:var(--font-head);font-weight:700;font-size:13px;text-transform:uppercase;letter-spacing:.7px;color:var(--muted);margin-bottom:4px}
+.cl-box p:last-child{margin:0}
+.eq{font-family:var(--font-mono);font-size:14px;background:var(--bg);border:1px solid var(--card-border);border-radius:4px;padding:6px 10px;margin:6px 0;overflow-x:auto;white-space:nowrap}
+.cl-nav{display:flex;justify-content:space-between;gap:10px;margin-top:12px;flex-wrap:wrap}
+.cl-count{font-size:14px;color:var(--muted)}
+</style>
+</head><body>
+
+
+<div class="util"><div class="util-inner"><span>Texas A&amp;M University</span><span class="util-right"><nav class="courses" aria-label="Courses"><a href="index.html">All courses</a><a href="ecg-biosignals-101.html" class="">ECG 101</a><a href="biomechanics-biomaterials-101.html" class="cur">Biomechanics 101</a><a href="hemodynamics-biofluids-101.html" class="">Hemodynamics 101</a></nav><button class="theme-btn" id="themeBtn" type="button" aria-label="Toggle light or dark theme">Theme</button></span></div></div>
+<div class="prog"><div class="prog-inner">
+  <a class="mark" href="#home" aria-label="Course home">EnMed</a>
+  <a class="prog-txt" href="#home"><span class="u">Texas A&amp;M University</span><span class="p">Engineering Medicine Program</span></a>
+  <span class="prog-course">Biomechanics &amp; Biomaterials 101</span>
+</div></div>
+<header class="topnav">
+  <div class="topnav-inner"><nav class="navlinks" id="navlinks" aria-label="Modules"></nav></div>
+</header>
+<div class="banner"><div class="banner-inner"><b>Course prototype:</b> Draft interactive module for Texas A&amp;M EnMed students, under faculty review. Not an official university publication. Layout modeled on the open tutorial <a href="https://judepj.github.io/neuro-signals-101/" target="_blank" rel="noopener">EEG &amp; Signal Processing (Neuro Signals 101)</a> by judepj; all content here is original.</div></div>
+<div class="page">
+  <main id="main"></main>
+  <aside class="toc" id="toc" aria-label="On this page"></aside>
+</div>
+<div class="footer">Biomechanics &amp; Biomaterials 101 · Texas A&amp;M Engineering Medicine (EnMed) · Houston, Texas<br>Prototype course material · Simplified models and synthetic data for teaching only, not for clinical use</div>
+<script>
+"use strict";
+/* ================= utilities ================= */
+const $ = (s, r = document) => r.querySelector(s);
+const $$ = (s, r = document) => [...r.querySelectorAll(s)];
+function css(name) { return getComputedStyle(document.documentElement).getPropertyValue(name).trim(); }
+function rng(seed) { let a = seed >>> 0; return () => { a |= 0; a = a + 0x6D2B79F5 | 0; let t = Math.imul(a ^ a >>> 15, 1 | a); t = t + Math.imul(t ^ t >>> 7, 61 | t) ^ t; return ((t ^ t >>> 14) >>> 0) / 4294967296; }; }
+function gauss(r) { let u = 0, v = 0; while (u === 0) u = r(); while (v === 0) v = r(); return Math.sqrt(-2 * Math.log(u)) * Math.cos(2 * Math.PI * v); }
+const clamp = (x, a, b) => Math.max(a, Math.min(b, x));
+const fmt = (x, d = 0) => Number.isFinite(x) ? x.toFixed(d) : "—";
+const ICON = {
+  scenario: '<svg class="ico" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true"><path d="M3 1h8l3 3v11H3z" opacity=".25"/><path d="M3 1h8l3 3v11H3zM5 6h7v1H5zm0 3h7v1H5zm0 3h5v1H5z"/></svg>',
+  tip: '<svg class="ico" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true"><path d="M10.5 1.5a4 4 0 0 0-3.8 5.2L1.5 12l2.5 2.5 5.3-5.2A4 4 0 0 0 14.5 5l-2.2 2.2-2-.5-.5-2z"/></svg>',
+  warn: '<svg class="ico" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true"><path d="M8 1 15 14H1z"/><path d="M7.3 5.5h1.4v4.5H7.3zm0 5.5h1.4v1.5H7.3z" fill="#fff"/></svg>',
+  info: '<svg class="ico" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true"><circle cx="8" cy="8" r="7"/><path d="M7.3 7h1.4v5H7.3zm0-3h1.4v1.5H7.3z" fill="#fff"/></svg>'
+};
+function callout(kind, label, html) {
+  const ic = kind === "scenario" ? ICON.scenario : kind === "tip" ? ICON.tip : kind === "warn" ? ICON.warn : ICON.info;
+  return `<div class="callout ${kind}"><div class="lbl">${ic}${label}</div>${html}</div>`;
+}
+
+/* ================= synthetic ECG =================
+   Each beat = sum of Gaussian bumps (P, Q, R, S, T) placed relative to the R peak.
+   Amplitudes in mV, times in seconds. */
+function beatTemplate(o) {
+  const qrs = o.qrsW ?? 0.09;            // QRS duration (s)
+  const s = qrs / 0.09;                   // width scale
+  const w = [];
+  if (o.pAmp !== 0) w.push({ mu: -(o.pr ?? 0.16), sd: 0.022, a: o.pAmp ?? 0.15 });
+  w.push({ mu: -0.022 * s, sd: 0.008 * s, a: o.qAmp ?? -0.1 });
+  w.push({ mu: 0, sd: 0.010 * s, a: o.rAmp ?? 1.2 });
+  w.push({ mu: 0.024 * s, sd: 0.009 * s, a: o.sAmp ?? -0.28 });
+  w.push({ mu: o.tPos ?? 0.28, sd: o.tW ?? 0.045, a: o.tAmp ?? 0.32 });
+  return w;
+}
+function rrSequence(o, dur, r) {
+  const rr = [];
+  let t = 0.35;
+  const base = 60 / o.hr;
+  let i = 0;
+  while (t < dur + 1) {
+    let d;
+    if (o.rhythm === "af") d = base * (0.6 + 0.8 * r());
+    else d = base * (1 + (o.hrv ?? 0.03) * gauss(r) + 0.04 * (o.hrv ? o.hrv / 0.03 : 1) * Math.sin(2 * Math.PI * t / 4));
+    rr.push({ t, kind: "n" });
+    if (o.rhythm === "pvc" && i % (o.pvcEvery ?? 4) === (o.pvcEvery ?? 4) - 2) {
+      // next beat comes early as a PVC, then a compensatory pause
+      const tp = t + base * 0.62;
+      rr.push({ t: tp, kind: "v" });
+      t = t + 2 * base; i += 2; continue;
+    }
+    t += Math.max(0.25, d); i++;
+  }
+  return rr.filter(b => b.t < dur + 0.5);
+}
+function synthECG(o) {
+  const fs = o.fs ?? 500, dur = o.dur ?? 6, n = Math.round(fs * dur);
+  const r = rng(o.seed ?? 7);
+  const y = new Float64Array(n), t = new Float64Array(n);
+  for (let k = 0; k < n; k++) t[k] = k / fs;
+  const beats = rrSequence(o, dur, r);
+  const scale = o.scale ?? 1;
+  for (const b of beats) {
+    let tmpl;
+    if (b.kind === "v") tmpl = [{ mu: 0, sd: 0.03, a: 1.5 }, { mu: 0.05, sd: 0.03, a: -0.5 }, { mu: 0.3, sd: 0.06, a: -0.45 }];
+    else {
+      const rrPrev = 60 / o.hr;
+      tmpl = beatTemplate({ ...o, pAmp: o.rhythm === "af" ? 0 : o.pAmp, tPos: (o.tPos ?? 0.28) * Math.sqrt(Math.min(1.2, rrPrev)) });
+    }
+    for (const w of tmpl) {
+      const c = b.t + w.mu, k0 = Math.max(0, Math.floor((c - 5 * w.sd) * fs)), k1 = Math.min(n - 1, Math.ceil((c + 5 * w.sd) * fs));
+      for (let k = k0; k <= k1; k++) { const z = (t[k] - c) / w.sd; y[k] += scale * w.a * Math.exp(-0.5 * z * z); }
+    }
+  }
+  if (o.rhythm === "af") { // fibrillatory baseline 5–7 Hz
+    const f1 = 5.3 + r(), f2 = 6.6 + r(), p1 = r() * 6, p2 = r() * 6;
+    for (let k = 0; k < n; k++) y[k] += 0.05 * Math.sin(2 * Math.PI * f1 * t[k] + p1) + 0.035 * Math.sin(2 * Math.PI * f2 * t[k] + p2);
+  }
+  addNoise(y, t, o, r);
+  return { t, y, fs, beats: beats.filter(b => b.t < dur).map(b => b.t), kinds: beats.filter(b => b.t < dur).map(b => b.kind) };
+}
+function addNoise(y, t, o, r) {
+  const n = y.length;
+  if (o.wander) { const ph = r() * 6; for (let k = 0; k < n; k++) y[k] += o.wander * (Math.sin(2 * Math.PI * 0.22 * t[k] + ph) + 0.5 * Math.sin(2 * Math.PI * 0.07 * t[k])); }
+  if (o.mains) { for (let k = 0; k < n; k++) y[k] += o.mains * Math.sin(2 * Math.PI * 60 * t[k]); }
+  if (o.emg) { // band-limited muscle noise
+    let lp = 0; for (let k = 0; k < n; k++) { const g = gauss(r); lp = 0.6 * lp + 0.4 * g; y[k] += o.emg * (g - lp) * 1.6; }
+  }
+  if (o.motion) { // occasional large slow excursions
+    for (let j = 0; j < 3; j++) { const c = 0.8 + r() * (t[n - 1] - 1.6), a = (r() - .5) * 2 * o.motion, sd = 0.18 + r() * 0.2;
+      for (let k = 0; k < n; k++) { const z = (t[k] - c) / sd; y[k] += a * Math.exp(-0.5 * z * z); } }
+  }
+  if (o.pop) { // electrode pop: step + exponential recovery
+    const c = t[n - 1] * 0.55, k0 = Math.floor(c / (t[1] - t[0]));
+    for (let k = k0; k < n; k++) y[k] += o.pop * Math.exp(-(t[k] - c) / 0.35);
+  }
+  if (o.white) for (let k = 0; k < n; k++) y[k] += o.white * gauss(r);
+}
+
+/* ================= filters (RBJ biquads, zero-phase filtfilt) ================= */
+function biquad(type, f0, fs, Q = Math.SQRT1_2) {
+  const w = 2 * Math.PI * f0 / fs, c = Math.cos(w), s = Math.sin(w), al = s / (2 * Q);
+  let b0, b1, b2, a0, a1, a2;
+  if (type === "lp") { b0 = (1 - c) / 2; b1 = 1 - c; b2 = (1 - c) / 2; }
+  else if (type === "hp") { b0 = (1 + c) / 2; b1 = -(1 + c); b2 = (1 + c) / 2; }
+  else { b0 = 1; b1 = -2 * c; b2 = 1; } // notch
+  a0 = 1 + al; a1 = -2 * c; a2 = 1 - al;
+  return [b0 / a0, b1 / a0, b2 / a0, a1 / a0, a2 / a0];
+}
+function runBiquad(k, x) {
+  const y = new Float64Array(x.length); let x1 = x[0], x2 = x[0], y1 = x[0] * (k[0] + k[1] + k[2]) / (1 + k[3] + k[4]), y2 = y1;
+  for (let i = 0; i < x.length; i++) { const v = k[0] * x[i] + k[1] * x1 + k[2] * x2 - k[3] * y1 - k[4] * y2; x2 = x1; x1 = x[i]; y2 = y1; y1 = v; y[i] = v; }
+  return y;
+}
+function filtfilt(k, x) { const a = runBiquad(k, x); a.reverse(); const b = runBiquad(k, a); b.reverse(); return b; }
+function hpFirstSafe(x, f0, fs) { // high-pass that starts settled (subtract mean first)
+  const m = x.reduce((a, b) => a + b, 0) / x.length; return filtfilt(biquad("hp", f0, fs), x.map(v => v - m));
+}
+
+/* ================= FFT ================= */
+function fftMag(x, fs) {
+  let N = 1; while (N < x.length) N <<= 1;
+  const re = new Float64Array(N), im = new Float64Array(N);
+  const m = x.reduce((a, b) => a + b, 0) / x.length;
+  for (let i = 0; i < x.length; i++) { const w = 0.5 - 0.5 * Math.cos(2 * Math.PI * i / (x.length - 1)); re[i] = (x[i] - m) * w; }
+  for (let i = 1, j = 0; i < N; i++) { let bit = N >> 1; for (; j & bit; bit >>= 1) j ^= bit; j ^= bit; if (i < j) { [re[i], re[j]] = [re[j], re[i]]; [im[i], im[j]] = [im[j], im[i]]; } }
+  for (let len = 2; len <= N; len <<= 1) {
+    const ang = -2 * Math.PI / len, wr = Math.cos(ang), wi = Math.sin(ang);
+    for (let i = 0; i < N; i += len) { let cr = 1, ci = 0;
+      for (let j = 0; j < len / 2; j++) { const ur = re[i + j], ui = im[i + j], vr = re[i + j + len / 2] * cr - im[i + j + len / 2] * ci, vi = re[i + j + len / 2] * ci + im[i + j + len / 2] * cr;
+        re[i + j] = ur + vr; im[i + j] = ui + vi; re[i + j + len / 2] = ur - vr; im[i + j + len / 2] = ui - vi; const nr = cr * wr - ci * wi; ci = cr * wi + ci * wr; cr = nr; } }
+  }
+  const f = [], p = [];
+  for (let k = 0; k <= N / 2; k++) { f.push(k * fs / N); p.push(Math.hypot(re[k], im[k]) * 4 / x.length); }
+  return { f, p };
+}
+
+/* ================= plotting (canvas) ================= */
+function niceTicks(a, b, n = 5) {
+  if (n <= 0) return [];
+  const span = b - a; if (span <= 0) return [a];
+  const step0 = span / n, mag = Math.pow(10, Math.floor(Math.log10(step0))), r = step0 / mag;
+  const step = (r < 1.5 ? 1 : r < 3 ? 2 : r < 7 ? 5 : 10) * mag;
+  const out = []; for (let v = Math.ceil(a / step - 1e-9) * step; v <= b + 1e-9; v += step) out.push(+v.toFixed(10));
+  return out;
+}
+const PLOTS = new Set();
+function plot(cv, o) {
+  cv._opts = o; PLOTS.add(cv); drawPlot(cv);
+}
+function drawPlot(cv) {
+  const o = cv._opts; if (!o || !cv.isConnected) { PLOTS.delete(cv); return; }
+  const dpr = window.devicePixelRatio || 1, W = cv.clientWidth || 600, H = +(cv.dataset.h || 220);
+  cv.style.height = H + "px"; cv.width = Math.round(W * dpr); cv.height = Math.round(H * dpr);
+  const g = cv.getContext("2d"); g.setTransform(dpr, 0, 0, dpr, 0, 0); g.clearRect(0, 0, W, H);
+  const fg = css("--fg"), muted = css("--muted"), grid = css("--grid"), axis = css("--axis");
+  const L = o.left ?? 48, R = 18, T = o.title ? 24 : 12, B = o.xlabel ? 42 : 26;
+  const pw = W - L - R, ph = H - T - B;
+  const [x0, x1] = o.xlim, [y0, y1] = o.ylim;
+  const X = v => L + (v - x0) / (x1 - x0) * pw, Y = v => T + (1 - (v - y0) / (y1 - y0)) * ph;
+  g.font = `12px ${css("--font-body")}`;
+  if (o.paper) { // ECG paper: 1 mm = 0.04 s and 0.1 mV
+    g.fillStyle = css("--paper"); g.fillRect(L, T, pw, ph);
+    const minor = css("--paper-minor"), major = css("--paper-major");
+    for (let v = Math.ceil(x0 / 0.04) * 0.04, i = Math.round(v / 0.04); v <= x1 + 1e-9; v += 0.04, i++) { g.strokeStyle = i % 5 === 0 ? major : minor; g.lineWidth = i % 5 === 0 ? 1 : 0.5; g.beginPath(); g.moveTo(X(v), T); g.lineTo(X(v), T + ph); g.stroke(); }
+    for (let v = Math.ceil(y0 / 0.1) * 0.1, i = Math.round(v / 0.1); v <= y1 + 1e-9; v += 0.1, i++) { g.strokeStyle = i % 5 === 0 ? major : minor; g.lineWidth = i % 5 === 0 ? 1 : 0.5; g.beginPath(); g.moveTo(L, Y(v)); g.lineTo(L + pw, Y(v)); g.stroke(); }
+  } else {
+    g.strokeStyle = grid; g.lineWidth = 1;
+    for (const v of niceTicks(x0, x1, o.xt ?? 6)) { g.beginPath(); g.moveTo(X(v), T); g.lineTo(X(v), T + ph); g.stroke(); }
+    for (const v of niceTicks(y0, y1, o.yt ?? 4)) { g.beginPath(); g.moveTo(L, Y(v)); g.lineTo(L + pw, Y(v)); g.stroke(); }
+  }
+  for (const b of (o.bands || [])) { g.fillStyle = b.color; g.globalAlpha = b.alpha ?? 0.15; g.fillRect(X(Math.max(b.x0, x0)), T, X(Math.min(b.x1, x1)) - X(Math.max(b.x0, x0)), ph); g.globalAlpha = 1;
+    if (b.label) { g.fillStyle = b.color; g.textAlign = "center"; g.fillText(b.label, (X(b.x0) + X(b.x1)) / 2, T + 13); } }
+  // axes
+  g.strokeStyle = axis; g.lineWidth = 1; g.beginPath(); g.moveTo(L, T); g.lineTo(L, T + ph); g.lineTo(L + pw, T + ph); g.stroke();
+  g.fillStyle = muted; g.textAlign = "center"; g.textBaseline = "top";
+  for (const v of niceTicks(x0, x1, o.xt ?? 6)) g.fillText(o.xfmt ? o.xfmt(v) : String(+v.toFixed(3)), X(v), T + ph + 5);
+  g.textAlign = "right"; g.textBaseline = "middle";
+  for (const v of niceTicks(y0, y1, o.yt ?? 4)) g.fillText(o.yfmt ? o.yfmt(v) : String(+v.toFixed(3)), L - 6, Y(v));
+  if (o.xlabel) { g.textAlign = "center"; g.textBaseline = "bottom"; g.fillStyle = fg; g.fillText(o.xlabel, L + pw / 2, H - 2); }
+  if (o.ylabel) { g.save(); g.translate(12, T + ph / 2); g.rotate(-Math.PI / 2); g.textAlign = "center"; g.textBaseline = "middle"; g.fillStyle = fg; g.fillText(o.ylabel, 0, 0); g.restore(); }
+  if (o.title) { g.textAlign = "left"; g.textBaseline = "top"; g.fillStyle = fg; g.font = `700 13px ${css("--font-body")}`; g.fillText(o.title, L, 4); g.font = `12px ${css("--font-body")}`; }
+  for (const h of (o.hlines || [])) { g.strokeStyle = css(h.color) || h.color; g.setLineDash(h.dash || [5, 4]); g.lineWidth = 1.2; g.beginPath(); g.moveTo(L, Y(h.y)); g.lineTo(L + pw, Y(h.y)); g.stroke(); g.setLineDash([]);
+    if (h.label) { g.fillStyle = css(h.color) || h.color; g.textAlign = "right"; g.textBaseline = "bottom"; g.fillText(h.label, L + pw - 4, Y(h.y) - 2); } }
+  // series
+  g.save(); g.beginPath(); g.rect(L, T, pw, ph); g.clip();
+  for (const s of o.series) {
+    const col = s.color.startsWith("--") ? css(s.color) : s.color;
+    g.strokeStyle = col; g.fillStyle = col; g.lineWidth = s.w ?? 1.6; g.globalAlpha = s.alpha ?? 1;
+    if (s.dash) g.setLineDash(s.dash);
+    const xs = s.x, ys = s.y, n = ys.length;
+    if (s.stems) { for (let i = 0; i < n; i++) { if (xs[i] < x0 || xs[i] > x1) continue; g.beginPath(); g.moveTo(X(xs[i]), Y(Math.max(y0, Math.min(y1, 0)))); g.lineTo(X(xs[i]), Y(ys[i])); g.stroke(); g.beginPath(); g.arc(X(xs[i]), Y(ys[i]), s.r ?? 3, 0, 7); g.fill(); } }
+    else if (s.dots) { for (let i = 0; i < n; i++) { if (xs[i] < x0 || xs[i] > x1) continue; g.beginPath(); g.arc(X(xs[i]), Y(ys[i]), s.r ?? 3.5, 0, 7); g.fill(); } }
+    else {
+      // decimate to ~2 points per pixel with min/max to keep spikes visible
+      g.beginPath(); let started = false;
+      const per = Math.max(1, Math.floor(n / (pw * 2)));
+      for (let i = 0; i < n; i += per) {
+        if (per === 1) { const px = X(xs[i]), py = Y(ys[i]); started ? g.lineTo(px, py) : (g.moveTo(px, py), started = true); continue; }
+        let mn = Infinity, mx = -Infinity, imn = i, imx = i;
+        for (let j = i; j < Math.min(n, i + per); j++) { if (ys[j] < mn) { mn = ys[j]; imn = j; } if (ys[j] > mx) { mx = ys[j]; imx = j; } }
+        const a = imn < imx ? [imn, imx] : [imx, imn];
+        for (const j of a) { const px = X(xs[j]), py = Y(ys[j]); started ? g.lineTo(px, py) : (g.moveTo(px, py), started = true); }
+      }
+      g.stroke();
+    }
+    g.setLineDash([]); g.globalAlpha = 1;
+  }
+  for (const m of (o.markers || [])) { const col = m.color.startsWith("--") ? css(m.color) : m.color; g.fillStyle = col; g.strokeStyle = col;
+    if (m.shape === "tri") { const px = X(m.x), py = Y(m.y) - 8; g.beginPath(); g.moveTo(px - 5, py - 8); g.lineTo(px + 5, py - 8); g.lineTo(px, py); g.fill(); }
+    else { g.beginPath(); g.arc(X(m.x), Y(m.y), m.r ?? 4, 0, 7); g.fill(); }
+    if (m.label) { g.textAlign = "center"; g.textBaseline = "bottom"; g.font = `700 12px ${css("--font-body")}`; g.fillText(m.label, X(m.x), Y(m.y) - (m.shape === "tri" ? 18 : 7)); g.font = `12px ${css("--font-body")}`; } }
+  for (const a of (o.annots || [])) { g.fillStyle = a.color ? css(a.color) : fg; g.textAlign = a.align || "left"; g.textBaseline = "top"; g.font = `${a.bold ? 700 : 400} 12px ${css("--font-body")}`; g.fillText(a.text, X(a.x), Y(a.y)); }
+  g.restore();
+}
+function redrawAll() { for (const cv of [...PLOTS]) drawPlot(cv); }
+let rT; window.addEventListener("resize", () => { clearTimeout(rT); rT = setTimeout(redrawAll, 80); });
+matchMedia("(prefers-color-scheme: dark)").addEventListener("change", () => setTimeout(redrawAll, 30));
+
+/* ================= small UI builders ================= */
+function slider(id, label, min, max, step, val, unit = "") {
+  return `<div class="ctrl"><label for="${id}">${label}: <output id="${id}-o">${val}${unit}</output></label><input type="range" id="${id}" min="${min}" max="${max}" step="${step}" value="${val}" data-unit="${unit}"></div>`;
+}
+function bindSliders(root, onChange) {
+  $$("input[type=range]", root).forEach(el => el.addEventListener("input", () => { $(`#${el.id}-o`).textContent = el.value + (el.dataset.unit || ""); onChange(); }));
+  $$("input[type=checkbox],select", root).forEach(el => el.addEventListener("change", onChange));
+}
+function setSlider(id, v) { const el = $("#" + id); if (!el) return; el.value = v; $(`#${id}-o`).textContent = el.value + (el.dataset.unit || ""); }
+const val = id => +$("#" + id).value;
+const chk = id => $("#" + id).checked;
+function stat(k, v, extra = "") { return `<div class="stat"><div class="k">${k}</div><div class="v">${v}${extra}</div></div>`; }
+
+function quizHTML(id, qs) {
+  return `<div class="quiz" id="${id}">${qs.map((q, i) => `<fieldset class="q" style="margin:0"><legend class="qt">Q${i + 1}. ${q.q}</legend>${q.a.map((a, j) => `<label><input type="radio" name="${id}-${i}" value="${j}"><span>${a}</span></label>`).join("")}<div class="fb" hidden></div></fieldset>`).join("")}</div>`;
+}
+function bindQuiz(id, qs) {
+  const root = $("#" + id); if (!root) return;
+  $$(".q", root).forEach((el, i) => el.addEventListener("change", e => {
+    const j = +e.target.value, fb = $(".fb", el), q = qs[i]; fb.hidden = false;
+    if (j === q.c) { fb.className = "fb ok"; fb.innerHTML = `<b>Correct.</b> ${q.why}`; }
+    else { fb.className = "fb no"; fb.innerHTML = `<b>Not quite.</b> ${q.hint || q.why}`; }
+  }));
+}
+
+function cvHook(cv, fn) { cv._custom = fn; CUSTOM.add(cv); }
+const CUSTOM = new Set();
+window.addEventListener("resize", () => setTimeout(() => { for (const cv of [...CUSTOM]) { if (cv.isConnected) cv._custom(); else CUSTOM.delete(cv); } }, 100));
+matchMedia("(prefers-color-scheme: dark)").addEventListener("change", () => setTimeout(() => { for (const cv of [...CUSTOM]) if (cv.isConnected) cv._custom(); }, 40));
+
+
+/* ================= Case library engine (shared) =================
+   A case: { title, system, concepts:[..], hook, present, md, eng, eq, ctrls:[[key,label,min,max,step,val,unit]],
+             presets:[[label,{key:val}]], h (canvas height), render(v, cv, out), pearl } */
+function caseLibraryModule(opts) {
+  const { id, num, cases, intro } = opts;
+  const concepts = [...new Set(cases.flatMap(c => c.concepts))].sort();
+  return {
+    id, num, nav: "Case Library", title: `Module ${num}: Clinical Case Library`, subtitle: `${cases.length} interactive cases where the engineering explains the medicine`,
+    html: () => `
+${callout("info", "How to use this library", `<p>${intro}</p><p>Each case has three parts: what the clinician sees, the engineering principle underneath it, and a model you can change. Change the inputs until the clinical picture makes sense to you as an engineer.</p>`)}
+<h2 id="browse">Browse Cases</h2>
+<div style="display:flex;flex-wrap:wrap;gap:10px;align-items:center"><input class="cl-search" id="cl-q" type="search" placeholder="Search cases (e.g. potassium, stent, bone)" aria-label="Search cases"><span class="cl-count" id="cl-count"></span></div>
+<div class="cl-filters" id="cl-f"><button class="cl-chip" data-c="" aria-pressed="true">All</button>${concepts.map(c => `<button class="cl-chip" data-c="${c}" aria-pressed="false">${c}</button>`).join("")}</div>
+<div class="cl-detail" id="cl-detail"></div>
+<div class="cl-grid" id="cl-grid"></div>
+<h2 id="summary">Summary</h2>
+<p>The pattern repeats in every case: a clinical observation, a physical law that explains it, and a parameter that changes the outcome. That chain is engineering judgment, and it is what lets you predict, not just recognize.</p>`,
+    init() {
+      let cur = 0, filt = "", q = "";
+      const grid = $("#cl-grid"), det = $("#cl-detail");
+      const visible = () => cases.map((c, i) => [c, i]).filter(([c]) => (!filt || c.concepts.includes(filt)) && (!q || (c.title + " " + c.system + " " + c.concepts.join(" ") + " " + c.hook).toLowerCase().includes(q)));
+      const drawGrid = () => {
+        const vs = visible();
+        grid.innerHTML = vs.map(([c, i]) => `<button class="cl-card" data-i="${i}" aria-current="${i === cur}"><span class="n">CASE ${i + 1} · ${c.system}</span><span class="t">${c.title}</span><span class="s">${c.hook}</span></button>`).join("");
+        $("#cl-count").textContent = `${vs.length} of ${cases.length} cases`;
+        $$(".cl-card", grid).forEach(b => b.addEventListener("click", () => { show(+b.dataset.i); det.scrollIntoView({ block: "start" }); }));
+      };
+      const show = i => {
+        cur = i; const c = cases[i];
+        det.innerHTML = `<div class="cl-count">Case ${i + 1} of ${cases.length}</div><h3>${c.title}</h3>
+<div class="cl-tags"><span class="cl-tag">${c.system}</span>${c.concepts.map(k => `<span class="cl-tag">${k}</span>`).join("")}</div>
+${callout("scenario", "Presentation", `<p>${c.present}</p>`)}
+<div class="cl-two"><div class="cl-box"><div class="h">What the clinician sees</div><p>${c.md}</p></div><div class="cl-box"><div class="h">What the engineer sees</div><p>${c.eng}</p>${c.eq ? `<div class="eq">${c.eq}</div>` : ""}</div></div>
+<div class="widget" id="cl-w" style="margin:12px 0">
+${c.presets ? `<div class="presets">${c.presets.map((p, j) => `<button class="pill c${[4, 5, 3, 6, 1, 2][j % 6]}" data-j="${j}">${p[0]}</button>`).join("")}</div>` : ""}
+<div class="ctrls">${c.ctrls.map(k => slider("cs-" + k[0], k[1], k[2], k[3], k[4], k[5], k[6] || "")).join("")}</div>
+<div class="plotwrap"><canvas class="plot" id="cl-cv" data-h="${c.h || 230}"></canvas></div><div class="readout" id="cl-out"></div></div>
+${callout("tip", "Clinical pearl", `<p>${c.pearl}</p>`)}
+<div class="cl-nav"><button class="btn" id="cl-prev">← Previous case</button><button class="btn" id="cl-next">Next case →</button></div>`;
+        const run = () => { const v = {}; c.ctrls.forEach(k => v[k[0]] = val("cs-" + k[0])); try { c.render(v, $("#cl-cv"), $("#cl-out")); } catch (e) { $("#cl-out").textContent = "Model error: " + e.message; } };
+        bindSliders($("#cl-w"), run);
+        $$("#cl-w .pill").forEach(b => b.addEventListener("click", () => { const p = c.presets[+b.dataset.j][1]; Object.entries(p).forEach(([k, x]) => setSlider("cs-" + k, x)); $$("#cl-w .pill").forEach(x => x.setAttribute("aria-pressed", x === b)); run(); }));
+        $("#cl-prev").addEventListener("click", () => show((cur - 1 + cases.length) % cases.length));
+        $("#cl-next").addEventListener("click", () => show((cur + 1) % cases.length));
+        run(); drawGrid();
+      };
+      $$("#cl-f .cl-chip").forEach(b => b.addEventListener("click", () => { filt = b.dataset.c; $$("#cl-f .cl-chip").forEach(x => x.setAttribute("aria-pressed", x === b)); drawGrid(); }));
+      $("#cl-q").addEventListener("input", e => { q = e.target.value.trim().toLowerCase(); drawGrid(); });
+      show(0);
+    }
+  };
+}
+/* helpers for case models */
+function linspace(a, b, n) { const o = []; for (let i = 0; i < n; i++) o.push(a + (b - a) * i / (n - 1)); return o; }
+function chip(text, kind) { return `<span class="chip ${kind}" style="align-self:center">${text}</span>`; }
+function beatOnce(o, dur = 1.2, fs = 500) { return synthECG({ hr: 60 / dur * 0.999, dur, fs, hrv: 0, seed: 2, ...o }); }
+
+/* ================= Numeric challenge engine (shared) =================
+   items: { title, q (html), unit, ans (number), tol (fraction), sol (html) }  or  { title, q, choices:[...], ans (index), sol } */
+function challengeModule(opts) {
+  const { id, num, items, scenario, subtitle } = opts;
+  return {
+    id, num, nav: "Challenge", title: `Module ${num}: The Challenge`, subtitle: subtitle || `${items.length} problems. Your numbers. Graded.`,
+    html: () => `${callout("scenario", "Your shift", `<p>${scenario}</p>`)}
+<h2 id="rules">How It's Graded</h2><ul><li>Numeric answers are correct within the tolerance shown (usually ±10%).</li><li>Each problem is worth 1 point. A worked solution appears after grading.</li><li>Use the modules' widgets as calculators if you like.</li></ul>
+<h2 id="problems">The Problems</h2>
+${items.map((it, i) => `<div class="case" id="ch${i}"><div class="case-head"><b>Problem ${i + 1}: ${it.title}</b><span id="ch${i}-chip"></span></div><p style="margin:4px 0 8px">${it.q}</p>
+<div class="case-form">${it.choices ? `<label for="ch${i}-a">Your answer<select id="ch${i}-a"><option value="">Choose…</option>${it.choices.map((c, j) => `<option value="${j}">${c}</option>`).join("")}</select></label>` : `<label for="ch${i}-a">Your answer (${it.unit})<input id="ch${i}-a" type="number" step="any" inputmode="decimal"></label>`}</div>
+<div class="res" id="ch${i}-res"></div></div>`).join("")}
+<div class="scorebar"><span id="chscore">Answer all ${items.length} problems, then grade.</span><span style="display:flex;gap:8px"><button class="btn" id="chreset" style="color:#fff;border-color:#fff">Reset</button><button class="btn solid" id="chgrade">Grade my answers</button></span></div>`,
+    init() {
+      $("#chgrade").addEventListener("click", () => { let tot = 0;
+        items.forEach((it, i) => { const raw = $(`#ch${i}-a`).value; let ok;
+          if (it.choices) ok = raw !== "" && +raw === it.ans; else { const x = +raw; ok = raw !== "" && Math.abs(x - it.ans) <= Math.abs(it.ans) * (it.tol ?? 0.1); }
+          tot += ok; $(`#ch${i}-chip`).innerHTML = chip(ok ? "Correct" : "Not quite", ok ? "good" : "bad");
+          $(`#ch${i}-res`).innerHTML = `<b>Answer:</b> ${it.choices ? it.choices[it.ans] : `${+it.ans.toPrecision(3)} ${it.unit}`}<br>${it.sol}`; });
+        $("#chscore").innerHTML = `Score: <b>${tot} / ${items.length}</b>${tot >= items.length - 1 ? " · Excellent." : tot >= items.length / 2 ? " · Solid. Review the solutions." : " · Revisit the modules and try again."}`; });
+      $("#chreset").addEventListener("click", () => { items.forEach((it, i) => { $(`#ch${i}-a`).value = ""; $(`#ch${i}-chip`).innerHTML = ""; $(`#ch${i}-res`).innerHTML = ""; }); $("#chscore").textContent = `Answer all ${items.length} problems, then grade.`; });
+    }
+  };
+}
+/* shared home + homework builders */
+function homeworkModule(list, n) {
+  return { id: "hw", num: "", nav: "Homework", title: "Homework", subtitle: `${list.length} problems covering modules 1–${n}`,
+    html: () => `<p>Keep this course open while you work. Every problem can be solved with the modules and widgets. Answer keys are hidden under each problem.</p><h2 id="problems">Problems</h2>
+${list.map((h, i) => `<div class="problem"><div><span class="pn">Problem ${i + 1}</span> <span style="color:var(--muted)">· Module ${h[0]} · ${h[1]}</span></div><p style="margin:6px 0 0">${h[2]}</p><details class="hint"><summary>Show answer key</summary><p style="margin:6px 0 0">${h[3]}</p></details></div>`).join("")}
+<h2 id="submit">Submitting</h2><p>Submit answers as a single PDF with screenshots of any widget settings you used as evidence.</p>`, init() {} };
+}
+function genericHome(o) {
+  return `<h1>${o.title}</h1><p class="subtitle">${o.subtitle}</p>
+<h2 id="welcome">Welcome</h2>${o.welcome}
+<h2 id="how-this-works">How This Works</h2>
+<ol><li><b>Clinical scenario.</b> Each module opens with a patient problem.</li><li><b>Interactive widgets.</b> Change the inputs. The model and graphs respond in real time.</li><li><b>Try it.</b> Short guided experiments point you at the key insight.</li><li><b>Quiz.</b> Three questions with instant feedback.</li><li><b>The Challenge.</b> Graded problems with worked solutions.</li><li><b>Clinical Case Library.</b> ${o.caseCount} real clinical cases, each with a model you can change.</li></ol>
+<h2 id="modules">Modules</h2>
+<div class="module-grid">${MODULES.filter(m => m.id !== "hw").map(m => `<a class="module-card ${m.nav === "Challenge" ? "challenge" : ""}" href="#${m.id}"><span class="module-number">${String(m.num).padStart(2, "0")}</span><span class="module-title">${m.title.replace(/^Module \d+: /, "")}</span><span class="module-desc">${o.descs[m.id] || ""}</span></a>`).join("")}</div>
+<h2 id="what-youll-need">What You'll Need</h2><ul><li>A web browser. Everything runs on this page; nothing to install.</li><li>About 20–30 minutes per module.</li>${o.need || ""}</ul>
+<h2 id="homework">Homework</h2><p>A self-paced problem set designed to be solved with the widgets.</p>
+<a class="hw-card" href="#hw"><span class="k">PROBLEM SET</span><span class="t">Open Homework</span><span class="d">${o.hwCount} problems · answer keys included</span></a>
+<p style="margin-top:22px">Let's begin.</p><p><a class="btn solid" href="#m1" style="text-decoration:none;display:inline-block">Begin Module 1 →</a></p>`;
+}
+
+/* ================= Biomechanics & Biomaterials 101 ================= */
+const MODULES = [];
+const M = m => MODULES.push(m);
+const COURSE_TITLE = "Biomechanics & Biomaterials 101";
+const MPA = 1e6, MMHG = 133.322;
+
+/* material library: strain (%) / stress (MPa) points of a uniaxial tension test (typical literature-range values, simplified) */
+const MATS = {
+  bone: { name: "Cortical bone", pts: [[0, 0], [0.7, 120], [1.5, 135], [2.5, 140]], note: "Stiff and strong, little post-yield strain. Values for longitudinal tension." },
+  tendon: { name: "Tendon", pts: [[0, 0], [1, 5], [2, 20], [4, 45], [7, 80], [9, 100]], note: "Toe region (crimped collagen straightening), then a linear region." },
+  artery: { name: "Artery (circumferential)", pts: [[0, 0], [20, 0.05], [40, 0.15], [60, 0.45], [80, 1.2], [95, 2.0]], note: "J-shaped: soft at first (elastin), then stiff (collagen recruits)." },
+  ti: { name: "Titanium alloy (Ti-6Al-4V)", pts: [[0, 0], [0.8, 880], [2, 900], [8, 950], [14, 920]], note: "Implant workhorse: strong, light, corrosion resistant." },
+  ss: { name: "316L stainless steel", pts: [[0, 0], [0.15, 290], [2, 330], [20, 500], [40, 580], [45, 560]], note: "Yields early but deforms a lot before breaking: very tough." },
+  pmma: { name: "PMMA bone cement", pts: [[0, 0], [1.2, 30], [1.5, 35]], note: "Brittle: fails with almost no plastic deformation." },
+  uhmwpe: { name: "UHMWPE (joint bearing)", pts: [[0, 0], [2.5, 21], [50, 25], [200, 33], [300, 40]], note: "Soft and extremely ductile." },
+  silicone: { name: "Medical silicone", pts: [[0, 0], [100, 1.5], [300, 4], [500, 8]], note: "Very compliant, huge stretch." }
+};
+function matStress(m, e) { const p = m.pts; if (e <= 0) return 0; for (let i = 1; i < p.length; i++) if (e <= p[i][0]) { const [x0, y0] = p[i - 1], [x1, y1] = p[i]; return y0 + (y1 - y0) * (e - x0) / (x1 - x0); } return NaN; }
+function matCurve(m, n = 200) { const eMax = m.pts[m.pts.length - 1][0], x = linspace(0, eMax, n); return { x, y: x.map(e => matStress(m, e)) }; }
+function matProps(m) { const p = m.pts, E = p[1][1] / (p[1][0] / 100) / 1000; let tough = 0; for (let i = 1; i < p.length; i++) tough += (p[i][1] + p[i - 1][1]) / 2 * (p[i][0] - p[i - 1][0]) / 100;
+  return { E, uts: Math.max(...p.map(q => q[1])), ef: p[p.length - 1][0], tough }; }
+function strainAt(m, s) { const c = matCurve(m, 600); for (let i = 1; i < c.x.length; i++) if (c.y[i] >= s) return c.x[i - 1] + (c.x[i] - c.x[i - 1]) * (s - c.y[i - 1]) / ((c.y[i] - c.y[i - 1]) || 1); return NaN; }
+
+/* ---------- Module 1 ---------- */
+const MQ1 = [
+  { q: "Two rods carry the same force. Rod B has twice the diameter of rod A. The stress in B is…", a: ["Half of A", "One quarter of A", "Twice A", "The same"], c: 1, why: "Stress = force ÷ area, and area scales with diameter squared. Double the diameter, four times the area, one quarter the stress." },
+  { q: "Which property tells you how much a material deforms under a given load (before yielding)?", a: ["Strength", "Toughness", "Young's modulus (stiffness)", "Density"], c: 2, why: "Young's modulus E is the slope of the linear part of the stress–strain curve: stress ÷ strain. High E = stiff." },
+  { q: "Why does an artery feel soft at low pressure but resist over-stretching at high pressure?", a: ["Its wall gets thicker", "Elastin carries load first, then wavy collagen fibers straighten and take over", "Blood pressure lowers its modulus", "Smooth muscle relaxes"], c: 1, why: "That is the J-shaped curve: a soft elastin-dominated region, then stiff collagen recruitment. It protects the vessel from bursting while staying compliant at normal pressure." }
+];
+M({ id: "m1", num: "1", nav: "Stress & Strain", title: "Module 1: Stress, Strain & Materials", subtitle: "The universal language of how things deform",
+  html: () => `
+${callout("scenario", "Clinical scenario", `<p>An orthopedic resident asks why the hip implant is titanium, the bearing is polyethylene, and the cement is acrylic, when "titanium is the strongest." Choosing a material is never about one number. By the end of this module you can explain why each part is made of what it is.</p>`)}
+<h2 id="basics">The Basics</h2>
+<p>Forces alone do not tell you whether something breaks. A 500 N load is trivial for a femur and catastrophic for a suture. Engineers normalize:</p>
+<ul><li><b>Stress</b> σ = F / A, force per area. Units: pascals (N/m²); for tissues and implants we use megapascals (MPa).</li>
+<li><b>Strain</b> ε = ΔL / L₀, the fractional change in length. No units; often written in %.</li>
+<li><b>Young's modulus</b> E = σ / ε in the linear region. This is <b>stiffness</b> of the material.</li></ul>
+<p>Plot stress against strain during a pull test and you get a material's fingerprint. The <b>yield point</b> is where permanent deformation begins, the <b>ultimate strength</b> is the peak stress, and the <b>area under the curve</b> is the energy absorbed before breaking: <b>toughness</b>.</p>
+<h2 id="tensile">Interactive: Virtual Tensile Test</h2>
+<p>Pick a material, then set the force and the cross-sectional area of the specimen.</p>
+<div class="widget" id="w1"><div class="presets" id="m1mats">${Object.entries(MATS).map(([k, m], i) => `<button class="pill c${[4, 5, 3, 6, 1, 2][i % 6]}" data-k="${k}" aria-pressed="${k === "bone"}">${m.name}</button>`).join("")}</div>
+<div class="ctrls">${slider("m1f", "Force", 0, 100, 0.5, 82)}${slider("m1a", "Cross-sectional area (mm²)", 1, 200, 1, 50)}</div>
+<div class="plotwrap"><canvas class="plot" id="m1plot" data-h="260"></canvas></div><div class="readout" id="m1read"></div><p class="wnote" id="m1note" style="margin:0"></p></div>
+${callout("tip", "Try it", `<ul><li>On <b>cortical bone</b>, raise the force until it fails. Note how little strain there was. Now try <b>stainless steel</b> with the same force and area.</li>
+<li>Compare <b>tendon</b> and <b>artery</b>: both soft tissues, very different curves. Find the toe region in tendon.</li>
+<li>Switch to <b>PMMA bone cement</b>. Strong in compression, but in tension it breaks almost without warning. That is why cement mantles crack.</li></ul>`)}
+<h2 id="properties">Stiff vs Strong vs Tough</h2>
+<div class="tablewrap"><table><thead><tr><th>Property</th><th>Question it answers</th><th>On the curve</th></tr></thead><tbody>
+<tr><td><b>Stiffness (E)</b></td><td>How much does it deform under load?</td><td>Slope of the first, linear part</td></tr>
+<tr><td><b>Strength</b></td><td>How much stress before it yields or breaks?</td><td>Height of the curve</td></tr>
+<tr><td><b>Ductility</b></td><td>How far can it stretch before breaking?</td><td>Width of the curve</td></tr>
+<tr><td><b>Toughness</b></td><td>How much energy can it absorb before breaking?</td><td>Area under the curve</td></tr></tbody></table></div>
+${callout("info", "Why does this matter clinically?", `<p>Glass is stiff and strong but not tough. Bone is a composite of brittle mineral and tough collagen, giving it both. Diseases that alter one component shift the curve: too little mineral and bone bends (osteomalacia); defective collagen and it shatters (osteogenesis imperfecta). Module 2 explores this.</p>`)}
+<h2 id="quiz">Quiz: Check Your Understanding</h2>${quizHTML("mq1", MQ1)}
+<h2 id="summary">Summary</h2><ul><li>Stress = F/A, strain = ΔL/L. Normalizing lets you compare a suture and a femur.</li><li>Young's modulus = stiffness; strength = peak stress; toughness = area under the curve.</li><li>Soft tissues have J-shaped curves; metals yield and flow; ceramics and cements are brittle.</li><li>Implant design is about matching the right property to the job.</li></ul>`,
+  init() {
+    let cur = "bone";
+    const draw = () => {
+      const m = MATS[cur], F = Math.pow(10, val("m1f") / 25), A = val("m1a"), s = F / A, pr = matProps(m), c = matCurve(m);
+      $("#m1f-o").textContent = F >= 1000 ? fmt(F / 1000, 1) + " kN" : fmt(F, 0) + " N";
+      const fails = s > pr.uts, e = fails ? NaN : strainAt(m, s);
+      plot($("#m1plot"), { series: [{ x: c.x, y: c.y, color: "--trace", w: 2.2 }], markers: fails ? [] : [{ x: e, y: s, color: "--trace2", r: 6, label: fmt(s, s < 10 ? 2 : 0) + " MPa" }], hlines: fails ? [{ y: Math.min(s, pr.uts * 1.25), color: "--bad", label: "applied stress exceeds strength" }] : [], xlim: [0, pr.ef * 1.05], ylim: [0, pr.uts * 1.3], xlabel: "Strain (%)", ylabel: "Stress (MPa)", left: 56 });
+      $("#m1read").innerHTML = stat("Stress", fmt(s, s < 10 ? 2 : 1), " MPa") + stat("Strain", fails ? "—" : fmt(e, 2), " %") + stat("Modulus E", fmt(pr.E, pr.E < 1 ? 3 : 1), " GPa") + stat("Strength", fmt(pr.uts, pr.uts < 10 ? 1 : 0), " MPa") + stat("Toughness", fmt(pr.tough, 2), " MJ/m³") + chip(fails ? "Fractured" : s > matStress(m, m.pts[1][0]) ? "Yielded (permanent)" : "Elastic", fails ? "bad" : s > m.pts[1][1] ? "warn" : "good");
+      $("#m1note").innerHTML = `<b>${m.name}.</b> ${m.note}`;
+    };
+    $$("#m1mats .pill").forEach(b => b.addEventListener("click", () => { cur = b.dataset.k; $$("#m1mats .pill").forEach(x => x.setAttribute("aria-pressed", x === b)); draw(); }));
+    bindSliders($("#w1"), draw); draw(); bindQuiz("mq1", MQ1);
+  } });
+
+/* ---------- Module 2 ---------- */
+function boneModel(min, col = 1) { // illustrative composite model: mineral fraction (% by weight), collagen quality factor
+  const E = 4 + (min - 50) * 0.55, ey = 0.7, sy = E * 1000 * ey / 100, eu = Math.max(ey + 0.05, (4.2 * Math.exp(-(min - 50) / 11)) * col), su = sy * 1.08;
+  const tough = (sy * ey / 2 + (sy + su) / 2 * (eu - ey)) / 100; return { E, ey, sy, eu, su, tough };
+}
+const MQ2 = [
+  { q: "Osteopetrosis makes bone very dense. Why do these patients still fracture easily?", a: ["Dense bone is less stiff", "High mineral makes bone stiffer but brittle: low toughness", "Dense bone is weaker in compression", "It is caused by low calcium"], c: 1, why: "More mineral raises stiffness but sharply reduces how far bone can deform before cracking. Energy absorption (toughness) falls, so a fall that a normal bone survives breaks a 'marble bone'." },
+  { q: "A child with osteogenesis imperfecta has a collagen defect. Which property suffers most?", a: ["Stiffness", "Toughness and post-yield strain", "Density", "Compressive strength only"], c: 1, why: "Collagen provides the ductile, energy-absorbing phase. Defective collagen leaves the brittle mineral to carry load alone." },
+  { q: "Two materials have the same strength. Material A breaks at 2% strain, B at 20%. In a fall, which absorbs more energy?", a: ["A", "B", "Same", "Cannot tell"], c: 1, why: "Toughness is area under the curve. Same height, ten times the width: far more energy absorbed." }
+];
+M({ id: "m2", num: "2", nav: "Stiff vs Tough", title: "Module 2: Stiff, Strong, Tough", subtitle: "Why the densest bone is not the best bone",
+  html: () => `
+${callout("scenario", "Clinical scenario", `<p>Two patients with fractures. One has osteomalacia: soft, poorly mineralized bone that bows. The other has osteopetrosis: bone so dense it looks white on X-ray. Both break. Density alone does not predict fracture. Why?</p>`)}
+<h2 id="basics">The Basics</h2>
+<p>Bone is a <b>composite</b>: stiff, brittle hydroxyapatite mineral embedded in tough, flexible collagen. Like fiberglass or reinforced concrete, the combination outperforms either part. Mineral gives stiffness. Collagen lets microcracks form and stop instead of running through the whole bone.</p>
+<p>Shift the balance and you trade one property for another. That trade-off is the key idea of this module: <b>stiffness, strength and toughness are separate properties</b>, and the body tunes them. (Antler, for example, is less mineralized than femur, and much tougher. It is built to survive impacts.)</p>
+<h2 id="interactive">Interactive: Tune the Composite</h2>
+<p>An illustrative model. Change the mineral fraction and the collagen quality. The dashed curve is healthy adult bone.</p>
+<div class="widget" id="w2"><div class="presets"><button class="pill c5" data-p="malacia">Osteomalacia</button><button class="pill c4" data-p="normal" aria-pressed="true">Healthy adult</button><button class="pill c3" data-p="petro">Osteopetrosis</button><button class="pill c6" data-p="oi">Osteogenesis imperfecta</button></div>
+<div class="ctrls">${slider("m2m", "Mineral fraction (% by weight)", 50, 80, 0.5, 65)}${slider("m2c", "Collagen quality (1 = normal)", 0.3, 1.2, 0.05, 1)}</div>
+<div class="plotwrap"><canvas class="plot" id="m2plot" data-h="250"></canvas></div><div class="readout" id="m2read"></div></div>
+${callout("tip", "Try it", `<ul><li>Slide mineral from 50% to 80%. Watch stiffness climb and toughness rise, then collapse. Find the mineral fraction that maximizes toughness.</li><li>Drop collagen quality to 0.4 at normal mineral. The curve stays stiff but becomes short: that is brittle bone.</li></ul>`)}
+<h2 id="clinical">Why Does This Matter Clinically?</h2>
+<p>Bone mineral density (DEXA) measures mostly mineral, so it predicts fracture only partly. Long-term bisphosphonate use is linked to rare atypical femoral fractures, thought to involve accumulated microdamage and more homogeneous, less tough bone. Bone quality, not just quantity, decides fracture risk.</p>
+<h2 id="quiz">Quiz: Check Your Understanding</h2>${quizHTML("mq2", MQ2)}
+<h2 id="summary">Summary</h2><ul><li>Bone is a composite: mineral for stiffness, collagen for toughness.</li><li>More mineral is stiffer but more brittle; toughness peaks at a balance.</li><li>Density (what DEXA sees) is not the same as fracture resistance.</li></ul>`,
+  init() {
+    const P = { malacia: [54, 1], normal: [65, 1], petro: [77, 1], oi: [64, 0.4] }, ref = boneModel(65, 1);
+    const curve = b => ({ x: [0, b.ey, b.eu], y: [0, b.sy, b.su] });
+    const draw = () => { const b = boneModel(val("m2m"), val("m2c")), c = curve(b), r = curve(ref);
+      plot($("#m2plot"), { series: [{ x: r.x, y: r.y, color: "--axis", w: 1.4, dash: [5, 4] }, { x: c.x, y: c.y, color: "--trace", w: 2.4 }], markers: [{ x: b.eu, y: b.su, color: "--trace2", r: 5, label: "fracture" }], xlim: [0, 5], ylim: [0, 200], xlabel: "Strain (%)", ylabel: "Stress (MPa)", left: 56 });
+      $("#m2read").innerHTML = stat("Stiffness E", fmt(b.E, 1), " GPa") + stat("Strength", fmt(b.su, 0), " MPa") + stat("Strain to failure", fmt(b.eu, 1), " %") + stat("Toughness", fmt(b.tough, 2), " MJ/m³") + chip(b.tough < ref.tough * 0.6 ? "Brittle: low toughness" : b.E < ref.E * 0.75 ? "Soft: bows and deforms" : "Balanced", b.tough < ref.tough * 0.6 ? "bad" : b.E < ref.E * 0.75 ? "warn" : "good"); };
+    $$("#w2 .pill").forEach(b => b.addEventListener("click", () => { const [m, c] = P[b.dataset.p]; setSlider("m2m", m); setSlider("m2c", c); $$("#w2 .pill").forEach(x => x.setAttribute("aria-pressed", x === b)); draw(); }));
+    bindSliders($("#w2"), draw); draw(); bindQuiz("mq2", MQ2);
+  } });
+
+/* ---------- Module 3 ---------- */
+function tubeI(R, r) { return Math.PI / 4 * (R ** 4 - r ** 4); }
+const MQ3 = [
+  { q: "With the same amount of bone material (same cross-sectional area), which resists bending best?", a: ["A solid rod", "A wide hollow tube", "A narrow hollow tube", "All the same"], c: 1, why: "Bending resistance depends on the second moment of area, I, which grows with distance from the center to the fourth power. Moving material outward is the most efficient way to resist bending." },
+  { q: "In aging, bone is lost from the inner (endosteal) surface while a little is added on the outside. What is the effect?", a: ["Bending strength falls in proportion to mass lost", "The outward expansion partly compensates for the mass lost", "Bending strength increases", "No effect"], c: 1, why: "Material at the outer radius contributes most to I, so modest periosteal expansion offsets much of the inner loss. This is why some bone loss causes less weakening than mass alone predicts." },
+  { q: "Doubling the outer radius of a solid rod (same material) increases bending stiffness by about…", a: ["2×", "4×", "8×", "16×"], c: 3, why: "I = πr⁴/4 for a solid rod. Double r → 2⁴ = 16× stiffer in bending." }
+];
+M({ id: "m3", num: "3", nav: "Bending & Geometry", title: "Module 3: Bending & Geometry", subtitle: "Shape matters more than mass",
+  html: () => `
+${callout("scenario", "Clinical scenario", `<p>An 81-year-old woman falls from standing and fractures her femoral neck. Her DEXA scan last year showed only "moderate" bone loss. Her cortex has thinned from the inside, and the force of a sideways fall bent the neck past its limit.</p>`)}
+<h2 id="basics">The Basics</h2>
+<p>When a beam bends, one side stretches and the other compresses. Stress is zero at the center (the neutral axis) and highest at the outer surface:</p>
+<p style="text-align:center" class="mono">σ_max = M · c / I</p>
+<p>M is the bending moment (force × lever arm), c is the distance to the outer surface, and I is the <b>second moment of area</b>, a pure geometry term. For a hollow tube with outer radius R and inner radius r:</p>
+<p style="text-align:center" class="mono">I = π/4 · (R⁴ − r⁴)</p>
+<p>Because of the fourth power, material far from the center does most of the work. That is why long bones, bike frames and bamboo are hollow tubes.</p>
+<h2 id="interactive">Interactive: Design a Bone</h2>
+<div class="widget" id="w3"><div class="presets"><button class="pill c4" data-p="young" aria-pressed="true">Young adult</button><button class="pill c3" data-p="old">Elderly: endosteal loss</button><button class="pill c5" data-p="comp">Elderly: with periosteal expansion</button><button class="pill c6" data-p="solid">Same mass as a solid rod</button></div>
+<div class="ctrls">${slider("m3R", "Outer radius R (mm)", 6, 20, 0.5, 13)}${slider("m3t", "Cortical thickness (mm)", 1, 13, 0.25, 5.5)}${slider("m3M", "Bending moment (N·m)", 20, 400, 5, 180)}</div>
+<div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:12px;align-items:center"><div class="plotwrap"><canvas class="plot" id="m3x" data-h="230"></canvas></div><div class="plotwrap"><canvas class="plot" id="m3plot" data-h="230"></canvas></div></div>
+<div class="readout" id="m3read"></div><div class="wnote">Failure is flagged above ~150 MPa, a typical bending strength for cortical bone. The right plot holds the bone area constant and varies the outer radius.</div></div>
+${callout("tip", "Try it", `<ul><li>Click <b>Elderly: endosteal loss</b>, then <b>with periosteal expansion</b>. Same area loss, very different stress.</li><li>Click <b>Same mass as a solid rod</b>. The solid rod is far weaker in bending.</li></ul>`)}
+<h2 id="clinical">Why Does This Matter Clinically?</h2>
+<p>Geometry explains why hip structural analysis adds information beyond DEXA density, why intramedullary nails share load well (they sit at the neutral axis, so bending loads stay mostly in the cortex), and why a hole drilled near the surface weakens a bone more than one near the center.</p>
+<h2 id="quiz">Quiz: Check Your Understanding</h2>${quizHTML("mq3", MQ3)}
+<h2 id="summary">Summary</h2><ul><li>Bending stress = M·c/I. Geometry (I) is as important as material.</li><li>I scales with radius⁴: hollow tubes are the most efficient bending structure.</li><li>Where bone is lost matters as much as how much is lost.</li></ul>`,
+  init() {
+    const P = { young: [13, 5.5], old: [13, 2.5], comp: [14.5, 2.2], solid: [Math.sqrt(13 ** 2 - 7.5 ** 2), 13] };
+    const drawX = () => { const cv = $("#m3x"), dpr = devicePixelRatio || 1, W = cv.clientWidth || 300, H = 230; cv.style.height = H + "px"; cv.width = W * dpr; cv.height = H * dpr;
+      const g = cv.getContext("2d"); g.setTransform(dpr, 0, 0, dpr, 0, 0); g.clearRect(0, 0, W, H); const R = val("m3R"), t = Math.min(val("m3t"), R), sc = 4.8;
+      g.fillStyle = css("--paper-major"); g.beginPath(); g.arc(W / 2, H / 2, R * sc, 0, 7); g.fill(); g.fillStyle = css("--panel"); g.beginPath(); g.arc(W / 2, H / 2, Math.max(0, R - t) * sc, 0, 7); g.fill();
+      g.strokeStyle = css("--axis"); g.setLineDash([4, 4]); g.beginPath(); g.moveTo(W / 2 - R * sc - 10, H / 2); g.lineTo(W / 2 + R * sc + 10, H / 2); g.stroke(); g.setLineDash([]);
+      g.fillStyle = css("--muted"); g.font = `12px ${css("--font-body")}`; g.textAlign = "center"; g.fillText("cross-section (neutral axis dashed)", W / 2, H - 6); };
+    const draw = () => { const R = val("m3R") / 1000, t = Math.min(val("m3t"), val("m3R")) / 1000, r = R - t, Mo = val("m3M"), I = tubeI(R, r), s = Mo * R / I / MPA, A = Math.PI * (R * R - r * r);
+      const Rs = linspace(Math.sqrt(A / Math.PI) * 1000, 22, 80), ss = Rs.map(x => { const Ro = x / 1000, ri = Math.sqrt(Math.max(0, Ro * Ro - A / Math.PI)); return Mo * Ro / tubeI(Ro, ri) / MPA; });
+      plot($("#m3plot"), { title: "Same bone area, wider tube", series: [{ x: Rs, y: ss, color: "--trace", w: 2 }], markers: [{ x: R * 1000, y: s, color: "--trace2", r: 6 }], hlines: [{ y: 150, color: "--bad", label: "≈ failure" }], xlim: [Math.min(...Rs), 22], ylim: [0, Math.max(200, Math.min(600, ss[0] * 1.1))], xlabel: "Outer radius (mm)", ylabel: "Max stress (MPa)", left: 52 });
+      drawX();
+      $("#m3read").innerHTML = stat("Bone area", fmt(A * 1e6, 0), " mm²") + stat("I", fmt(I * 1e12 / 1000, 1), " ×10³ mm⁴") + stat("Max bending stress", fmt(s, 0), " MPa") + chip(s > 150 ? "Fracture" : s > 110 ? "Near limit" : "Safe", s > 150 ? "bad" : s > 110 ? "warn" : "good"); };
+    cvHook($("#m3x"), drawX);
+    $$("#w3 .pill").forEach(b => b.addEventListener("click", () => { const [R, t] = P[b.dataset.p]; setSlider("m3R", +R.toFixed(1)); setSlider("m3t", t); $$("#w3 .pill").forEach(x => x.setAttribute("aria-pressed", x === b)); draw(); }));
+    bindSliders($("#w3"), draw); draw(); bindQuiz("mq3", MQ3);
+  } });
+
+/* ---------- Module 4 ---------- */
+const WIRE = { niti: ["Nitinol", 50], ss: ["Stainless steel", 193], ptfe: ["PTFE / polymer", 0.5], bone: ["Trabecular strut (bone)", 15] };
+const MQ4 = [
+  { q: "You double the unsupported length of a guidewire. Its buckling load becomes…", a: ["Half", "One quarter", "Double", "Unchanged"], c: 1, why: "Euler buckling load ∝ 1/L². Twice the length, one quarter of the load. That is why a support catheter or sheath close to the tip transforms pushability." },
+  { q: "Why do veins collapse at near-zero pressure while arteries stay round?", a: ["Veins have no muscle", "Collapse pressure scales with E·(t/R)³: veins have thin walls relative to their radius", "Veins contain valves", "Arterial blood is less viscous"], c: 1, why: "A thin-walled tube's resistance to external pressure scales with the cube of wall thickness ratio. Veins are thin and wide, so the slightest negative transmural pressure flattens them." },
+  { q: "In osteoporosis, horizontal trabeculae are lost first. Why does this hurt vertical struts so much?", a: ["They get shorter", "Their unsupported length increases, so buckling load drops with 1/L²", "They become stiffer", "Mineral density increases"], c: 1, why: "Cross-struts act like bracing. Remove them and the vertical struts' effective length grows, so they buckle at a fraction of the original load: a vertebra can collapse under ordinary loads." }
+];
+M({ id: "m4", num: "4", nav: "Buckling & Collapse", title: "Module 4: Buckling & Collapse", subtitle: "When slender things fail sideways",
+  html: () => `
+${callout("scenario", "Clinical scenario", `<p>During a coronary procedure the interventionalist pushes a guidewire, and instead of advancing, it bows and loops in the aorta. Two rooms over, an ultrasound tech presses on the femoral vein and it flattens completely, while the artery next to it stays round. Both are buckling problems.</p>`)}
+<h2 id="basics">The Basics</h2>
+<p>Slender structures in compression rarely fail by crushing. They fail by suddenly bending sideways: <b>buckling</b>. Euler's formula gives the critical load:</p>
+<p style="text-align:center" class="mono">P_cr = π² · E · I / (K · L)²</p>
+<p>E is stiffness, I is the cross-section geometry (∝ d⁴ for a round wire), L is the unsupported length and K depends on how the ends are held. Note the <b>1/L²</b>: length is the enemy.</p>
+<p>Tubes under external pressure have their own version. A long thin-walled tube collapses when the outside pressure exceeds the inside by:</p>
+<p style="text-align:center" class="mono">ΔP_collapse = E / (4(1 − ν²)) · (t / R)³</p>
+<h2 id="column">Interactive: Push a Guidewire</h2>
+<div class="widget" id="w4"><div class="presets" id="m4mats">${Object.entries(WIRE).map(([k, w], i) => `<button class="pill c${[4, 5, 3, 1][i]}" data-k="${k}" aria-pressed="${k === "niti"}">${w[0]} (${w[1]} GPa)</button>`).join("")}</div>
+<div class="ctrls">${slider("m4L", "Unsupported length (mm)", 5, 300, 1, 60)}${slider("m4d", "Diameter (mm)", 0.1, 3, 0.01, 0.36)}${slider("m4K", "End condition K (0.5 fixed–fixed, 1 pinned, 2 free tip)", 0.5, 2, 0.5, 1)}</div>
+<div class="plotwrap"><canvas class="plot" id="m4plot" data-h="230"></canvas></div><div class="readout" id="m4read"></div><div class="wnote">0.36 mm is a standard 0.014-inch coronary guidewire. A solid wire core is assumed.</div></div>
+<h2 id="tube">Interactive: Collapse a Tube</h2>
+<div class="widget" id="w4b"><div class="presets"><button class="pill c5" data-p="vein">Vein</button><button class="pill c6" data-p="artery">Artery</button><button class="pill c3" data-p="trach">Soft trachea (tracheomalacia)</button><button class="pill c4" data-p="cath">Thin catheter</button></div>
+<div class="ctrls">${slider("m4E", "Wall modulus E (MPa)", 0.1, 50, 0.1, 0.8)}${slider("m4tr", "Wall thickness / radius (t/R)", 0.02, 0.4, 0.005, 0.06)}${slider("m4P", "External − internal pressure (mmHg)", -20, 80, 1, 5)}</div>
+<div class="plotwrap"><canvas class="plot" id="m4bplot" data-h="210"></canvas></div><div class="readout" id="m4bread"></div></div>
+${callout("tip", "Try it", `<ul><li>Halve the guidewire length. The buckling load quadruples. Now increase diameter from 0.36 to 0.46 mm (0.018"): small change, big effect (d⁴).</li><li>In the tube widget, click <b>Vein</b>, then <b>Artery</b>. Then <b>Soft trachea</b>: why do these infants have noisy breathing when they cry or cough?</li></ul>`)}
+<h2 id="quiz">Quiz: Check Your Understanding</h2>${quizHTML("mq4", MQ4)}
+<h2 id="summary">Summary</h2><ul><li>Slender columns fail by buckling: P_cr ∝ E·d⁴ / L².</li><li>Support close to the load (short L) is the cheapest fix.</li><li>Thin tubes collapse under external pressure ∝ E·(t/R)³: veins, airways, catheters, compartments.</li></ul>`,
+  init() {
+    let mat = "niti";
+    const draw = () => { const E = WIRE[mat][1] * 1e9, d = val("m4d") / 1000, K = val("m4K"), L = val("m4L") / 1000, I = Math.PI * d ** 4 / 64, P = Math.PI ** 2 * E * I / (K * L) ** 2;
+      const Ls = linspace(5, 300, 150), Ps = Ls.map(l => Math.PI ** 2 * E * I / (K * l / 1000) ** 2);
+      plot($("#m4plot"), { series: [{ x: Ls, y: Ps.map(p => Math.log10(p)), color: "--trace", w: 2 }], markers: [{ x: L * 1000, y: Math.log10(P), color: "--trace2", r: 6 }], xlim: [5, 300], ylim: [-3, 4], xlabel: "Unsupported length (mm)", ylabel: "Buckling load (N, log)", yfmt: v => v >= 0 ? String(10 ** v) : (10 ** v).toFixed(-v), left: 58 });
+      $("#m4read").innerHTML = stat("Buckling load", P < 1 ? fmt(P * 1000, 0) : fmt(P, 1), P < 1 ? " mN" : " N") + stat("≈ weight of", P / 9.81 < 1 ? fmt(P / 9.81 * 1000, 0) : fmt(P / 9.81, 1), P / 9.81 < 1 ? " g" : " kg") + chip(P < 0.2 ? "Buckles easily" : P < 2 ? "Moderate pushability" : "Stiff", P < 0.2 ? "bad" : P < 2 ? "warn" : "good"); };
+    $$("#m4mats .pill").forEach(b => b.addEventListener("click", () => { mat = b.dataset.k; $$("#m4mats .pill").forEach(x => x.setAttribute("aria-pressed", x === b)); draw(); }));
+    bindSliders($("#w4"), draw); draw();
+    const P = { vein: [0.8, 0.06, 5], artery: [1.5, 0.18, 5], trach: [1.5, 0.08, 30], cath: [20, 0.05, 40] };
+    const drawB = () => { const E = val("m4E") * MPA, tr = val("m4tr"), dp = val("m4P"), pc = E / (4 * (1 - 0.25)) * tr ** 3 / MMHG, trs = linspace(0.02, 0.4, 150);
+      plot($("#m4bplot"), { series: [{ x: trs, y: trs.map(x => Math.log10(E / 3 * x ** 3 / MMHG)), color: "--trace3", w: 2 }], markers: [{ x: tr, y: Math.log10(pc), color: dp > pc ? "--bad" : "--good", r: 6 }], hlines: [{ y: Math.log10(Math.max(0.01, dp)), color: "--trace2", label: "applied" }], xlim: [0.02, 0.4], ylim: [-2, 5], xlabel: "Wall thickness / radius", ylabel: "Collapse ΔP (mmHg, log)", yfmt: v => v >= 0 ? String(10 ** v) : (10 ** v).toFixed(-v), left: 58 });
+      $("#m4bread").innerHTML = stat("Collapse pressure", fmt(pc, pc < 1 ? 2 : 0), " mmHg") + stat("Applied", fmt(dp, 0), " mmHg") + chip(dp > pc ? "Collapsed" : "Stays open", dp > pc ? "bad" : "good"); };
+    $$("#w4b .pill").forEach(b => b.addEventListener("click", () => { const [E, t, p] = P[b.dataset.p]; setSlider("m4E", E); setSlider("m4tr", t); setSlider("m4P", p); $$("#w4b .pill").forEach(x => x.setAttribute("aria-pressed", x === b)); drawB(); }));
+    bindSliders($("#w4b"), drawB); drawB(); bindQuiz("mq4", MQ4);
+  } });
+
+/* ---------- Module 5 ---------- */
+const MQ5 = [
+  { q: "An aneurysm grows from 4 to 6 cm while blood pressure stays the same. Wall stress…", a: ["Stays the same", "Increases about 1.5×", "Increases more than 1.5×, because the wall also thins", "Decreases"], c: 2, why: "Laplace: σ = P·r/t. Radius rises 1.5×, and the same wall material is stretched thinner, so t falls too. Stress rises roughly with r²: a positive feedback loop." },
+  { q: "Why is blood pressure control important for a patient with a known aneurysm?", a: ["It shrinks the aneurysm", "Wall stress is directly proportional to pressure", "It thickens the wall", "It lowers viscosity"], c: 1, why: "In Laplace's law, stress scales linearly with P. Lowering pressure is the one lever that reduces wall stress immediately." },
+  { q: "Without surfactant, two connected alveoli of different size…", a: ["Equalize", "The small one empties into the large one", "The large one empties into the small one", "Both collapse equally"], c: 1, why: "For a sphere with surface tension T, P = 2T/r. The smaller alveolus has higher pressure and empties into the larger one. Surfactant lowers T more in small alveoli, stabilizing them." }
+];
+M({ id: "m5", num: "5", nav: "Pressure & Rupture", title: "Module 5: Pressure Vessels & Rupture", subtitle: "Laplace's law from aneurysms to alveoli",
+  html: () => `
+${callout("scenario", "Clinical scenario", `<p>A 72-year-old smoker's surveillance scan shows his abdominal aortic aneurysm grew from 4.9 to 5.6 cm in one year. The vascular surgeon recommends repair. Why does a few millimeters change the plan?</p>`)}
+<h2 id="basics">The Basics</h2>
+<p>Any pressurized vessel (aorta, bladder, heart, balloon) must hold back its pressure with tension in its wall. For a thin-walled cylinder:</p>
+<p style="text-align:center" class="mono">hoop stress σ = P · r / t</p>
+<p>For a sphere it is half that: σ = P·r / (2t). Three levers: <b>pressure</b>, <b>radius</b>, <b>wall thickness</b>. When a vessel dilates, the same amount of wall is spread over a larger circumference, so it thins. Radius up, thickness down: stress rises faster than radius. That is the vicious cycle of aneurysm growth.</p>
+<h2 id="interactive">Interactive: Grow an Aneurysm</h2>
+<div class="widget" id="w5"><div class="ctrls">${slider("m5D", "Aortic diameter (mm)", 18, 90, 1, 20)}${slider("m5P", "Systolic pressure (mmHg)", 90, 220, 1, 130)}${slider("m5t", "Wall thickness at 20 mm diameter (mm)", 1, 3, 0.1, 2)}</div>
+<div class="plotwrap"><canvas class="plot" id="m5plot" data-h="250"></canvas></div><div class="readout" id="m5read"></div>
+<div class="wnote">Model: wall volume conserved, so thickness ∝ 1/diameter. The dashed lines (~400–600 kPa) bracket an illustrative range where peak stresses in rupture-prone aneurysms are reported; real walls vary.</div></div>
+${callout("tip", "Try it", `<ul><li>Move diameter from 20 to 55 mm at fixed pressure. How much does stress rise? Compare with the change in diameter alone.</li><li>At 60 mm, drop pressure from 180 to 120 mmHg. That is what antihypertensives buy.</li></ul>`)}
+<h2 id="clinical">Why Does This Matter Clinically?</h2>
+<p>Repair thresholds (about 5.5 cm for an abdominal aortic aneurysm in men, lower in women) follow from this physics plus outcome data. The same law explains why a dilated heart needs more wall tension to make the same pressure (worse oxygen demand), why the cecum perforates first in colonic obstruction (largest radius), and why alveoli need surfactant.</p>
+<h2 id="quiz">Quiz: Check Your Understanding</h2>${quizHTML("mq5", MQ5)}
+<h2 id="summary">Summary</h2><ul><li>σ = P·r/t (cylinder), P·r/2t (sphere).</li><li>Dilation raises r and lowers t: wall stress climbs roughly with r².</li><li>Pressure is the fastest lever; radius explains why big things rupture first.</li></ul>`,
+  init() {
+    const draw = () => { const P = val("m5P") * MMHG, t0 = val("m5t") / 1000, Ds = linspace(18, 90, 150), st = D => P * (D / 2000) / (t0 * 20 / D) / 1000, D = val("m5D");
+      plot($("#m5plot"), { series: [{ x: Ds, y: Ds.map(st), color: "--trace", w: 2.2 }], bands: [{ x0: 54.6, x1: 55.4, color: css("--muted"), alpha: 0.5, label: "5.5 cm" }], hlines: [{ y: 400, color: "--warn", label: "" }, { y: 600, color: "--bad", label: "rupture-prone range" }], markers: [{ x: D, y: st(D), color: "--trace2", r: 6 }], xlim: [18, 90], ylim: [0, Math.max(800, st(90) * 1.05)], xlabel: "Diameter (mm)", ylabel: "Hoop stress (kPa)", left: 56 });
+      const s = st(D); $("#m5read").innerHTML = stat("Wall thickness", fmt(t0 * 20 / D * 1000, 2), " mm") + stat("Hoop stress", fmt(s, 0), " kPa") + stat("vs normal aorta", fmt(s / st(20), 1), "×") + chip(s > 600 ? "High rupture risk" : s > 400 ? "Elevated" : "Low", s > 600 ? "bad" : s > 400 ? "warn" : "good"); };
+    bindSliders($("#w5"), draw); draw(); bindQuiz("mq5", MQ5);
+  } });
+
+/* ---------- Module 6 ---------- */
+const MQ6 = [
+  { q: "A surgeon closing a tight wound pulls the edges together, waits a few minutes, and the tension drops. Which property is she using?", a: ["Plasticity", "Stress relaxation (viscoelasticity)", "Fatigue", "Buckling"], c: 1, why: "Held at a fixed stretch, viscoelastic tissue gradually sheds stress as collagen and fluid rearrange. Waiting lowers the closing tension." },
+  { q: "You are about 1–2 cm shorter in the evening than in the morning. Why?", a: ["Bones compress", "Intervertebral discs creep under body weight and lose fluid during the day", "Muscles shorten", "Cartilage wears"], c: 1, why: "Under constant load, discs creep: fluid slowly flows out and height falls. Lying down overnight unloads them and they rehydrate." },
+  { q: "Ligaments are stiffer when loaded quickly. What does that mean for injury?", a: ["Fast loading is always safer", "At high loading rates, more load reaches the ligament before it can deform, and failure modes can shift", "Rate does not matter", "Slow loading causes more tears"], c: 1, why: "Viscoelastic tissues are rate-dependent. During sudden pivots, the ACL behaves stiffer and can see very high loads in milliseconds." }
+];
+M({ id: "m6", num: "6", nav: "Viscoelasticity", title: "Module 6: Viscoelasticity", subtitle: "Tissues remember time",
+  html: () => `
+${callout("scenario", "Clinical scenario", `<p>A plastic surgeon places a tissue expander under a burn scar and inflates it a little each week. A pediatric orthopedist uses serial casting to correct a clubfoot. Both rely on the same fact: tissues slowly give way under sustained load.</p>`)}
+<h2 id="basics">The Basics</h2>
+<p>A spring (elastic) deforms instantly and returns instantly. A dashpot (viscous, like a syringe plunger) deforms at a rate proportional to force. Soft tissues are both: <b>viscoelastic</b>. Two signature behaviors:</p>
+<ul><li><b>Creep</b>: under a constant load, strain keeps increasing over time.</li><li><b>Stress relaxation</b>: held at a constant stretch, stress decreases over time.</li></ul>
+<p>The standard linear solid model (a spring in series with a spring–dashpot pair) captures both with a time constant τ:</p>
+<p style="text-align:center" class="mono">creep: ε(t) = σ₀/E₁ + σ₀/E₂ · (1 − e^(−t/τ))</p>
+<h2 id="interactive">Interactive: Creep and Relaxation</h2>
+<div class="widget" id="w6"><div class="presets"><button class="pill c4" data-m="creep" aria-pressed="true">Creep test (constant load)</button><button class="pill c5" data-m="relax">Relaxation test (constant stretch)</button></div>
+<div class="ctrls">${slider("m6s", "Load or stretch level", 0.2, 2, 0.05, 1)}${slider("m6tau", "Time constant τ (min)", 1, 120, 1, 20)}${slider("m6f", "Instant (elastic) fraction", 0.1, 0.9, 0.05, 0.4)}${slider("m6T", "Observation time (min)", 10, 480, 10, 120)}</div>
+<div class="plotwrap"><canvas class="plot" id="m6plot" data-h="240"></canvas></div><div class="readout" id="m6read"></div></div>
+${callout("tip", "Try it", `<ul><li>In creep mode, set τ = 60 min and watch over 8 hours: that is roughly a disc during a working day.</li><li>Switch to relaxation, short τ: tissue sheds most of its stress in minutes. That is why surgeons pre-stretch skin.</li></ul>`)}
+<h2 id="clinical">Why Does This Matter Clinically?</h2>
+<p>Tissue expansion, serial casting, orthodontic tooth movement, traction and stretching all exploit creep. Pressure ulcers reflect sustained loading of tissue over time. Rate dependence explains why the same knee motion can be safe slowly and injurious quickly.</p>
+<h2 id="quiz">Quiz: Check Your Understanding</h2>${quizHTML("mq6", MQ6)}
+<h2 id="summary">Summary</h2><ul><li>Viscoelastic = spring + dashpot: response depends on time and rate.</li><li>Creep under constant load; stress relaxation under constant stretch.</li><li>Time constant τ sets how fast; clinicians exploit it deliberately.</li></ul>`,
+  init() {
+    let mode = "creep";
+    const draw = () => { const s = val("m6s"), tau = val("m6tau"), f = val("m6f"), T = val("m6T"), t = linspace(0, T, 300);
+      const y = mode === "creep" ? t.map(x => s * (f + (1 - f) * (1 - Math.exp(-x / tau)))) : t.map(x => s * (1 - (1 - f) * (1 - Math.exp(-x / tau))));
+      plot($("#m6plot"), { series: [{ x: t, y, color: "--trace", w: 2.2 }, { x: [0, T], y: [mode === "creep" ? s : s, mode === "creep" ? s : s], color: "--axis", w: 1, dash: [5, 4] }], xlim: [0, T], ylim: [0, 2.1], xlabel: "Time (min)", ylabel: mode === "creep" ? "Strain (relative)" : "Stress (relative)" });
+      const end = y[y.length - 1];
+      $("#m6read").innerHTML = stat(mode === "creep" ? "Instant strain" : "Initial stress", fmt(mode === "creep" ? s * f : s, 2)) + stat(mode === "creep" ? "Strain at end" : "Stress at end", fmt(end, 2)) + stat("Time to 63% of change", fmt(tau, 0), " min") + chip(mode === "creep" ? "Creep: deforms over time" : "Relaxation: stress fades", "warn"); };
+    $$("#w6 .pill").forEach(b => b.addEventListener("click", () => { mode = b.dataset.m; $$("#w6 .pill").forEach(x => x.setAttribute("aria-pressed", x === b)); draw(); }));
+    bindSliders($("#w6"), draw); draw(); bindQuiz("mq6", MQ6);
+  } });
+
+/* ---------- Module 7 ---------- */
+function cyclesToFail(ratio) { return ratio >= 1 ? 1 : Math.pow(ratio, -1 / 0.08); } // Basquin-type, illustrative for bone/metals
+const MQ7 = [
+  { q: "A military recruit develops a tibial stress fracture after 3 weeks of marching. The loads were well below bone strength. What happened?", a: ["A single overload", "Fatigue: repeated sub-failure loads accumulated microdamage faster than remodeling could repair it", "Osteoporosis", "Viscoelastic creep"], c: 1, why: "Fatigue failure happens below the strength limit when cycles accumulate. Bone normally repairs microdamage, but a sudden jump in training outpaces remodeling." },
+  { q: "Why do fracture plates often break at a screw hole?", a: ["Screws are weaker than plates", "Holes concentrate stress, multiplying local stress by about 2–3×", "Holes cause corrosion only", "Plates are thinner there by design"], c: 1, why: "A hole forces stress lines around it. For a round hole in a plate, peak stress is about three times the average (Kt ≈ 3). Fatigue cracks start at these hot spots." },
+  { q: "Halving the stress amplitude, in a material whose fatigue curve has a typical shallow slope, changes life by roughly…", a: ["2× longer", "10× longer", "100× to 1000× longer or more", "No change"], c: 2, why: "Fatigue life is very sensitive to stress: with a Basquin exponent around 0.08, half the stress gives about 2^12.5 ≈ 6000× more cycles. Small reductions in stress buy enormous life." }
+];
+M({ id: "m7", num: "7", nav: "Fatigue & Fracture", title: "Module 7: Fatigue & Fracture", subtitle: "How things break under loads they can carry",
+  html: () => `
+${callout("scenario", "Clinical scenario", `<p>Eight months after a tibial plate was placed, a patient feels a sudden pop walking up stairs. X-ray shows the plate snapped cleanly at a screw hole over a fracture that never fully healed. The plate was strong enough for any single step. It was not strong enough for 800,000 of them.</p>`)}
+<h2 id="basics">The Basics</h2>
+<p><b>Fatigue</b> is failure under repeated loading at stresses below the ultimate strength. Each cycle grows tiny cracks a little. The relationship between stress amplitude and cycles to failure is the <b>S–N curve</b>. It is steep: small reductions in stress buy huge increases in life.</p>
+<p><b>Stress concentrations</b> (holes, notches, sharp corners, scratches) multiply local stress by a factor K<sub>t</sub>. A round hole in a plate gives K<sub>t</sub> ≈ 3. Fatigue cracks almost always start at these spots.</p>
+<p>Bone differs from metal in one important way: it is alive. Remodeling repairs microdamage, but slowly. When loading increases suddenly, damage outruns repair.</p>
+<h2 id="interactive">Interactive: S–N Curve</h2>
+<div class="widget" id="w7"><div class="ctrls">${slider("m7s", "Nominal stress amplitude (% of strength)", 5, 100, 1, 25)}${slider("m7kt", "Stress concentration factor Kt", 1, 3.5, 0.1, 1)}${slider("m7c", "Loading cycles per day (steps)", 1000, 30000, 500, 8000)}</div>
+<div class="plotwrap"><canvas class="plot" id="m7plot" data-h="240"></canvas></div><div class="readout" id="m7read"></div><div class="wnote">Illustrative Basquin-type curve (exponent 0.08), typical in shape for bone and many metals. Real fatigue curves depend on material, environment and loading.</div></div>
+${callout("tip", "Try it", `<ul><li>At 25% stress, set Kt from 1 to 3 (add a screw hole). Watch life collapse.</li><li>Double the daily step count (training jump). Life in days halves. Bone needs weeks to remodel.</li></ul>`)}
+<h2 id="clinical">Why Does This Matter Clinically?</h2>
+<p>Stress fractures in runners and recruits, broken plates and nails over non-unions, fractured stents and pacing leads, cracked cement mantles: all fatigue. The engineering fixes are the same: lower the stress amplitude, remove stress concentrations, and give biology time to heal.</p>
+<h2 id="quiz">Quiz: Check Your Understanding</h2>${quizHTML("mq7", MQ7)}
+<h2 id="summary">Summary</h2><ul><li>Fatigue: failure from many cycles below strength.</li><li>Life is extremely sensitive to stress amplitude.</li><li>Holes and notches (Kt) are where cracks start.</li><li>Bone repairs itself, if the loading lets it.</li></ul>`,
+  init() {
+    const draw = () => { const r = val("m7s") / 100 * val("m7kt"), N = cyclesToFail(Math.min(1, r)), xs = linspace(0, 9, 200);
+      plot($("#m7plot"), { series: [{ x: xs, y: xs.map(l => 100 * Math.pow(10, -0.08 * l)), color: "--trace", w: 2.2 }], markers: [{ x: Math.min(9, Math.log10(N)), y: Math.min(100, r * 100), color: "--trace2", r: 6, label: "local stress" }], xlim: [0, 9], ylim: [0, 105], xlabel: "Cycles to failure (log₁₀ N)", ylabel: "Stress amplitude (% strength)", xfmt: v => "10^" + v, left: 52 });
+      const days = N / val("m7c");
+      $("#m7read").innerHTML = stat("Local stress", fmt(r * 100, 0), " % of strength") + stat("Cycles to failure", N > 1e9 ? "> 10⁹" : N.toExponential(1)) + stat("Time to failure", days > 3650 ? "> 10" : days > 365 ? fmt(days / 365, 1) : fmt(days, 0), days > 365 ? " yr" : " days") + chip(days < 60 ? "Fails before bone can heal" : days < 365 ? "At risk" : "Durable", days < 60 ? "bad" : days < 365 ? "warn" : "good"); };
+    bindSliders($("#w7"), draw); draw(); bindQuiz("mq7", MQ7);
+  } });
+
+/* ---------- Module 8 ---------- */
+const IMPL = { ti: ["Titanium alloy", 110], cocr: ["Cobalt-chrome", 210], ss: ["Stainless steel", 193], cfpeek: ["Carbon-fiber PEEK", 18], peek: ["PEEK", 3.6] };
+const MQ8 = [
+  { q: "After a stiff cobalt-chrome hip stem is implanted, the surrounding femoral bone thins over years. Why?", a: ["Infection", "Stress shielding: the stiff stem carries most of the load, and unloaded bone resorbs (Wolff's law)", "Metal allergy", "Fatigue of the stem"], c: 1, why: "Parallel structures share load in proportion to their stiffness (E·A). A stiff stem takes the load; bone that is not loaded is removed by remodeling." },
+  { q: "Why are nitinol stents 'self-expanding' with a nearly constant outward force?", a: ["They are spring steel", "Superelasticity: a stress-induced phase change gives a flat stress plateau over several percent strain", "They contain a balloon", "They are polymer"], c: 1, why: "Nitinol transforms between austenite and martensite under stress, so it pushes outward with nearly constant force across a range of vessel sizes and recovers large strains." },
+  { q: "Which change reduces stress shielding most for a femoral stem of fixed size?", a: ["Switch titanium → cobalt-chrome", "Switch cobalt-chrome → titanium or a composite", "Polish the stem", "Make it longer"], c: 1, why: "Lower modulus means the stem takes a smaller share of the load, so more stays in the bone." }
+];
+M({ id: "m8", num: "8", nav: "Implants", title: "Module 8: Implants & Stress Shielding", subtitle: "When a stronger implant is the wrong implant",
+  html: () => `
+${callout("scenario", "Clinical scenario", `<p>Seven years after total hip replacement, X-rays show the patient's upper femur has thinned around the implant, even though the stem is perfectly fixed. The implant did its job too well.</p>`)}
+<h2 id="basics">The Basics</h2>
+<p>When two structures are bonded side by side and loaded together, they stretch by the same amount. Each carries load in proportion to its <b>axial stiffness E·A</b>:</p>
+<p style="text-align:center" class="mono">bone share = E_b·A_b / (E_b·A_b + E_i·A_i)</p>
+<p>Bone is a living material that follows <b>Wolff's law</b>: loaded bone is maintained, unloaded bone is resorbed. A very stiff implant takes the load, the bone around it loses its signal, and it thins: <b>stress shielding</b>.</p>
+<h2 id="interactive">Interactive: Share the Load</h2>
+<div class="widget" id="w8"><div class="presets" id="m8mats">${Object.entries(IMPL).map(([k, v], i) => `<button class="pill c${[4, 6, 2, 5, 3][i]}" data-k="${k}" aria-pressed="${k === "ti"}">${v[0]} (${v[1]} GPa)</button>`).join("")}</div>
+<div class="ctrls">${slider("m8d", "Stem diameter (mm)", 6, 18, 0.5, 12)}${slider("m8R", "Femur outer radius (mm)", 11, 17, 0.5, 14)}${slider("m8t", "Cortical thickness (mm)", 2, 7, 0.25, 4.5)}</div>
+<div class="plotwrap"><canvas class="plot" id="m8plot" data-h="230"></canvas></div><div class="readout" id="m8read"></div><div class="wnote">Axial loading of a bonded stem inside a cortical tube; cortical bone E ≈ 18 GPa. Real stems taper, and load transfer varies along their length.</div></div>
+${callout("tip", "Try it", `<ul><li>Switch from cobalt-chrome to carbon-fiber PEEK at the same size. How much load returns to bone?</li><li>Increase stem diameter: bigger stems shield more, because A rises with d².</li></ul>`)}
+<h2 id="beyond">Beyond Stiffness: Choosing Biomaterials</h2>
+<div class="tablewrap"><table><thead><tr><th>Requirement</th><th>Why</th><th>Example</th></tr></thead><tbody>
+<tr><td>Biocompatibility</td><td>No toxic, immune or carcinogenic response</td><td>Titanium's stable oxide layer</td></tr>
+<tr><td>Corrosion resistance</td><td>Body fluid is warm salt water</td><td>316L "L" = low carbon</td></tr>
+<tr><td>Wear resistance</td><td>Wear particles drive osteolysis</td><td>Highly cross-linked UHMWPE</td></tr>
+<tr><td>Fatigue strength</td><td>Millions of cycles per year</td><td>Polished, notch-free designs</td></tr>
+<tr><td>Imaging compatibility</td><td>MRI, CT artifacts</td><td>PEEK is radiolucent</td></tr></tbody></table></div>
+<h2 id="quiz">Quiz: Check Your Understanding</h2>${quizHTML("mq8", MQ8)}
+<h2 id="summary">Summary</h2><ul><li>Parallel structures share load by stiffness E·A.</li><li>Too stiff an implant shields bone, which then resorbs.</li><li>Material choice balances stiffness, strength, wear, corrosion and imaging.</li></ul>`,
+  init() {
+    let mat = "ti";
+    const draw = () => { const d = val("m8d") / 2, R = val("m8R"), t = val("m8t"), r = Math.max(d, R - t), Ab = Math.PI * (R * R - r * r), Ai = Math.PI * d * d, Eb = 18, Ei = IMPL[mat][1], share = Eb * Ab / (Eb * Ab + Ei * Ai);
+      const Es = linspace(1, 220, 200);
+      plot($("#m8plot"), { series: [{ x: Es, y: Es.map(e => 100 * Eb * Ab / (Eb * Ab + e * Ai)), color: "--trace", w: 2.2 }], markers: [{ x: Ei, y: share * 100, color: "--trace2", r: 6, label: IMPL[mat][0] }], hlines: [{ y: 100, color: "--axis", label: "" }], xlim: [0, 220], ylim: [0, 105], xlabel: "Implant modulus (GPa)", ylabel: "Load carried by bone (%)", left: 52 });
+      $("#m8read").innerHTML = stat("Bone area", fmt(Ab, 0), " mm²") + stat("Stem area", fmt(Ai, 0), " mm²") + stat("Bone load share", fmt(share * 100, 0), " %") + chip(share < 0.3 ? "Severe shielding" : share < 0.55 ? "Moderate shielding" : "Bone stays loaded", share < 0.3 ? "bad" : share < 0.55 ? "warn" : "good"); };
+    $$("#m8mats .pill").forEach(b => b.addEventListener("click", () => { mat = b.dataset.k; $$("#m8mats .pill").forEach(x => x.setAttribute("aria-pressed", x === b)); draw(); }));
+    bindSliders($("#w8"), draw); draw(); bindQuiz("mq8", MQ8);
+  } });
+
+/* ---------- Challenge ---------- */
+const CH_MECH = (() => {
+  const s1 = 150 * 0.014 / tubeI(0.014, 0.008) / MPA;
+  const s2 = 150 * MMHG * 0.03 / 0.0007 / 1000;
+  const I3 = Math.PI * 0.00036 ** 4 / 64, p3 = Math.PI ** 2 * 50e9 * I3 / 0.05 ** 2;
+  const Ab = Math.PI * (14 ** 2 - 9.5 ** 2), Ai = Math.PI * 6 ** 2, sh = 100 * 18 * Ab / (18 * Ab + 110 * Ai);
+  const pc = 0.8e6 / 3 * 0.05 ** 3 / MMHG;
+  return [
+    { title: "Hip fracture risk", q: "A femoral neck is modeled as a tube with outer radius 14 mm and inner radius 8 mm. A sideways fall applies a bending moment of 150 N·m. What is the peak bending stress?", unit: "MPa", ans: s1, sol: `I = π/4·(R⁴ − r⁴) = ${fmt(tubeI(0.014, 0.008) * 1e12, 0)} mm⁴. σ = M·R/I = ${fmt(s1, 0)} MPa. Close to cortical bone's bending strength.` },
+    { title: "Aneurysm wall stress", q: "A 60 mm abdominal aortic aneurysm has a wall 0.7 mm thick. Systolic pressure is 150 mmHg. Hoop stress?", unit: "kPa", ans: s2, sol: `P = 150 × 133.3 = 20.0 kPa; r = 30 mm. σ = P·r/t = ${fmt(s2, 0)} kPa: in the rupture-prone range.` },
+    { title: "Guidewire pushability", q: "A 0.014-inch (0.36 mm) solid nitinol guidewire (E = 50 GPa) is pushed with 50 mm unsupported, pinned ends (K = 1). Euler buckling load?", unit: "N", ans: p3, sol: `I = πd⁴/64 = ${(I3 * 1e18).toFixed(0)} ×10⁻¹⁸ m⁴. P = π²EI/L² = ${fmt(p3, 2)} N, about the weight of ${fmt(p3 / 9.81 * 1000, 0)} g.` },
+    { title: "Stress shielding", q: "A titanium stem (E = 110 GPa, diameter 12 mm) is bonded inside cortical bone with outer radius 14 mm and inner radius 9.5 mm (E = 18 GPa). What percentage of an axial load does bone carry?", unit: "%", ans: sh, sol: `Bone EA ∝ 18 × ${fmt(Ab, 0)}; stem EA ∝ 110 × ${fmt(Ai, 0)}. Share = ${fmt(sh, 0)}%.` },
+    { title: "Vein collapse", q: "A vein has E = 0.8 MPa, t/R = 0.05 and ν = 0.5. Estimate the transmural pressure at which it collapses.", unit: "mmHg", ans: pc, tol: 0.15, sol: `ΔP = E/(4(1−ν²))·(t/R)³ = 0.8 MPa / 3 × 1.25×10⁻⁴ = ${fmt(pc * MMHG, 0)} Pa ≈ ${fmt(pc, 2)} mmHg. Barely any external pressure flattens it.` },
+    { title: "Material selection", q: "You need a bearing surface for a hip cup that must deform slightly and survive tens of millions of cycles with low friction against a metal or ceramic head. Best choice?", choices: ["PMMA bone cement", "Cross-linked UHMWPE", "Stainless steel", "Silicone"], ans: 1, sol: "UHMWPE is tough, low-friction and wear-resistant. Cross-linking cuts wear further. PMMA is brittle; silicone is far too soft." },
+    { title: "Fatigue", q: "A plate sees a nominal stress of 20% of its strength. A screw hole has Kt = 3. Using the course S–N model (N = (σ/σu)^(−12.5)), how many cycles until a crack starts at the hole, in millions?", unit: "million cycles", ans: cyclesToFail(0.6) / 1e6, tol: 0.15, sol: `Local stress = 3 × 20% = 60%. N = 0.6^(−12.5) ≈ ${fmt(cyclesToFail(0.6), 0)} cycles, about ${fmt(cyclesToFail(0.6) / 1e6, 2)} million: only weeks of walking. Without the hole: ${cyclesToFail(0.2).toExponential(1)} cycles.` }
+  ];
+})();
+M(challengeModule({ id: "m9", num: "9", items: CH_MECH, scenario: "You are the engineering consultant for an orthopedic and vascular surgery conference. Seven questions come in from the surgeons. Give them numbers they can use." }));
+
+const MECH_HW = [
+  ["1", "Stress", "A 2 mm² suture holds 20 N. Calculate the stress in MPa. Using the virtual tensile test, which material families could survive this?", "10 MPa. Tendon, bone, metals and UHMWPE survive; artery and silicone do not."],
+  ["2", "Toughness", "Find the mineral fraction that maximizes toughness in the Module 2 model. Explain why toughness falls on both sides.", "Around 60–66%. Too little mineral: low strength; too much: very low strain to failure."],
+  ["3", "Geometry", "Keep bone area constant at 300 mm². Compare bending stress for outer radius 11 mm vs 16 mm at 150 N·m.", "Wider tube has much lower stress; read values from the right-hand plot."],
+  ["4", "Buckling", "A guidewire buckles at 0.1 N with 100 mm unsupported. What is the buckling load if a support catheter reduces unsupported length to 25 mm?", "16× higher: 1.6 N (1/L²)."],
+  ["4", "Collapse", "Explain, with the tube-collapse formula, why the internal jugular vein distends in Trendelenburg position and collapses when the patient sits up.", "Head-down raises venous pressure (positive transmural pressure keeps it open). Sitting lowers it below atmospheric; thin wall (small t/R) offers almost no resistance."],
+  ["5", "Laplace", "Compute hoop stress for a 25 mm aorta (t = 1.8 mm) at 120 mmHg, and for a 55 mm aneurysm assuming wall-volume conservation.", "≈ 111 kPa and ≈ 540 kPa (t ≈ 0.82 mm)."],
+  ["6", "Viscoelasticity", "Using the creep widget, estimate how long a tissue expander should wait between fills if τ = 30 min, so that 95% of creep has occurred.", "About 3τ = 90 min."],
+  ["7", "Fatigue", "A runner increases weekly mileage by 50%. Using the S–N widget, explain the effect on time to fatigue failure and why gradual increases are recommended.", "Days to failure fall by a third; remodeling needs time to repair microdamage."],
+  ["8", "Implants", "Compare bone load share for cobalt-chrome vs carbon-fiber PEEK stems at 12 mm diameter. Which would you choose for a young patient, and what are the trade-offs?", "Composite keeps far more load in bone; trade-offs include strength, wear and long-term data."],
+  ["9", "Synthesis", "Pick one case from the Case Library. Write a one-paragraph explanation for a medical student with no engineering background.", "Open-ended; graded on correct principle and clarity."]
+];
+
+/* home */
+const MECH_DESCS = { m1: "Stress, strain and the stress–strain fingerprint of tissues and implants.", m2: "Bone as a composite: why dense bone can be brittle.", m3: "Bending, hollow tubes and why fractures happen where they do.", m4: "Guidewires, trabeculae, veins and airways: when slender things fail.", m5: "Laplace's law from aneurysms to alveoli.", m6: "Creep and relaxation: tissue expanders, discs, serial casts.", m7: "Stress fractures, screw holes and broken plates.", m8: "Load sharing, stress shielding and biomaterial choice.", m9: "Seven graded design and diagnosis problems.", m10: "16 interactive clinical cases where mechanics explains the medicine." };
+function homeHTML() { return genericHome({ title: "Biomechanics &amp; Biomaterials 101", subtitle: "An interactive tutorial for Texas A&amp;M EnMed students", caseCount: 16, hwCount: MECH_HW.length, descs: MECH_DESCS,
+  welcome: `<p>Fractures, aneurysms, collapsing veins, broken plates, stents that kink: much of clinical medicine is mechanics with a pulse. You already have an engineering degree. This course connects the fundamentals you know (stress, stiffness, buckling, fatigue) to the patients you will treat.</p><p>The goal is intuition, not theory of elasticity. Every concept comes with a model you can change, and every module ends in a real clinical decision.</p>`,
+  need: "<li>Comfort with algebra. No calculus required for the widgets.</li>" }); }
+
+/* ================= Biomechanics case library ================= */
+function sectorTubeStress(R, r, f, Mo) { // bending stress of a tube with a cortical defect (fraction f of circumference) on the tension side; numeric
+  const pts = []; const nr = 24, nt = 360;
+  for (let i = 0; i < nr; i++) { const rr = r + (R - r) * (i + 0.5) / nr; for (let j = 0; j < nt; j++) { const th = 2 * Math.PI * (j + 0.5) / nt; const ang = Math.abs(((th - Math.PI / 2 + Math.PI) % (2 * Math.PI)) - Math.PI); if (ang < Math.PI * f) continue; pts.push([rr * Math.cos(th), rr * Math.sin(th), rr * (R - r) / nr * 2 * Math.PI / nt]); } }
+  let A = 0, yc = 0; for (const p of pts) { A += p[2]; yc += p[1] * p[2]; } yc /= A; let I = 0, c = 0; for (const p of pts) { I += (p[1] - yc) ** 2 * p[2]; c = Math.max(c, Math.abs(p[1] - yc)); }
+  return { s: Mo * c / I, A, I };
+}
+const MECH_CASES = [
+{ title: "Hip fracture after a fall", system: "Orthopedics / Geriatrics", concepts: ["Bending", "Geometry"], hook: "Why a standing-height fall breaks an 85-year-old's hip.",
+  present: "An 85-year-old woman trips at home and lands on her side. She cannot bear weight; the leg is shortened and externally rotated.",
+  md: "Femoral neck fracture. Risk factors: age, osteoporosis, falls. Hip protectors and fall prevention reduce fractures.",
+  eng: "A sideways fall loads the femoral neck in bending. With age, bone is lost from the inner surface, so the cortex thins and the second moment of area falls with the fourth power of radius. A hip protector spreads and absorbs the impact, lowering the bending moment.",
+  eq: "σ = M·R / I,   I = π/4·(R⁴ − r⁴)",
+  ctrls: [["age", "Age (years)", 40, 95, 1, 85], ["M", "Fall bending moment (N·m)", 60, 300, 5, 180], ["prot", "Hip protector energy absorption (%)", 0, 60, 5, 0]],
+  render(v, cv, out) { const geo = a => { const t = Math.max(1.2, 5.2 - (a - 40) * 0.065), R = 13.5 + (a - 40) * 0.02; return [R, t]; }, st = (a, M) => { const [R, t] = geo(a); return M * R / 1000 / tubeI(R / 1000, (R - t) / 1000) / MPA; };
+    const Me = v.M * (1 - v.prot / 100), ages = linspace(40, 95, 100);
+    plot(cv, { series: [{ x: ages, y: ages.map(a => st(a, Me)), color: "--trace", w: 2 }], markers: [{ x: v.age, y: st(v.age, Me), color: "--trace2", r: 6 }], hlines: [{ y: 150, color: "--bad", label: "≈ fracture" }], xlim: [40, 95], ylim: [0, 320], xlabel: "Age (years)", ylabel: "Neck stress (MPa)", left: 52 });
+    const [R, t] = geo(v.age), s = st(v.age, Me);
+    out.innerHTML = stat("Cortical thickness", fmt(t, 1), " mm") + stat("Peak stress", fmt(s, 0), " MPa") + chip(s > 150 ? "Fracture" : "Survives", s > 150 ? "bad" : "good"); },
+  pearl: "Most hip fractures follow a sideways fall. Strength training, vision correction and medication review cut falls; hip protectors cut impact." },
+
+{ title: "Osteogenesis imperfecta", system: "Genetics / Pediatrics", concepts: ["Toughness", "Composites"], hook: "Normal-looking bone that shatters.",
+  present: "A 4-year-old has had six fractures from minor falls. He has blue-gray sclerae. Child protection services were consulted after the third fracture.",
+  md: "Type I collagen mutation. Bones fracture with little trauma. Bisphosphonates and rodding reduce fractures. It is an important differential in suspected abuse.",
+  eng: "Bone is a composite; collagen is the tough phase that stops cracks. With defective collagen, the composite behaves like its brittle mineral alone. Stiffness barely changes, but the energy it can absorb collapses, so a minor fall exceeds it.",
+  ctrls: [["col", "Collagen quality (1 = normal)", 0.2, 1, 0.05, 0.35], ["fall", "Impact energy per unit bone volume (relative)", 0.2, 2, 0.05, 0.6]],
+  render(v, cv, out) { const n = boneModel(65, 1), b = boneModel(65, v.col), c = x => ({ x: [0, x.ey, x.eu], y: [0, x.sy, x.su] }), cn = c(n), cb = c(b);
+    plot(cv, { series: [{ x: cn.x, y: cn.y, color: "--axis", w: 1.5, dash: [5, 4] }, { x: cb.x, y: cb.y, color: "--trace", w: 2.4 }], xlim: [0, 4.5], ylim: [0, 190], xlabel: "Strain (%)", ylabel: "Stress (MPa)", annots: [{ x: 2.6, y: 175, text: "dashed = healthy", color: "--muted" }], left: 52 });
+    const need = v.fall * n.tough * 0.5, br = b.tough < need;
+    out.innerHTML = stat("Toughness", fmt(b.tough, 2), " MJ/m³") + stat("vs healthy", fmt(100 * b.tough / n.tough, 0), " %") + stat("Stiffness", fmt(b.E, 1), " GPa") + chip(br ? "Fractures" : "Absorbs the fall", br ? "bad" : "good"); },
+  pearl: "Normal stiffness with very low toughness is why bone density can look reassuring in OI. Look for blue sclerae, dentinogenesis imperfecta and family history." },
+
+{ title: "Stress fracture in a recruit", system: "Sports / Military", concepts: ["Fatigue", "Remodeling"], hook: "Damage accumulates faster than biology repairs it.",
+  present: "A 19-year-old recruit, three weeks into basic training with heavy pack marches, has focal tibial pain that worsens with activity.",
+  md: "Tibial stress fracture. MRI shows marrow edema. Treatment is rest and graded return. Prevention is gradual training progression.",
+  eng: "Each step adds a small amount of fatigue damage (Miner's rule: damage = n/N). Bone also repairs damage at a rate set by remodeling. If the daily damage rate exceeds repair, damage climbs to 1 and a crack forms. The S–N curve makes this extremely sensitive to load.",
+  eq: "D(day+1) = D + steps/N(σ) − repair·D",
+  ctrls: [["s", "Bone stress (% of strength)", 25, 42, 0.5, 36], ["steps", "Steps per day", 5000, 30000, 500, 20000], ["rep", "Repair rate (per day)", 0.02, 0.2, 0.01, 0.05]], presets: [["Civilian", { s: 28, steps: 9000 }], ["Basic training", { s: 36, steps: 20000 }], ["Pack march + rest days", { s: 36, steps: 14000, rep: 0.08 }]],
+  render(v, cv, out) { const N = cyclesToFail(v.s / 100), d = [0]; let fx = -1; for (let i = 1; i <= 90; i++) { const x = d[i - 1] + v.steps / N - v.rep * d[i - 1]; d.push(x); if (x >= 1 && fx < 0) fx = i; }
+    plot(cv, { series: [{ x: d.map((_, i) => i), y: d.map(x => Math.min(1.5, x)), color: "--trace", w: 2.2 }], hlines: [{ y: 1, color: "--bad", label: "crack forms" }], xlim: [0, 90], ylim: [0, 1.5], xlabel: "Day of training", ylabel: "Fatigue damage D" });
+    out.innerHTML = stat("Damage per day", fmt(v.steps / N, 3)) + stat("Steady state", fmt(v.steps / N / v.rep, 2)) + stat("Fracture day", fx > 0 ? fx : "none") + chip(fx > 0 ? "Stress fracture" : "Sustainable", fx > 0 ? "bad" : "good"); },
+  pearl: "The '10% rule' (increase training load by no more than about 10% per week) is a practical way to keep damage below repair capacity." },
+
+{ title: "AAA surveillance: when to repair", system: "Vascular", concepts: ["Laplace", "Positive feedback"], hook: "Growth rate and blood pressure decide the clock.",
+  present: "A 70-year-old ex-smoker has a 4.8 cm abdominal aortic aneurysm. It grew 4 mm last year. His blood pressure is 160/90.",
+  md: "Repair at about 5.5 cm in men (5.0 cm in women), or for rapid growth (more than 1 cm per year) or symptoms. Control blood pressure and stop smoking.",
+  eng: "Laplace's law with wall thinning makes stress rise faster than diameter. Projecting growth forward shows when stress crosses the danger zone, and how much time lowering pressure buys.",
+  ctrls: [["D", "Current diameter (mm)", 30, 65, 1, 48], ["g", "Growth rate (mm/yr)", 1, 12, 0.5, 4], ["P", "Systolic pressure (mmHg)", 100, 200, 1, 160]],
+  render(v, cv, out) { const yrs = linspace(0, 10, 101), st = D => v.P * MMHG * (D / 2000) / (0.002 * 20 / D) / 1000, Ds = yrs.map(y => v.D + v.g * y);
+    plot(cv, { series: [{ x: yrs, y: Ds.map(st), color: "--trace", w: 2.2 }], hlines: [{ y: 600, color: "--bad", label: "rupture-prone" }], xlim: [0, 10], ylim: [0, 1400], xlabel: "Years from now", ylabel: "Hoop stress (kPa)", left: 52 });
+    const t55 = Math.max(0, (55 - v.D) / v.g), t600 = yrs.find((y, i) => st(Ds[i]) > 600);
+    out.innerHTML = stat("Now", fmt(st(v.D), 0), " kPa") + stat("Reaches 55 mm in", fmt(t55, 1), " yr") + stat("Stress > 600 kPa in", t600 === undefined ? "> 10" : fmt(t600, 1), " yr") + chip(v.D >= 55 || v.g > 10 ? "Repair indicated" : "Surveillance", v.D >= 55 || v.g > 10 ? "bad" : "warn"); },
+  pearl: "Smoking is the strongest modifiable driver of aneurysm growth. Blood pressure control lowers wall stress immediately." },
+
+{ title: "Neonatal respiratory distress and surfactant", system: "Neonatology / Pulmonary", concepts: ["Laplace", "Surface tension"], hook: "Small bubbles empty into big ones, unless surfactant intervenes.",
+  present: "A baby born at 28 weeks grunts, retracts and needs rising oxygen. The chest X-ray shows a ground-glass, 'white-out' pattern.",
+  md: "Surfactant deficiency causes alveolar collapse (atelectasis). Treatment: CPAP and exogenous surfactant; antenatal steroids help prevent it.",
+  eng: "Each alveolus is like a bubble. Surface tension creates an inward pressure P = 2T/r. Without surfactant, smaller alveoli have higher pressure and empty into larger ones until they collapse. Surfactant lowers surface tension, especially as an alveolus shrinks, which stabilizes small alveoli.",
+  eq: "P = 2T / r    (1 cmH₂O ≈ 98 Pa)",
+  ctrls: [["r1", "Small alveolus radius (µm)", 30, 100, 1, 50], ["r2", "Large alveolus radius (µm)", 80, 150, 1, 110], ["s", "Surfactant level (0 = none, 1 = normal)", 0, 1, 0.05, 0.1]], presets: [["Premature (no surfactant)", { s: 0.05 }], ["After surfactant", { s: 0.9 }]],
+  render(v, cv, out) { const T = r => (0.07 * (1 - v.s) + v.s * 0.025 * (r / 110) ** 2), P = r => 2 * T(r) / (r * 1e-6) / 98.07, rs = linspace(30, 150, 120);
+    plot(cv, { series: [{ x: rs, y: rs.map(P), color: "--trace", w: 2.2 }], markers: [{ x: v.r1, y: P(v.r1), color: "--trace2", r: 6, label: "small" }, { x: v.r2, y: P(v.r2), color: "--trace3", r: 6, label: "large" }], xlim: [30, 150], ylim: [0, 50], xlabel: "Alveolar radius (µm)", ylabel: "Collapsing pressure (cmH₂O)" });
+    const d = P(v.r1) - P(v.r2);
+    out.innerHTML = stat("Small alveolus", fmt(P(v.r1), 1), " cmH₂O") + stat("Large alveolus", fmt(P(v.r2), 1), " cmH₂O") + chip(d > 0.5 ? "Small empties into large: collapse" : "Stable", d > 0.5 ? "bad" : "good"); },
+  pearl: "CPAP works by holding pressure above the collapsing pressure, keeping alveoli open until surfactant production catches up." },
+
+{ title: "Compression ultrasound for DVT", system: "Vascular / Emergency", concepts: ["Collapse", "Tube law"], hook: "A vein that will not flatten is full of clot.",
+  present: "A 55-year-old with a swollen, painful left calf after a long flight. You place the ultrasound probe over the femoral vessels and press.",
+  md: "A normal vein collapses completely with probe pressure. Non-compressibility indicates deep vein thrombosis.",
+  eng: "The vein's thin wall collapses as soon as external pressure exceeds venous pressure (a few mmHg). The thick-walled artery at much higher internal pressure stays round. A clot fills the lumen with a solid that resists compression, so the vein cannot flatten.",
+  ctrls: [["pp", "Probe pressure (mmHg)", 0, 150, 1, 40], ["pv", "Venous pressure (mmHg)", 3, 30, 1, 8], ["clot", "Clot filling the lumen (%)", 0, 100, 5, 0]], presets: [["Normal vein", { clot: 0, pp: 40 }], ["Acute DVT", { clot: 85, pp: 40 }]],
+  h: 220,
+  render(v, cv, out) { const dpr = devicePixelRatio || 1, W = cv.clientWidth || 600, H = 220; cv.style.height = H + "px"; cv.width = W * dpr; cv.height = H * dpr; cvHook(cv, () => this.render(v, cv, out));
+    const g = cv.getContext("2d"); g.setTransform(dpr, 0, 0, dpr, 0, 0); g.fillStyle = "#151515"; g.fillRect(0, 0, W, H);
+    const vf = clamp((v.pp - v.pv) / 12, 0, 1) * (1 - v.clot / 100) * 0.95, af = clamp((v.pp - 90) / 60, 0, 1) * 0.6, cx = W / 2;
+    g.fillStyle = "#555"; g.fillRect(cx - 170, 10, 340, 18); g.fillStyle = "#ddd"; g.font = `12px ${css("--font-body")}`; g.textAlign = "center"; g.fillText(`probe · ${v.pp} mmHg`, cx, 23);
+    const ell = (x, y, rx, ry, fill, stroke) => { g.beginPath(); g.ellipse(x, y, rx, Math.max(1.5, ry), 0, 0, 7); g.fillStyle = fill; g.fill(); g.strokeStyle = stroke; g.lineWidth = 3; g.stroke(); };
+    ell(cx - 70, 120, 48 + 25 * vf, 42 * (1 - vf), v.clot > 0 ? "#6d6359" : "#000", "#cfcfcf"); ell(cx + 70, 120, 30, 30 * (1 - af), "#000", "#f2f2f2");
+    g.fillStyle = "#ddd"; g.fillText("vein", cx - 70, 190); g.fillText("artery", cx + 70, 190);
+    out.innerHTML = stat("Vein lumen remaining", fmt(100 * (1 - vf), 0), " %") + chip(v.pp > v.pv + 12 && v.clot > 30 ? "Non-compressible: DVT" : v.pp > v.pv + 12 ? "Fully compressible: no DVT here" : "Press harder", v.pp > v.pv + 12 && v.clot > 30 ? "bad" : v.pp > v.pv + 12 ? "good" : "warn"); },
+  pearl: "If the artery starts to deform before the vein, you are pressing hard enough. A vein that still will not collapse is the positive finding." },
+
+{ title: "Tracheomalacia: the airway that folds on a cough", system: "Pulmonary / Pediatrics", concepts: ["Collapse", "Tube law"], hook: "Soft cartilage turns a cough into an obstruction.",
+  present: "A 6-month-old has a barking cough and noisy breathing that worsens when crying. Bronchoscopy shows the trachea narrowing to a slit on expiration.",
+  md: "Tracheomalacia: weak cartilage. Usually improves with growth; severe cases need airway support or surgery.",
+  eng: "During forced expiration, pressure around the airway exceeds pressure inside it. A tube's resistance to collapse scales with E·(t/R)³. Soft cartilage (low E) collapses at pressures a crying infant easily generates. Beyond collapse, area falls steeply (tube law).",
+  eq: "ΔP_cr = E/(4(1−ν²))·(t/R)³,   A/A₀ ≈ (ΔP/ΔP_cr)^(−2/3) after collapse",
+  ctrls: [["E", "Cartilage stiffness (MPa)", 0.2, 10, 0.1, 0.8], ["tr", "Wall thickness / radius", 0.08, 0.3, 0.005, 0.12], ["dp", "Expiratory transmural pressure (cmH₂O)", 0, 60, 1, 25]], presets: [["Normal infant", { E: 4 }], ["Tracheomalacia", { E: 0.6 }]],
+  render(v, cv, out) { const pc = v.E * MPA / 3 * v.tr ** 3 / 98.07, A = p => p <= pc ? 1 : Math.pow(p / pc, -2 / 3), ps = linspace(0, 60, 150);
+    plot(cv, { series: [{ x: ps, y: ps.map(A).map(a => a * 100), color: "--trace", w: 2.2 }], markers: [{ x: v.dp, y: A(v.dp) * 100, color: "--trace2", r: 6 }], xlim: [0, 60], ylim: [0, 105], xlabel: "Transmural pressure (cmH₂O)", ylabel: "Airway area (% open)" });
+    const a = A(v.dp), res = Math.pow(1 / a, 2);
+    out.innerHTML = stat("Collapse pressure", fmt(pc, 1), " cmH₂O") + stat("Area open", fmt(a * 100, 0), " %") + stat("Resistance increase", fmt(res, 1), "×") + chip(a < 0.5 ? "Dynamic obstruction" : "Patent", a < 0.5 ? "bad" : "good"); },
+  pearl: "CPAP splints the airway open by raising the pressure inside it: a pressure fix for a structural problem." },
+
+{ title: "Pushing through tortuous anatomy", system: "Interventional", concepts: ["Buckling", "Device design"], hook: "Support close to the tip beats a stiffer wire.",
+  present: "During a coronary intervention, the guide catheter backs out and the wire prolapses instead of crossing a tight lesion.",
+  md: "Options: buddy wire, guide extension catheter, stiffer wire, more supportive guide position.",
+  eng: "The wire behaves like a column. Its buckling load scales with 1/L². A guide extension advances the support point toward the lesion, shortening the unsupported length. Switching to a wire with a stiffer core raises E·I, but only a little compared with the L² effect.",
+  ctrls: [["L", "Distance from support to lesion (mm)", 10, 150, 1, 100], ["ext", "Guide extension advanced (mm)", 0, 100, 1, 0], ["d", "Wire core diameter (mm)", 0.15, 0.36, 0.01, 0.2]],
+  render(v, cv, out) { const Le = Math.max(5, v.L - v.ext) / 1000, I = Math.PI * (v.d / 1000) ** 4 / 64, P = Math.PI ** 2 * 193e9 * I / Le ** 2, need = 0.05;
+    const Ls = linspace(5, 150, 100); plot(cv, { series: [{ x: Ls, y: Ls.map(l => Math.PI ** 2 * 193e9 * I / (l / 1000) ** 2 * 1000), color: "--trace", w: 2 }], hlines: [{ y: need * 1000, color: "--bad", label: "force needed to cross" }], markers: [{ x: Le * 1000, y: P * 1000, color: "--trace2", r: 6 }], xlim: [5, 150], ylim: [0, 600], xlabel: "Unsupported length (mm)", ylabel: "Buckling load (mN)", left: 52 });
+    out.innerHTML = stat("Unsupported length", fmt(Le * 1000, 0), " mm") + stat("Buckling load", fmt(P * 1000, 0), " mN") + chip(P > need ? "Crosses the lesion" : "Wire prolapses", P > need ? "good" : "bad"); },
+  pearl: "Advancing support closer to the lesion often solves a crossing problem that a stiffer wire would not." },
+
+{ title: "Self-expanding stent sizing", system: "Interventional", concepts: ["Superelasticity", "Device design"], hook: "Oversize too little and it migrates; too much and it injures.",
+  present: "You are choosing a nitinol stent for a 6 mm superficial femoral artery. The available stents are 6, 7 and 8 mm nominal diameter.",
+  md: "Self-expanding stents are typically oversized 1–2 mm (about 10–30%). Too little: migration and poor wall contact. Too much: vessel injury and restenosis.",
+  eng: "Nitinol is superelastic: a stress-induced phase change gives a flat stress plateau, so the stent pushes outward with nearly constant chronic outward force across a range of diameters. Oversizing sets where on that curve the stent sits.",
+  ctrls: [["Dv", "Vessel diameter (mm)", 4, 8, 0.1, 6], ["Ds", "Stent nominal diameter (mm)", 6, 10, 0.5, 7]],
+  render(v, cv, out) { const f = D => { const s = (v.Ds - D) / v.Ds; return s <= 0 ? 0 : s < 0.06 ? s / 0.06 * 0.25 : s < 0.35 ? 0.25 + (s - 0.06) * 0.25 : 0.32 + (s - 0.35) * 3; }, Ds = linspace(3, v.Ds, 120);
+    plot(cv, { series: [{ x: Ds, y: Ds.map(f), color: "--trace", w: 2.2 }], markers: [{ x: v.Dv, y: f(v.Dv), color: "--trace2", r: 6 }], xlim: [3, v.Ds], ylim: [0, 0.8], xlabel: "Vessel diameter (mm)", ylabel: "Chronic outward force (N/mm)", left: 52 });
+    const ov = (v.Ds - v.Dv) / v.Dv * 100;
+    out.innerHTML = stat("Oversizing", fmt(ov, 0), " %") + stat("Outward force", fmt(f(v.Dv), 2), " N/mm") + chip(ov < 8 ? "Migration risk" : ov > 40 ? "Vessel injury risk" : "Appropriate", ov < 8 || ov > 40 ? "bad" : "good"); },
+  pearl: "Force values here are illustrative. The shape matters: across the plateau, a self-expanding stent's outward force barely changes with vessel size." },
+
+{ title: "Bone loss around a hip stem", system: "Orthopedics", concepts: ["Stress shielding", "Remodeling"], hook: "Predict the bone that will disappear over 10 years.",
+  present: "A 58-year-old active man needs a total hip replacement. He asks which implant will last longest.",
+  md: "Periprosthetic bone loss from stress shielding can complicate revision surgery. Stem material, size and design affect it.",
+  eng: "Bone remodels to keep its mechanical stimulus within a 'lazy zone.' A stiff stem takes load away, so bone resorbs until the stimulus per unit bone area recovers. A simple equilibrium model predicts how much bone area remains.",
+  eq: "share = E_b·A / (E_b·A + E_i·A_i);   remodel until share/A ≥ 0.75/A₀",
+  ctrls: [["Ei", "Stem modulus (GPa)", 5, 220, 1, 110], ["d", "Stem diameter (mm)", 8, 16, 0.5, 12]], presets: [["Cobalt-chrome", { Ei: 210 }], ["Titanium", { Ei: 110 }], ["Composite", { Ei: 18 }]],
+  render(v, cv, out) { const A0 = Math.PI * (14 ** 2 - 9.5 ** 2), k = v.Ei * Math.PI * (v.d / 2) ** 2 / 18, Aeq = Math.min(A0, Math.max(0.15 * A0, A0 / 0.75 - k)), t = linspace(0, 10, 100), A = t.map(x => Aeq + (A0 - Aeq) * Math.exp(-x / 2));
+    plot(cv, { series: [{ x: t, y: A.map(a => 100 * a / A0), color: "--trace", w: 2.2 }], xlim: [0, 10], ylim: [0, 105], xlabel: "Years after surgery", ylabel: "Cortical bone area (%)" });
+    const loss = 100 * (1 - Aeq / A0);
+    out.innerHTML = stat("Predicted bone loss", fmt(loss, 0), " %") + chip(loss > 30 ? "Major shielding" : loss > 10 ? "Moderate" : "Minimal", loss > 30 ? "bad" : loss > 10 ? "warn" : "good"); },
+  pearl: "This is a teaching model. Real stems vary in taper, coating and where load transfers, and shielding is concentrated near the top of the femur." },
+
+{ title: "Metastatic lesion: fix before it breaks?", system: "Oncology / Orthopedics", concepts: ["Bending", "Geometry"], hook: "A hole on the tension side costs more than its area.",
+  present: "A 64-year-old with breast cancer has thigh pain. X-ray shows a lytic metastasis destroying part of the femoral cortex.",
+  md: "Prophylactic fixation is considered when cortical destruction is large (Mirels' score combines site, pain, lesion type and size). A pathologic fracture is far worse to manage.",
+  eng: "Removing part of the cortex lowers the second moment of area and shifts the neutral axis. A defect on the tension side also moves the outermost fiber farther from the new neutral axis. Strength falls faster than the area of bone lost.",
+  ctrls: [["f", "Cortex destroyed (% of circumference)", 0, 60, 1, 25], ["M", "Bending moment from walking (N·m)", 40, 150, 5, 80]],
+  render(v, cv, out) { const R = 0.014, r = 0.009, base = sectorTubeStress(R, r, 0, v.M), cur = sectorTubeStress(R, r, v.f / 100, v.M), fs = linspace(0, 60, 25);
+    plot(cv, { series: [{ x: fs, y: fs.map(f => 100 * base.s / sectorTubeStress(R, r, f / 100, v.M).s), color: "--trace", w: 2.2 }, { x: fs, y: fs.map(f => 100 * (1 - f / 100)), color: "--axis", w: 1.2, dash: [5, 4] }], markers: [{ x: v.f, y: 100 * base.s / cur.s, color: "--trace2", r: 6 }], xlim: [0, 60], ylim: [0, 105], xlabel: "Cortex destroyed (%)", ylabel: "Remaining bending strength (%)", annots: [{ x: 30, y: 98, text: "dashed = remaining area", color: "--muted" }], left: 52 });
+    const sm = cur.s / MPA;
+    out.innerHTML = stat("Remaining strength", fmt(100 * base.s / cur.s, 0), " %") + stat("Walking stress", fmt(sm, 0), " MPa") + chip(sm > 100 ? "Impending fracture: fix" : sm > 70 ? "Borderline" : "Observe", sm > 100 ? "bad" : sm > 70 ? "warn" : "good"); },
+  pearl: "Pain with weight bearing (functional pain) is a strong warning sign of an impending pathologic fracture." },
+
+{ title: "Incision direction and skin tension lines", system: "Surgery / Dermatology", concepts: ["Anisotropy", "Stress resolution"], hook: "Cut along the lines and the wound closes itself.",
+  present: "You are excising a mole on the forearm and must decide which direction to orient the elliptical excision.",
+  md: "Incisions parallel to relaxed skin tension lines heal with narrower scars and less tension on closure.",
+  eng: "Skin carries a resting tension along preferred directions (from collagen alignment). The stress pulling the wound edges apart is the component of that tension perpendicular to the incision: it scales with sin²θ, where θ is the angle between incision and tension line.",
+  eq: "σ_across wound = σ₀ · sin²θ",
+  ctrls: [["th", "Angle between incision and tension lines (°)", 0, 90, 1, 70], ["s0", "Resting skin tension (kPa)", 5, 60, 1, 30]],
+  render(v, cv, out) { const a = linspace(0, 90, 91), s = x => v.s0 * Math.sin(x * Math.PI / 180) ** 2;
+    plot(cv, { series: [{ x: a, y: a.map(s), color: "--trace", w: 2.2 }], markers: [{ x: v.th, y: s(v.th), color: "--trace2", r: 6 }], xlim: [0, 90], ylim: [0, 62], xlabel: "Angle to tension lines (°)", ylabel: "Wound-opening stress (kPa)", left: 52 });
+    const x = s(v.th) / v.s0; out.innerHTML = stat("Opening stress", fmt(s(v.th), 1), " kPa") + stat("Fraction of max", fmt(x * 100, 0), " %") + chip(x > 0.5 ? "Wide scar risk" : "Favorable", x > 0.5 ? "bad" : "good"); },
+  pearl: "On the face, tension lines follow wrinkles. Pinch the skin: the direction that forms neat parallel folds is the one to cut along." },
+
+{ title: "Tissue expansion before reconstruction", system: "Plastic surgery", concepts: ["Viscoelasticity", "Stress relaxation"], hook: "Fill, wait, let the tissue relax, repeat.",
+  present: "A patient needs breast reconstruction after mastectomy. A tissue expander is placed and filled in clinic every 1–2 weeks.",
+  md: "Overfilling causes pain, skin blanching and risk of necrosis. Gradual expansion recruits and grows new skin.",
+  eng: "Each fill is a step increase in strain, producing a stress spike. The tissue then relaxes viscoelastically, and over weeks it also grows. Fill size and interval decide whether peak stress stays below the level that compromises skin blood flow.",
+  ctrls: [["step", "Strain added per fill (%)", 2, 15, 0.5, 6], ["int", "Days between fills", 3, 21, 1, 10], ["tau", "Relaxation time constant (days)", 1, 10, 0.5, 3]],
+  render(v, cv, out) { const days = 70, dt = 0.1, t = [], s = []; let st = 0, next = 0, mx = 0;
+    for (let x = 0; x <= days; x += dt) { if (x >= next) { st += v.step * 3; next += v.int; } st -= st * (dt / v.tau) * 0.6; t.push(x); s.push(st); mx = Math.max(mx, st); }
+    plot(cv, { series: [{ x: t, y: s, color: "--trace", w: 1.8 }], hlines: [{ y: 30, color: "--bad", label: "skin perfusion risk" }], xlim: [0, days], ylim: [0, 60], xlabel: "Days", ylabel: "Skin stress (kPa, illustrative)", left: 52 });
+    out.innerHTML = stat("Peak stress", fmt(mx, 0), " kPa") + stat("Fills in 10 weeks", Math.ceil(days / v.int)) + chip(mx > 30 ? "Blanching/necrosis risk" : "Safe expansion", mx > 30 ? "bad" : "good"); },
+  pearl: "If skin blanches during a fill, remove some volume. The stress will relax, and you can add it back next visit." },
+
+{ title: "Why you are shorter in the evening", system: "Spine", concepts: ["Viscoelasticity", "Creep"], hook: "Discs creep all day and recover at night.",
+  present: "A 30-year-old astronaut returns from six months in orbit and is about 3 cm taller than at launch. On Earth, office workers lose 1–2 cm of height each day.",
+  md: "Disc height changes with loading. Microgravity unloads the spine; back pain after spaceflight is common.",
+  eng: "The disc is a fluid-filled viscoelastic structure. Under body weight, fluid slowly flows out and disc height decreases (creep). Lying down removes most of the load and the disc rehydrates. Height change = sum of creep across ~23 discs.",
+  ctrls: [["load", "Daytime spinal load (× normal)", 0, 2, 0.05, 1], ["tau", "Creep time constant (h)", 1, 8, 0.5, 3], ["up", "Hours upright per day", 8, 20, 1, 16]],
+  render(v, cv, out) { const t = linspace(0, 48, 481), loss = []; let L = 0; const max = 18 * v.load;
+    for (let i = 0; i < t.length; i++) { const h = t[i] % 24, upright = h < v.up, target = upright ? max : 0, tau = upright ? v.tau : v.tau * 0.6; if (i) L += (target - L) * (0.1 / tau); loss.push(-L); }
+    plot(cv, { series: [{ x: t, y: loss, color: "--trace", w: 2 }], xlim: [0, 48], ylim: [-38, 2], xlabel: "Hours (two days)", ylabel: "Height change (mm)", left: 52 });
+    out.innerHTML = stat("Daily height loss", fmt(-Math.min(...loss), 1), " mm") + chip(v.load < 0.2 ? "Unloaded (spaceflight)" : "Daily creep cycle", "warn"); },
+  pearl: "Disc pressure and hydration are highest in the morning. Some guidance suggests avoiding heavy flexion lifting in the first hour after waking." },
+
+{ title: "Sharp vs dull: the mechanics of cutting", system: "Surgery", concepts: ["Stress concentration", "Contact"], hook: "A sharp edge needs a fraction of the force and crushes less tissue.",
+  present: "A resident notices the scalpel is dragging and the wound edges look bruised. The attending asks for a fresh blade. Similar physics governs debridement and thrombectomy cutting devices.",
+  md: "Dull instruments crush tissue, increasing inflammation, necrosis and poor healing.",
+  eng: "Cutting starts when stress under the edge exceeds the tissue's failure stress. Stress = force ÷ contact area, and contact width scales with edge radius. A dull edge spreads force, so far more force is needed, and the tissue around it is compressed and crushed before it separates.",
+  eq: "F_cut ≈ σ_fail · (2 · r_edge) · L_engaged",
+  ctrls: [["r", "Edge radius (µm)", 0.3, 60, 0.1, 1], ["L", "Engaged edge length (mm)", 2, 30, 1, 10], ["sf", "Tissue failure stress (MPa)", 2, 30, 0.5, 15]], presets: [["New blade (0.5 µm)", { r: 0.5 }], ["Used blade (8 µm)", { r: 8 }], ["Dull blade (40 µm)", { r: 40 }]],
+  render(v, cv, out) { const F = r => v.sf * MPA * 2 * r * 1e-6 * v.L / 1000, rs = linspace(0.3, 60, 200);
+    plot(cv, { series: [{ x: rs, y: rs.map(F), color: "--trace", w: 2.2 }], markers: [{ x: v.r, y: F(v.r), color: "--trace2", r: 6 }], xlim: [0, 60], ylim: [0, Math.max(5, F(60) * 1.05)], xlabel: "Edge radius (µm)", ylabel: "Force to start cutting (N)", left: 52 });
+    out.innerHTML = stat("Cutting force", fmt(F(v.r), 2), " N") + stat("Crush zone ~", fmt(v.r * 10, 0), " µm") + chip(F(v.r) > 3 ? "Crushes before cutting" : "Clean cut", F(v.r) > 3 ? "bad" : "good"); },
+  pearl: "Changing the blade is the cheapest way to reduce tissue trauma. Crush-zone width here is a rough scaling, not a measured value." },
+
+{ title: "Polyethylene wear in hip replacements", system: "Orthopedics / Biomaterials", concepts: ["Wear", "Biomaterials"], hook: "Wear particles, not the implant breaking, cause late failures.",
+  present: "Twelve years after a hip replacement, X-rays show the femoral head sitting off-center in the cup and bone loss around the cup.",
+  md: "Polyethylene wear produces particles that trigger osteolysis and loosening. Highly cross-linked polyethylene has dramatically reduced wear.",
+  eng: "Archard's law: wear volume is proportional to load and sliding distance. Larger heads slide farther per step (more volume) but spread wear over a larger area (less linear penetration). Material wear factor k is the biggest lever.",
+  eq: "V = k · F · s   (s per step ≈ head radius × arc)",
+  ctrls: [["hd", "Head diameter (mm)", 22, 40, 1, 28], ["bw", "Body weight (kg)", 50, 130, 1, 80], ["cyc", "Steps per year (millions)", 0.5, 3, 0.1, 1.5], ["k", "Wear factor (×10⁻⁶ mm³/N·m)", 0.1, 2.5, 0.05, 1.5]], presets: [["Conventional PE", { k: 1.5 }], ["Cross-linked PE", { k: 0.3 }]],
+  render(v, cv, out) { const V = d => v.k * 1e-6 * (2.5 * v.bw * 9.81) * (d / 2 * 1.4) * v.cyc * 1e6, lin = d => V(d) / (Math.PI * (d / 2) ** 2), ds = linspace(22, 40, 50);
+    plot(cv, { series: [{ x: ds, y: ds.map(V), color: "--trace", w: 2.2 }, { x: ds, y: ds.map(d => lin(d) * 1000), color: "--trace3", w: 2, dash: [6, 4] }], markers: [{ x: v.hd, y: V(v.hd), color: "--trace2", r: 6 }], xlim: [22, 40], ylim: [0, Math.max(150, V(40) * 1.1)], xlabel: "Head diameter (mm)", ylabel: "Wear (mm³/yr), dashed = µm/yr", left: 52 });
+    const l = lin(v.hd);
+    out.innerHTML = stat("Volumetric wear", fmt(V(v.hd), 0), " mm³/yr") + stat("Linear wear", fmt(l, 3), " mm/yr") + chip(l > 0.1 ? "Osteolysis risk" : "Low wear", l > 0.1 ? "bad" : "good"); },
+  pearl: "A linear wear rate below about 0.1 mm per year is often cited as a threshold below which osteolysis is uncommon." }
+];
+M(caseLibraryModule({ id: "m10", num: "10", cases: MECH_CASES, intro: "Sixteen clinical situations where stress, geometry, buckling, fatigue, viscoelasticity and material choice explain what happens to the patient." }));
+M(homeworkModule(MECH_HW, 10));
+
+/* ================= router ================= */
+function navHTML(active) {
+  return `<a href="#home" class="${active === "home" ? "active" : ""}"><span>Home</span></a>` + MODULES.map(m => `<a href="#${m.id}" class="${active === m.id ? "active" : ""}">${m.num ? `<span class="n">${m.num}.</span>` : ""}<span>${m.nav}</span></a>`).join("");
+}
+let tocObs;
+function buildTOC() {
+  const hs = $$("#main h2[id]"); const toc = $("#toc");
+  if (!hs.length) { toc.innerHTML = ""; return; }
+  toc.innerHTML = `<h2>On this page</h2><ul>${hs.map(h => `<li><a href="#${h.id}" data-target="${h.id}">${h.textContent}</a></li>`).join("")}</ul>`;
+  $$("a", toc).forEach(a => a.addEventListener("click", e => { e.preventDefault(); document.getElementById(a.dataset.target).scrollIntoView({ block: "start" }); }));
+  if (tocObs) tocObs.disconnect();
+  tocObs = new IntersectionObserver(es => { es.forEach(e => { if (e.isIntersecting) { $$("a", toc).forEach(a => a.classList.toggle("on", a.dataset.target === e.target.id)); } }); }, { rootMargin: "-80px 0px -70% 0px" });
+  hs.forEach(h => tocObs.observe(h));
+}
+function route() {
+  let id = (location.hash || "#home").slice(1);
+  const m = MODULES.find(x => x.id === id);
+  if (!m && id !== "home") { // in-page anchor on home or unknown -> home
+    if (!document.getElementById(id)) id = "home"; else return;
+  }
+  PLOTS.clear(); CUSTOM.clear();
+  $("#navlinks").innerHTML = navHTML(m ? m.id : "home");
+  const main = $("#main");
+  if (!m) { main.innerHTML = homeHTML(); document.title = COURSE_TITLE; }
+  else {
+    const i = MODULES.indexOf(m), prev = MODULES[i - 1], next = MODULES[i + 1];
+    main.innerHTML = `<h1>${m.title}</h1><p class="subtitle">${m.subtitle}</p>${m.html()}
+<nav class="module-nav" aria-label="Module navigation"><a href="#${prev ? prev.id : "home"}">← ${prev ? prev.title.replace(/^Module (\d+): .*/, "Module $1") : "Home"}</a>${next ? `<a href="#${next.id}">${next.id === "hw" ? "Homework" : next.title.replace(/^Module (\d+): .*/, "Module $1")} →</a>` : `<a href="#home">Home →</a>`}</nav>`;
+    m.init();
+  }
+  buildTOC(); window.scrollTo(0, 0);
+  const act = $("#navlinks a.active"); if (act) act.scrollIntoView({ block: "nearest", inline: "center" });
+}
+window.addEventListener("hashchange", route);
+$("#themeBtn").addEventListener("click", () => {
+  const r = document.documentElement, cur = r.dataset.theme || (matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light");
+  r.dataset.theme = cur === "dark" ? "light" : "dark"; setTimeout(() => { redrawAll(); for (const cv of [...CUSTOM]) if (cv.isConnected) cv._custom(); }, 20);
+});
+route();
+
+</script>
+</body></html>

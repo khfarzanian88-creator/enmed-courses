@@ -1,0 +1,40 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>EnMed Interactive Engineering Courses</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600;700&family=Work+Sans:wght@500;600;700;800&display=swap">
+<style>
+:root{--bg:#fff;--fg:#1f1f1f;--muted:#5c5656;--maroon:#500000;--card:#fff;--border:#d9d4d4;--panel:#f6f6f6;--note:#3e5a7a}
+@media (prefers-color-scheme:dark){:root{--bg:#141213;--fg:#ece7e7;--muted:#a79d9d;--card:#191616;--border:#342c2c;--panel:#1d1a1a;color-scheme:dark}}
+body{margin:0;background:var(--bg);color:var(--fg);font-family:"Open Sans",Arial,sans-serif;line-height:1.6}
+.util{background:var(--maroon);color:#fff;font:700 13px "Work Sans",Arial,sans-serif;letter-spacing:.8px;text-transform:uppercase;padding:10px 16px}
+.hdr{border-bottom:1px solid var(--border);padding:16px}
+.in{max-width:960px;margin:0 auto}
+.hdr .u{font:700 12px "Work Sans",Arial,sans-serif;letter-spacing:.8px;text-transform:uppercase}.hdr .p{font:500 20px "Work Sans",Arial,sans-serif}
+.note{background:var(--note);color:#fff;font-size:14px;padding:10px 16px}.note a{color:#fff;font-weight:700}
+main{padding:36px 16px 60px}
+h1{font:700 clamp(28px,5vw,40px) "Work Sans",Arial,sans-serif;color:var(--maroon);margin:0 0 6px}
+@media (prefers-color-scheme:dark){h1{color:#e2adad}}
+.sub{color:var(--muted);font-size:18px;margin:0 0 28px}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:16px}
+.card{display:flex;flex-direction:column;gap:6px;border:1px solid var(--border);border-top:5px solid var(--maroon);border-radius:8px;padding:18px;background:var(--card);color:var(--fg);text-decoration:none}
+.card:hover{border-color:#732f2f}
+.card .t{font:700 20px "Work Sans",Arial,sans-serif}.card .d{color:var(--muted);font-size:15px}.card .go{margin-top:auto;font-weight:700;color:#732f2f}
+h2{font:600 22px "Work Sans",Arial,sans-serif;margin:40px 0 10px}
+.foot{color:var(--muted);font-size:14px;text-align:center;padding:0 16px 40px}
+</style></head><body>
+<div class="util"><div class="in">Texas A&amp;M University</div></div>
+<div class="hdr"><div class="in"><div class="u">School of Engineering Medicine</div><div class="p">EnMed Interactive Engineering Courses</div></div></div>
+<div class="note"><div class="in"><b>Course prototype:</b> draft material under faculty review; not an official university publication. Format inspired by the open tutorial <a href="https://judepj.github.io/neuro-signals-101/">EEG &amp; Signal Processing (Neuro Signals 101)</a> by judepj.</div></div>
+<main><div class="in">
+<h1>Learn engineering fundamentals by playing with them</h1>
+<p class="sub">Short interactive courses for engineering medicine students. Move the sliders, watch the physics change, and connect each concept to a real clinical case.</p>
+<div class="grid">
+<a class="card" href="ecg-biosignals-101.html"><span class="t">ECG &amp; Biosignals 101</span><span class="d">Sampling, filtering, FFT, leads and axis, artifacts, beat detection and HRV, plus 16 clinical cases.</span><span class="go">Open course →</span></a>
+<a class="card" href="biomechanics-biomaterials-101.html"><span class="t">Biomechanics &amp; Biomaterials 101</span><span class="d">Stress and strain, toughness, bending, buckling, Laplace's law, viscoelasticity, fatigue and implants, plus 16 clinical cases.</span><span class="go">Open course →</span></a>
+<a class="card" href="hemodynamics-biofluids-101.html"><span class="t">Hemodynamics &amp; Biofluids 101</span><span class="d">Resistance and r⁴, stenosis and FFR, turbulence, blood viscosity, compliance, collapsible tubes and wall shear, plus 16 clinical cases.</span><span class="go">Open course →</span></a>
+</div>
+<h2>How each course works</h2>
+<p>Every module opens with a clinical scenario, explains the basics, and gives you an interactive model to change. Each ends with a short experiment and a quiz. Each course also has a graded challenge, a clinical case library and homework. Everything runs in your browser; nothing to install.</p>
+</div></main>
+<div class="foot">Simplified models and synthetic data for teaching only, not for clinical use.</div>
+</body></html>

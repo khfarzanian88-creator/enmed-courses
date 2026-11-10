@@ -1,0 +1,1098 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<style>:root{color-scheme:light;padding-top:env(safe-area-inset-top);padding-bottom:env(safe-area-inset-bottom)}body{margin:0}img{max-width:100%}[hidden]{display:none!important}</style>
+<title>Hemodynamics &amp; Biofluids 101</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,400;0,600;0,700;1,400&family=Work+Sans:wght@500;600;700;800&family=JetBrains+Mono:wght@400;600&display=swap">
+<style>
+/* Layout: Texas A&M maroon utility bar · white program header · module tab row · reading column (~740px) + sticky "On this page" rail */
+:root{
+  --bg:#ffffff; --fg:#1f1f1f; --muted:#5c5656; --rule:#e2dddd;
+  --maroon:#500000; --maroon-2:#732f2f; --nav:#500000; --nav-fg:#ffffff; --nav-dim:#e8d6d6;
+  --hdr:#ffffff; --hdr-fg:#1f1f1f; --hdr-rule:#d1d1d1;
+  --accent:#500000; --accent-ink:#500000; --link:#500000;
+  --panel:#f6f6f6; --card:#ffffff; --card-border:#d9d4d4;
+  --info:#3e5a7a; --info-bg:#eef2f6;
+  --tip:#500000; --tip-bg:#f7efef;
+  --warn:#9a6a00; --warn-bg:#fbf4e4;
+  --bad:#b3242b; --good:#2e7d4f;
+  --trace:#500000; --trace2:#c0392b; --trace3:#3e5a7a; --trace4:#9a6a00;
+  --grid:#ebe7e7; --axis:#7a7373;
+  --paper:#fffafa; --paper-minor:#f2d2d2; --paper-major:#e3a1a1; --paper-ink:#1c1c1c;
+  --banner-bg:#3e5a7a; --banner-fg:#ffffff;
+  --font-body:"Open Sans",Arial,"Helvetica Neue",sans-serif;
+  --font-head:"Work Sans","Open Sans",Arial,sans-serif;
+  --font-mono:"JetBrains Mono",ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
+  --bg:#141213; --fg:#ece7e7; --muted:#a79d9d; --rule:#2e2828;
+  --maroon:#500000; --maroon-2:#8a3a3a; --nav:#3a0000; --nav-fg:#ffffff; --nav-dim:#d9bdbd;
+  --hdr:#1b1818; --hdr-fg:#ece7e7; --hdr-rule:#332b2b;
+  --accent:#d39a9a; --accent-ink:#e2adad; --link:#e2adad;
+  --panel:#1d1a1a; --card:#191616; --card-border:#342c2c;
+  --info:#8fb0d4; --info-bg:#1a222c;
+  --tip:#d39a9a; --tip-bg:#2a1a1a;
+  --warn:#e2b45a; --warn-bg:#2e2512;
+  --bad:#f07a7a; --good:#5fcf8e;
+  --trace:#e7a3a3; --trace2:#f07a7a; --trace3:#8fb0d4; --trace4:#e2b45a;
+  --grid:#2a2525; --axis:#857b7b;
+  --paper:#1d1617; --paper-minor:#3b2628; --paper-major:#653438; --paper-ink:#f1e9e9;
+  --banner-bg:#22303f; --banner-fg:#eaf0f6;
+  color-scheme:dark;
+}}
+:root[data-theme="dark"]{
+  --bg:#141213; --fg:#ece7e7; --muted:#a79d9d; --rule:#2e2828;
+  --maroon:#500000; --maroon-2:#8a3a3a; --nav:#3a0000; --nav-fg:#ffffff; --nav-dim:#d9bdbd;
+  --hdr:#1b1818; --hdr-fg:#ece7e7; --hdr-rule:#332b2b;
+  --accent:#d39a9a; --accent-ink:#e2adad; --link:#e2adad;
+  --panel:#1d1a1a; --card:#191616; --card-border:#342c2c;
+  --info:#8fb0d4; --info-bg:#1a222c;
+  --tip:#d39a9a; --tip-bg:#2a1a1a;
+  --warn:#e2b45a; --warn-bg:#2e2512;
+  --bad:#f07a7a; --good:#5fcf8e;
+  --trace:#e7a3a3; --trace2:#f07a7a; --trace3:#8fb0d4; --trace4:#e2b45a;
+  --grid:#2a2525; --axis:#857b7b;
+  --paper:#1d1617; --paper-minor:#3b2628; --paper-major:#653438; --paper-ink:#f1e9e9;
+  --banner-bg:#22303f; --banner-fg:#eaf0f6;
+  color-scheme:dark;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+@media (prefers-reduced-motion: reduce){html{scroll-behavior:auto}}
+body{background:var(--bg);color:var(--fg);font-family:var(--font-body);font-size:17px;line-height:1.6}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:60;background:var(--hdr)}
+a{color:var(--link)}
+a:focus-visible,button:focus-visible,input:focus-visible,select:focus-visible,summary:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+
+/* ---------- header ---------- */
+.util{background:var(--nav);color:var(--nav-fg);font-family:var(--font-head);font-weight:700;font-size:13px;letter-spacing:.8px;text-transform:uppercase;
+  padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+.util-inner{max-width:1180px;margin:0 auto;display:flex;justify-content:space-between;align-items:center;gap:12px;min-height:38px}
+.theme-btn{flex:none;background:none;border:1px solid rgba(255,255,255,.4);color:var(--nav-fg);border-radius:3px;padding:3px 9px;font:inherit;font-size:12px;cursor:pointer}
+.prog{background:var(--hdr);color:var(--hdr-fg);border-bottom:1px solid var(--hdr-rule);
+  padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+.prog-inner{max-width:1180px;margin:0 auto;display:flex;align-items:center;gap:14px;padding-block:14px;flex-wrap:wrap}
+.mark{min-width:44px;height:44px;padding:0 9px;background:var(--maroon);color:#fff;display:grid;place-items:center;font-family:var(--font-head);font-weight:800;font-size:15px;letter-spacing:.5px;flex:none;text-decoration:none}
+.prog-txt{display:flex;flex-direction:column;line-height:1.2;text-decoration:none;color:inherit;min-width:0}
+.prog-txt .u{font-family:var(--font-head);font-size:12px;font-weight:700;letter-spacing:.8px;text-transform:uppercase}
+.prog-txt .p{font-family:var(--font-head);font-size:20px;font-weight:500}
+.prog-course{margin-left:auto;font-family:var(--font-head);font-weight:700;color:var(--accent-ink);font-size:15px}
+.topnav{position:sticky;top:env(safe-area-inset-top,0px);z-index:50;background:var(--hdr);border-bottom:1px solid var(--hdr-rule);box-shadow:0 1px 3px rgba(0,0,0,.06);
+  padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+.topnav-inner{max-width:1180px;margin:0 auto;display:flex;align-items:center;min-height:48px}
+.navlinks{display:flex;gap:2px;overflow-x:auto;scrollbar-width:thin;flex:1;min-width:0}
+.navlinks a{color:var(--hdr-fg);text-decoration:none;font-family:var(--font-head);font-weight:600;font-size:14.5px;padding:13px 10px 11px;white-space:nowrap;border-bottom:3px solid transparent}
+.navlinks a .n{color:var(--muted);margin-right:3px}
+.navlinks a:hover{color:var(--accent-ink)}
+.navlinks a.active{color:var(--accent-ink);border-bottom-color:var(--accent)}
+.banner{background:var(--banner-bg);color:var(--banner-fg);font-size:14px;line-height:1.45;
+  padding-block:9px;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+.banner-inner{max-width:1180px;margin:0 auto}
+.banner a{color:inherit;font-weight:700}
+.banner b{font-family:var(--font-head);text-transform:uppercase;letter-spacing:.6px}
+
+/* ---------- page layout ---------- */
+.page{max-width:1180px;margin:0 auto;display:grid;grid-template-columns:minmax(0,1fr);gap:40px;
+  padding-block:36px 80px;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+@media (min-width:1000px){.page{grid-template-columns:minmax(0,740px) 230px;justify-content:center}}
+main{min-width:0}
+.toc{display:none}
+@media (min-width:1000px){.toc{display:block;position:sticky;top:72px;align-self:start;font-size:14px}}
+.toc h2{font-size:13px;font-weight:700;text-transform:uppercase;letter-spacing:.8px;border:0;margin:0 0 8px;color:var(--fg)}
+.toc ul{list-style:none;margin:0;padding:0;border-left:1px solid var(--rule)}
+.toc li a{display:block;padding:4px 0 4px 12px;color:var(--muted);text-decoration:none;line-height:1.3;border-left:2px solid transparent;margin-left:-1px}
+.toc li a.on{color:var(--accent-ink);border-left-color:var(--accent)}
+
+h1{font-family:var(--font-head);font-size:clamp(30px,5vw,42px);font-weight:700;color:var(--accent-ink);line-height:1.15;margin:0 0 6px;text-wrap:balance}
+.subtitle{font-size:20px;color:var(--muted);margin:0 0 26px}
+h2{font-family:var(--font-head);font-size:27px;font-weight:600;line-height:1.2;margin:46px 0 14px;padding-bottom:8px;border-bottom:1px solid var(--rule);text-wrap:balance;scroll-margin-top:90px}
+h3{font-family:var(--font-head);font-size:19px;margin:28px 0 8px}
+p{margin:0 0 14px}
+ul,ol{padding-left:24px;margin:0 0 14px}
+li{margin-bottom:4px}
+code,.mono{font-family:var(--font-mono);font-size:.88em}
+pre{background:var(--panel);border:1px solid var(--card-border);border-radius:6px;padding:14px;overflow-x:auto;font-size:14px;line-height:1.5}
+table{border-collapse:collapse;font-size:15px;width:100%}
+.tablewrap{overflow-x:auto;margin:0 0 16px}
+th,td{border-bottom:1px solid var(--rule);padding:7px 10px;text-align:left;vertical-align:top}
+th{font-weight:700}
+td.num,th.num{text-align:right;font-variant-numeric:tabular-nums}
+
+/* ---------- callouts ---------- */
+.callout{border-left:5px solid var(--info);background:var(--info-bg);border-radius:4px;padding:14px 18px;margin:18px 0}
+.callout .lbl{font-size:13px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:var(--info);margin-bottom:6px;display:flex;gap:8px;align-items:center}
+.callout p:last-child,.callout ul:last-child{margin-bottom:0}
+.callout.tip{border-color:var(--tip);background:var(--tip-bg)}
+.callout.tip .lbl{color:var(--accent-ink)}
+.callout.warn{border-color:var(--warn);background:var(--warn-bg)}
+.callout.warn .lbl{color:var(--warn)}
+.callout.scenario p{font-style:italic}
+.ico{width:14px;height:14px;flex:none}
+
+/* ---------- widgets ---------- */
+.widget{border:1px solid var(--card-border);background:var(--card);border-radius:8px;padding:18px 20px;margin:18px 0;box-shadow:0 1px 3px rgba(0,0,0,.05)}
+.widget .wlabel{font-size:14px;font-weight:700;color:var(--muted);margin-bottom:8px}
+.presets{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:16px}
+.pill{border:none;border-radius:999px;padding:7px 16px;font:inherit;font-size:14px;cursor:pointer;color:#fff;background:var(--nav)}
+.pill.c1{background:#5b6236}.pill.c2{background:#332c2c}.pill.c3{background:#8f5d00}.pill.c4{background:#500000}.pill.c5{background:#3e5a7a}.pill.c6{background:#a7000c}
+.pill{border-radius:3px;font-family:var(--font-head);font-weight:600}
+.pill[aria-pressed="true"]{outline:3px solid var(--accent);outline-offset:2px}
+.ctrls{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:12px 22px;margin-bottom:12px}
+.ctrl label{display:block;font-size:15px;font-weight:700}
+.ctrl label output{color:var(--bad);font-weight:700;font-variant-numeric:tabular-nums}
+.ctrl input[type=range]{width:100%;accent-color:var(--info)}
+.toggles{display:flex;flex-wrap:wrap;gap:8px 18px;margin:4px 0 12px;font-size:15px}
+.toggles label{display:flex;gap:6px;align-items:center;cursor:pointer}
+.toggles input{accent-color:var(--info);width:16px;height:16px}
+.plot{width:100%;display:block;border-radius:4px}
+.plotwrap{background:var(--panel);border-radius:6px;padding:6px;margin:8px 0}
+.readout{display:flex;flex-wrap:wrap;gap:10px;margin:10px 0 2px}
+.stat{background:var(--panel);border:1px solid var(--card-border);border-radius:6px;padding:6px 12px;min-width:110px}
+.stat .k{font-size:12px;color:var(--muted);text-transform:uppercase;letter-spacing:.6px}
+.stat .v{font-size:20px;font-weight:700;font-variant-numeric:tabular-nums}
+.chip{display:inline-block;font-size:13px;font-weight:700;border-radius:999px;padding:2px 10px;border:1px solid currentColor}
+.chip.good{color:var(--good)}.chip.bad{color:var(--bad)}.chip.warn{color:var(--warn)}
+.wnote{font-size:15px;color:var(--muted);border-top:1px dashed var(--card-border);padding-top:10px;margin-top:10px}
+.btn{font:inherit;font-size:15px;border:1.5px solid var(--info);color:var(--info);background:transparent;border-radius:999px;padding:6px 16px;cursor:pointer}
+.btn.solid{background:var(--maroon);border-color:var(--maroon);color:#fff;border-radius:4px;font-weight:700;padding:9px 18px}
+.minigrid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}
+.mini{background:var(--panel);border-radius:6px;padding:6px 8px}
+.mini .t{font-size:13px;font-weight:700;display:flex;justify-content:space-between}
+
+/* ---------- quiz ---------- */
+.quiz{display:flex;flex-direction:column;gap:16px}
+.q{border:1px solid var(--card-border);border-radius:8px;padding:14px 18px;background:var(--card)}
+.q .qt{font-weight:700;margin-bottom:8px}
+.q label{display:flex;gap:10px;align-items:flex-start;padding:5px 6px;border-radius:4px;cursor:pointer}
+.q label:hover{background:var(--panel)}
+.q input{margin-top:6px;accent-color:var(--info)}
+.q .fb{margin-top:8px;font-size:15px;padding:8px 12px;border-radius:4px}
+.q .fb.ok{background:var(--tip-bg);color:var(--fg);border-left:4px solid var(--good)}
+.q .fb.no{background:var(--warn-bg);color:var(--fg);border-left:4px solid var(--bad)}
+
+/* ---------- home ---------- */
+.module-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(210px,1fr));gap:14px;margin:16px 0}
+.module-card{border-top:4px solid var(--maroon) !important;display:flex;flex-direction:column;gap:4px;border:1px solid var(--card-border);border-radius:8px;padding:16px;text-decoration:none;color:var(--fg);background:var(--card);transition:border-color .15s,transform .15s}
+.module-card:hover{border-color:var(--maroon-2);transform:translateY(-2px)}
+@media (prefers-reduced-motion: reduce){.module-card{transition:none}.module-card:hover{transform:none}}
+.module-number{font-family:var(--font-head);font-size:28px;font-weight:800;color:var(--accent-ink);line-height:1}
+.module-title{font-weight:700;font-size:17px}
+.module-desc{font-size:14.5px;color:var(--muted);line-height:1.45}
+.module-card.challenge{border-color:var(--warn);background:var(--warn-bg)}
+.module-card.challenge .module-number{color:var(--warn)}
+.hw-card{display:inline-flex;flex-direction:column;border:1px solid var(--info);border-radius:8px;padding:14px 18px;max-width:280px;text-decoration:none;color:var(--fg)}
+.hw-card .k{font-size:12px;font-weight:700;color:var(--info);letter-spacing:1px}
+.hw-card .t{font-weight:700;font-size:17px}
+.hw-card .d{font-size:14px;color:var(--muted)}
+.module-nav{display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;border-top:1px solid var(--rule);margin-top:48px;padding-top:20px}
+.module-nav a{text-decoration:none}
+.footer{text-align:center;color:var(--muted);font-size:14px;padding-block:0 40px;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+details.hint{margin-top:8px;font-size:15px}
+details.hint summary{cursor:pointer;color:var(--link);font-weight:700}
+.problem{border-bottom:1px solid var(--rule);padding:12px 0}
+.problem .pn{font-weight:900;color:var(--accent-ink)}
+.case{border:1px solid var(--card-border);border-radius:8px;padding:14px 16px;margin:16px 0;background:var(--card)}
+.case-head{display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap;margin-bottom:6px}
+.case-head b{font-size:17px}
+.case-form{display:flex;flex-wrap:wrap;gap:10px 18px;align-items:end;margin-top:8px}
+.case-form label{font-size:14px;font-weight:700;display:flex;flex-direction:column;gap:4px}
+.case-form input,.case-form select{font:inherit;font-size:15px;padding:6px 8px;border:1px solid var(--card-border);border-radius:4px;background:var(--bg);color:var(--fg)}
+.case-form input{width:110px}
+.case .res{font-size:15px;margin-top:8px}
+.scorebar{position:sticky;bottom:12px;margin-top:20px;background:var(--maroon);color:#fff;border-radius:8px;padding:12px 16px;display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap}
+.scorebar .btn.solid{background:#fff;border-color:#fff;color:#500000}
+
+.util-right{display:flex;align-items:center;gap:14px;min-width:0}
+.courses{display:flex;gap:4px;overflow-x:auto;scrollbar-width:none}
+.courses a{color:var(--nav-dim);text-decoration:none;white-space:nowrap;padding:4px 7px;font-size:12px}
+.courses a:hover{color:#fff}.courses a.cur{color:#fff;border-bottom:2px solid #fff}
+@media (max-width:640px){.courses{display:none}}
+/* ---------- case library ---------- */
+.cl-filters{display:flex;flex-wrap:wrap;gap:6px;margin:10px 0}
+.cl-chip{font:inherit;font-size:13px;font-weight:600;border:1px solid var(--card-border);background:var(--card);color:var(--fg);border-radius:999px;padding:4px 12px;cursor:pointer}
+.cl-chip[aria-pressed="true"]{background:var(--maroon);border-color:var(--maroon);color:#fff}
+.cl-search{font:inherit;font-size:15px;padding:7px 10px;border:1px solid var(--card-border);border-radius:4px;background:var(--bg);color:var(--fg);width:100%;max-width:340px}
+.cl-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:10px;margin:12px 0}
+.cl-card{text-align:left;font:inherit;border:1px solid var(--card-border);border-left:4px solid var(--maroon);background:var(--card);color:var(--fg);border-radius:6px;padding:10px 12px;cursor:pointer;display:flex;flex-direction:column;gap:3px}
+.cl-card:hover{border-color:var(--maroon-2)}
+.cl-card[aria-current="true"]{background:var(--tip-bg)}
+.cl-card .n{font-family:var(--font-head);font-weight:800;color:var(--accent-ink);font-size:13px}
+.cl-card .t{font-weight:700;font-size:15px;line-height:1.3}
+.cl-card .s{font-size:12.5px;color:var(--muted)}
+.cl-detail{border:1px solid var(--card-border);border-radius:8px;background:var(--card);padding:18px 20px;margin:14px 0;scroll-margin-top:70px}
+.cl-detail h3{margin:0 0 4px;font-size:22px;color:var(--accent-ink)}
+.cl-tags{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:10px}
+.cl-tag{font-size:12px;font-weight:700;border-radius:3px;padding:2px 8px;background:var(--panel);color:var(--muted);border:1px solid var(--card-border)}
+.cl-two{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:12px;margin:12px 0}
+.cl-box{background:var(--panel);border-radius:6px;padding:12px 14px;font-size:15.5px}
+.cl-box .h{font-family:var(--font-head);font-weight:700;font-size:13px;text-transform:uppercase;letter-spacing:.7px;color:var(--muted);margin-bottom:4px}
+.cl-box p:last-child{margin:0}
+.eq{font-family:var(--font-mono);font-size:14px;background:var(--bg);border:1px solid var(--card-border);border-radius:4px;padding:6px 10px;margin:6px 0;overflow-x:auto;white-space:nowrap}
+.cl-nav{display:flex;justify-content:space-between;gap:10px;margin-top:12px;flex-wrap:wrap}
+.cl-count{font-size:14px;color:var(--muted)}
+</style>
+</head><body>
+
+
+<div class="util"><div class="util-inner"><span>Texas A&amp;M University</span><span class="util-right"><nav class="courses" aria-label="Courses"><a href="index.html">All courses</a><a href="ecg-biosignals-101.html" class="">ECG 101</a><a href="biomechanics-biomaterials-101.html" class="">Biomechanics 101</a><a href="hemodynamics-biofluids-101.html" class="cur">Hemodynamics 101</a></nav><button class="theme-btn" id="themeBtn" type="button" aria-label="Toggle light or dark theme">Theme</button></span></div></div>
+<div class="prog"><div class="prog-inner">
+  <a class="mark" href="#home" aria-label="Course home">EnMed</a>
+  <a class="prog-txt" href="#home"><span class="u">Texas A&amp;M University</span><span class="p">Engineering Medicine Program</span></a>
+  <span class="prog-course">Hemodynamics &amp; Biofluids 101</span>
+</div></div>
+<header class="topnav">
+  <div class="topnav-inner"><nav class="navlinks" id="navlinks" aria-label="Modules"></nav></div>
+</header>
+<div class="banner"><div class="banner-inner"><b>Course prototype:</b> Draft interactive module for Texas A&amp;M EnMed students, under faculty review. Not an official university publication. Layout modeled on the open tutorial <a href="https://judepj.github.io/neuro-signals-101/" target="_blank" rel="noopener">EEG &amp; Signal Processing (Neuro Signals 101)</a> by judepj; all content here is original.</div></div>
+<div class="page">
+  <main id="main"></main>
+  <aside class="toc" id="toc" aria-label="On this page"></aside>
+</div>
+<div class="footer">Hemodynamics &amp; Biofluids 101 · Texas A&amp;M Engineering Medicine (EnMed) · Houston, Texas<br>Prototype course material · Simplified models and synthetic data for teaching only, not for clinical use</div>
+<script>
+"use strict";
+/* ================= utilities ================= */
+const $ = (s, r = document) => r.querySelector(s);
+const $$ = (s, r = document) => [...r.querySelectorAll(s)];
+function css(name) { return getComputedStyle(document.documentElement).getPropertyValue(name).trim(); }
+function rng(seed) { let a = seed >>> 0; return () => { a |= 0; a = a + 0x6D2B79F5 | 0; let t = Math.imul(a ^ a >>> 15, 1 | a); t = t + Math.imul(t ^ t >>> 7, 61 | t) ^ t; return ((t ^ t >>> 14) >>> 0) / 4294967296; }; }
+function gauss(r) { let u = 0, v = 0; while (u === 0) u = r(); while (v === 0) v = r(); return Math.sqrt(-2 * Math.log(u)) * Math.cos(2 * Math.PI * v); }
+const clamp = (x, a, b) => Math.max(a, Math.min(b, x));
+const fmt = (x, d = 0) => Number.isFinite(x) ? x.toFixed(d) : "—";
+const ICON = {
+  scenario: '<svg class="ico" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true"><path d="M3 1h8l3 3v11H3z" opacity=".25"/><path d="M3 1h8l3 3v11H3zM5 6h7v1H5zm0 3h7v1H5zm0 3h5v1H5z"/></svg>',
+  tip: '<svg class="ico" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true"><path d="M10.5 1.5a4 4 0 0 0-3.8 5.2L1.5 12l2.5 2.5 5.3-5.2A4 4 0 0 0 14.5 5l-2.2 2.2-2-.5-.5-2z"/></svg>',
+  warn: '<svg class="ico" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true"><path d="M8 1 15 14H1z"/><path d="M7.3 5.5h1.4v4.5H7.3zm0 5.5h1.4v1.5H7.3z" fill="#fff"/></svg>',
+  info: '<svg class="ico" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true"><circle cx="8" cy="8" r="7"/><path d="M7.3 7h1.4v5H7.3zm0-3h1.4v1.5H7.3z" fill="#fff"/></svg>'
+};
+function callout(kind, label, html) {
+  const ic = kind === "scenario" ? ICON.scenario : kind === "tip" ? ICON.tip : kind === "warn" ? ICON.warn : ICON.info;
+  return `<div class="callout ${kind}"><div class="lbl">${ic}${label}</div>${html}</div>`;
+}
+
+/* ================= synthetic ECG =================
+   Each beat = sum of Gaussian bumps (P, Q, R, S, T) placed relative to the R peak.
+   Amplitudes in mV, times in seconds. */
+function beatTemplate(o) {
+  const qrs = o.qrsW ?? 0.09;            // QRS duration (s)
+  const s = qrs / 0.09;                   // width scale
+  const w = [];
+  if (o.pAmp !== 0) w.push({ mu: -(o.pr ?? 0.16), sd: 0.022, a: o.pAmp ?? 0.15 });
+  w.push({ mu: -0.022 * s, sd: 0.008 * s, a: o.qAmp ?? -0.1 });
+  w.push({ mu: 0, sd: 0.010 * s, a: o.rAmp ?? 1.2 });
+  w.push({ mu: 0.024 * s, sd: 0.009 * s, a: o.sAmp ?? -0.28 });
+  w.push({ mu: o.tPos ?? 0.28, sd: o.tW ?? 0.045, a: o.tAmp ?? 0.32 });
+  return w;
+}
+function rrSequence(o, dur, r) {
+  const rr = [];
+  let t = 0.35;
+  const base = 60 / o.hr;
+  let i = 0;
+  while (t < dur + 1) {
+    let d;
+    if (o.rhythm === "af") d = base * (0.6 + 0.8 * r());
+    else d = base * (1 + (o.hrv ?? 0.03) * gauss(r) + 0.04 * (o.hrv ? o.hrv / 0.03 : 1) * Math.sin(2 * Math.PI * t / 4));
+    rr.push({ t, kind: "n" });
+    if (o.rhythm === "pvc" && i % (o.pvcEvery ?? 4) === (o.pvcEvery ?? 4) - 2) {
+      // next beat comes early as a PVC, then a compensatory pause
+      const tp = t + base * 0.62;
+      rr.push({ t: tp, kind: "v" });
+      t = t + 2 * base; i += 2; continue;
+    }
+    t += Math.max(0.25, d); i++;
+  }
+  return rr.filter(b => b.t < dur + 0.5);
+}
+function synthECG(o) {
+  const fs = o.fs ?? 500, dur = o.dur ?? 6, n = Math.round(fs * dur);
+  const r = rng(o.seed ?? 7);
+  const y = new Float64Array(n), t = new Float64Array(n);
+  for (let k = 0; k < n; k++) t[k] = k / fs;
+  const beats = rrSequence(o, dur, r);
+  const scale = o.scale ?? 1;
+  for (const b of beats) {
+    let tmpl;
+    if (b.kind === "v") tmpl = [{ mu: 0, sd: 0.03, a: 1.5 }, { mu: 0.05, sd: 0.03, a: -0.5 }, { mu: 0.3, sd: 0.06, a: -0.45 }];
+    else {
+      const rrPrev = 60 / o.hr;
+      tmpl = beatTemplate({ ...o, pAmp: o.rhythm === "af" ? 0 : o.pAmp, tPos: (o.tPos ?? 0.28) * Math.sqrt(Math.min(1.2, rrPrev)) });
+    }
+    for (const w of tmpl) {
+      const c = b.t + w.mu, k0 = Math.max(0, Math.floor((c - 5 * w.sd) * fs)), k1 = Math.min(n - 1, Math.ceil((c + 5 * w.sd) * fs));
+      for (let k = k0; k <= k1; k++) { const z = (t[k] - c) / w.sd; y[k] += scale * w.a * Math.exp(-0.5 * z * z); }
+    }
+  }
+  if (o.rhythm === "af") { // fibrillatory baseline 5–7 Hz
+    const f1 = 5.3 + r(), f2 = 6.6 + r(), p1 = r() * 6, p2 = r() * 6;
+    for (let k = 0; k < n; k++) y[k] += 0.05 * Math.sin(2 * Math.PI * f1 * t[k] + p1) + 0.035 * Math.sin(2 * Math.PI * f2 * t[k] + p2);
+  }
+  addNoise(y, t, o, r);
+  return { t, y, fs, beats: beats.filter(b => b.t < dur).map(b => b.t), kinds: beats.filter(b => b.t < dur).map(b => b.kind) };
+}
+function addNoise(y, t, o, r) {
+  const n = y.length;
+  if (o.wander) { const ph = r() * 6; for (let k = 0; k < n; k++) y[k] += o.wander * (Math.sin(2 * Math.PI * 0.22 * t[k] + ph) + 0.5 * Math.sin(2 * Math.PI * 0.07 * t[k])); }
+  if (o.mains) { for (let k = 0; k < n; k++) y[k] += o.mains * Math.sin(2 * Math.PI * 60 * t[k]); }
+  if (o.emg) { // band-limited muscle noise
+    let lp = 0; for (let k = 0; k < n; k++) { const g = gauss(r); lp = 0.6 * lp + 0.4 * g; y[k] += o.emg * (g - lp) * 1.6; }
+  }
+  if (o.motion) { // occasional large slow excursions
+    for (let j = 0; j < 3; j++) { const c = 0.8 + r() * (t[n - 1] - 1.6), a = (r() - .5) * 2 * o.motion, sd = 0.18 + r() * 0.2;
+      for (let k = 0; k < n; k++) { const z = (t[k] - c) / sd; y[k] += a * Math.exp(-0.5 * z * z); } }
+  }
+  if (o.pop) { // electrode pop: step + exponential recovery
+    const c = t[n - 1] * 0.55, k0 = Math.floor(c / (t[1] - t[0]));
+    for (let k = k0; k < n; k++) y[k] += o.pop * Math.exp(-(t[k] - c) / 0.35);
+  }
+  if (o.white) for (let k = 0; k < n; k++) y[k] += o.white * gauss(r);
+}
+
+/* ================= filters (RBJ biquads, zero-phase filtfilt) ================= */
+function biquad(type, f0, fs, Q = Math.SQRT1_2) {
+  const w = 2 * Math.PI * f0 / fs, c = Math.cos(w), s = Math.sin(w), al = s / (2 * Q);
+  let b0, b1, b2, a0, a1, a2;
+  if (type === "lp") { b0 = (1 - c) / 2; b1 = 1 - c; b2 = (1 - c) / 2; }
+  else if (type === "hp") { b0 = (1 + c) / 2; b1 = -(1 + c); b2 = (1 + c) / 2; }
+  else { b0 = 1; b1 = -2 * c; b2 = 1; } // notch
+  a0 = 1 + al; a1 = -2 * c; a2 = 1 - al;
+  return [b0 / a0, b1 / a0, b2 / a0, a1 / a0, a2 / a0];
+}
+function runBiquad(k, x) {
+  const y = new Float64Array(x.length); let x1 = x[0], x2 = x[0], y1 = x[0] * (k[0] + k[1] + k[2]) / (1 + k[3] + k[4]), y2 = y1;
+  for (let i = 0; i < x.length; i++) { const v = k[0] * x[i] + k[1] * x1 + k[2] * x2 - k[3] * y1 - k[4] * y2; x2 = x1; x1 = x[i]; y2 = y1; y1 = v; y[i] = v; }
+  return y;
+}
+function filtfilt(k, x) { const a = runBiquad(k, x); a.reverse(); const b = runBiquad(k, a); b.reverse(); return b; }
+function hpFirstSafe(x, f0, fs) { // high-pass that starts settled (subtract mean first)
+  const m = x.reduce((a, b) => a + b, 0) / x.length; return filtfilt(biquad("hp", f0, fs), x.map(v => v - m));
+}
+
+/* ================= FFT ================= */
+function fftMag(x, fs) {
+  let N = 1; while (N < x.length) N <<= 1;
+  const re = new Float64Array(N), im = new Float64Array(N);
+  const m = x.reduce((a, b) => a + b, 0) / x.length;
+  for (let i = 0; i < x.length; i++) { const w = 0.5 - 0.5 * Math.cos(2 * Math.PI * i / (x.length - 1)); re[i] = (x[i] - m) * w; }
+  for (let i = 1, j = 0; i < N; i++) { let bit = N >> 1; for (; j & bit; bit >>= 1) j ^= bit; j ^= bit; if (i < j) { [re[i], re[j]] = [re[j], re[i]]; [im[i], im[j]] = [im[j], im[i]]; } }
+  for (let len = 2; len <= N; len <<= 1) {
+    const ang = -2 * Math.PI / len, wr = Math.cos(ang), wi = Math.sin(ang);
+    for (let i = 0; i < N; i += len) { let cr = 1, ci = 0;
+      for (let j = 0; j < len / 2; j++) { const ur = re[i + j], ui = im[i + j], vr = re[i + j + len / 2] * cr - im[i + j + len / 2] * ci, vi = re[i + j + len / 2] * ci + im[i + j + len / 2] * cr;
+        re[i + j] = ur + vr; im[i + j] = ui + vi; re[i + j + len / 2] = ur - vr; im[i + j + len / 2] = ui - vi; const nr = cr * wr - ci * wi; ci = cr * wi + ci * wr; cr = nr; } }
+  }
+  const f = [], p = [];
+  for (let k = 0; k <= N / 2; k++) { f.push(k * fs / N); p.push(Math.hypot(re[k], im[k]) * 4 / x.length); }
+  return { f, p };
+}
+
+/* ================= plotting (canvas) ================= */
+function niceTicks(a, b, n = 5) {
+  if (n <= 0) return [];
+  const span = b - a; if (span <= 0) return [a];
+  const step0 = span / n, mag = Math.pow(10, Math.floor(Math.log10(step0))), r = step0 / mag;
+  const step = (r < 1.5 ? 1 : r < 3 ? 2 : r < 7 ? 5 : 10) * mag;
+  const out = []; for (let v = Math.ceil(a / step - 1e-9) * step; v <= b + 1e-9; v += step) out.push(+v.toFixed(10));
+  return out;
+}
+const PLOTS = new Set();
+function plot(cv, o) {
+  cv._opts = o; PLOTS.add(cv); drawPlot(cv);
+}
+function drawPlot(cv) {
+  const o = cv._opts; if (!o || !cv.isConnected) { PLOTS.delete(cv); return; }
+  const dpr = window.devicePixelRatio || 1, W = cv.clientWidth || 600, H = +(cv.dataset.h || 220);
+  cv.style.height = H + "px"; cv.width = Math.round(W * dpr); cv.height = Math.round(H * dpr);
+  const g = cv.getContext("2d"); g.setTransform(dpr, 0, 0, dpr, 0, 0); g.clearRect(0, 0, W, H);
+  const fg = css("--fg"), muted = css("--muted"), grid = css("--grid"), axis = css("--axis");
+  const L = o.left ?? 48, R = 18, T = o.title ? 24 : 12, B = o.xlabel ? 42 : 26;
+  const pw = W - L - R, ph = H - T - B;
+  const [x0, x1] = o.xlim, [y0, y1] = o.ylim;
+  const X = v => L + (v - x0) / (x1 - x0) * pw, Y = v => T + (1 - (v - y0) / (y1 - y0)) * ph;
+  g.font = `12px ${css("--font-body")}`;
+  if (o.paper) { // ECG paper: 1 mm = 0.04 s and 0.1 mV
+    g.fillStyle = css("--paper"); g.fillRect(L, T, pw, ph);
+    const minor = css("--paper-minor"), major = css("--paper-major");
+    for (let v = Math.ceil(x0 / 0.04) * 0.04, i = Math.round(v / 0.04); v <= x1 + 1e-9; v += 0.04, i++) { g.strokeStyle = i % 5 === 0 ? major : minor; g.lineWidth = i % 5 === 0 ? 1 : 0.5; g.beginPath(); g.moveTo(X(v), T); g.lineTo(X(v), T + ph); g.stroke(); }
+    for (let v = Math.ceil(y0 / 0.1) * 0.1, i = Math.round(v / 0.1); v <= y1 + 1e-9; v += 0.1, i++) { g.strokeStyle = i % 5 === 0 ? major : minor; g.lineWidth = i % 5 === 0 ? 1 : 0.5; g.beginPath(); g.moveTo(L, Y(v)); g.lineTo(L + pw, Y(v)); g.stroke(); }
+  } else {
+    g.strokeStyle = grid; g.lineWidth = 1;
+    for (const v of niceTicks(x0, x1, o.xt ?? 6)) { g.beginPath(); g.moveTo(X(v), T); g.lineTo(X(v), T + ph); g.stroke(); }
+    for (const v of niceTicks(y0, y1, o.yt ?? 4)) { g.beginPath(); g.moveTo(L, Y(v)); g.lineTo(L + pw, Y(v)); g.stroke(); }
+  }
+  for (const b of (o.bands || [])) { g.fillStyle = b.color; g.globalAlpha = b.alpha ?? 0.15; g.fillRect(X(Math.max(b.x0, x0)), T, X(Math.min(b.x1, x1)) - X(Math.max(b.x0, x0)), ph); g.globalAlpha = 1;
+    if (b.label) { g.fillStyle = b.color; g.textAlign = "center"; g.fillText(b.label, (X(b.x0) + X(b.x1)) / 2, T + 13); } }
+  // axes
+  g.strokeStyle = axis; g.lineWidth = 1; g.beginPath(); g.moveTo(L, T); g.lineTo(L, T + ph); g.lineTo(L + pw, T + ph); g.stroke();
+  g.fillStyle = muted; g.textAlign = "center"; g.textBaseline = "top";
+  for (const v of niceTicks(x0, x1, o.xt ?? 6)) g.fillText(o.xfmt ? o.xfmt(v) : String(+v.toFixed(3)), X(v), T + ph + 5);
+  g.textAlign = "right"; g.textBaseline = "middle";
+  for (const v of niceTicks(y0, y1, o.yt ?? 4)) g.fillText(o.yfmt ? o.yfmt(v) : String(+v.toFixed(3)), L - 6, Y(v));
+  if (o.xlabel) { g.textAlign = "center"; g.textBaseline = "bottom"; g.fillStyle = fg; g.fillText(o.xlabel, L + pw / 2, H - 2); }
+  if (o.ylabel) { g.save(); g.translate(12, T + ph / 2); g.rotate(-Math.PI / 2); g.textAlign = "center"; g.textBaseline = "middle"; g.fillStyle = fg; g.fillText(o.ylabel, 0, 0); g.restore(); }
+  if (o.title) { g.textAlign = "left"; g.textBaseline = "top"; g.fillStyle = fg; g.font = `700 13px ${css("--font-body")}`; g.fillText(o.title, L, 4); g.font = `12px ${css("--font-body")}`; }
+  for (const h of (o.hlines || [])) { g.strokeStyle = css(h.color) || h.color; g.setLineDash(h.dash || [5, 4]); g.lineWidth = 1.2; g.beginPath(); g.moveTo(L, Y(h.y)); g.lineTo(L + pw, Y(h.y)); g.stroke(); g.setLineDash([]);
+    if (h.label) { g.fillStyle = css(h.color) || h.color; g.textAlign = "right"; g.textBaseline = "bottom"; g.fillText(h.label, L + pw - 4, Y(h.y) - 2); } }
+  // series
+  g.save(); g.beginPath(); g.rect(L, T, pw, ph); g.clip();
+  for (const s of o.series) {
+    const col = s.color.startsWith("--") ? css(s.color) : s.color;
+    g.strokeStyle = col; g.fillStyle = col; g.lineWidth = s.w ?? 1.6; g.globalAlpha = s.alpha ?? 1;
+    if (s.dash) g.setLineDash(s.dash);
+    const xs = s.x, ys = s.y, n = ys.length;
+    if (s.stems) { for (let i = 0; i < n; i++) { if (xs[i] < x0 || xs[i] > x1) continue; g.beginPath(); g.moveTo(X(xs[i]), Y(Math.max(y0, Math.min(y1, 0)))); g.lineTo(X(xs[i]), Y(ys[i])); g.stroke(); g.beginPath(); g.arc(X(xs[i]), Y(ys[i]), s.r ?? 3, 0, 7); g.fill(); } }
+    else if (s.dots) { for (let i = 0; i < n; i++) { if (xs[i] < x0 || xs[i] > x1) continue; g.beginPath(); g.arc(X(xs[i]), Y(ys[i]), s.r ?? 3.5, 0, 7); g.fill(); } }
+    else {
+      // decimate to ~2 points per pixel with min/max to keep spikes visible
+      g.beginPath(); let started = false;
+      const per = Math.max(1, Math.floor(n / (pw * 2)));
+      for (let i = 0; i < n; i += per) {
+        if (per === 1) { const px = X(xs[i]), py = Y(ys[i]); started ? g.lineTo(px, py) : (g.moveTo(px, py), started = true); continue; }
+        let mn = Infinity, mx = -Infinity, imn = i, imx = i;
+        for (let j = i; j < Math.min(n, i + per); j++) { if (ys[j] < mn) { mn = ys[j]; imn = j; } if (ys[j] > mx) { mx = ys[j]; imx = j; } }
+        const a = imn < imx ? [imn, imx] : [imx, imn];
+        for (const j of a) { const px = X(xs[j]), py = Y(ys[j]); started ? g.lineTo(px, py) : (g.moveTo(px, py), started = true); }
+      }
+      g.stroke();
+    }
+    g.setLineDash([]); g.globalAlpha = 1;
+  }
+  for (const m of (o.markers || [])) { const col = m.color.startsWith("--") ? css(m.color) : m.color; g.fillStyle = col; g.strokeStyle = col;
+    if (m.shape === "tri") { const px = X(m.x), py = Y(m.y) - 8; g.beginPath(); g.moveTo(px - 5, py - 8); g.lineTo(px + 5, py - 8); g.lineTo(px, py); g.fill(); }
+    else { g.beginPath(); g.arc(X(m.x), Y(m.y), m.r ?? 4, 0, 7); g.fill(); }
+    if (m.label) { g.textAlign = "center"; g.textBaseline = "bottom"; g.font = `700 12px ${css("--font-body")}`; g.fillText(m.label, X(m.x), Y(m.y) - (m.shape === "tri" ? 18 : 7)); g.font = `12px ${css("--font-body")}`; } }
+  for (const a of (o.annots || [])) { g.fillStyle = a.color ? css(a.color) : fg; g.textAlign = a.align || "left"; g.textBaseline = "top"; g.font = `${a.bold ? 700 : 400} 12px ${css("--font-body")}`; g.fillText(a.text, X(a.x), Y(a.y)); }
+  g.restore();
+}
+function redrawAll() { for (const cv of [...PLOTS]) drawPlot(cv); }
+let rT; window.addEventListener("resize", () => { clearTimeout(rT); rT = setTimeout(redrawAll, 80); });
+matchMedia("(prefers-color-scheme: dark)").addEventListener("change", () => setTimeout(redrawAll, 30));
+
+/* ================= small UI builders ================= */
+function slider(id, label, min, max, step, val, unit = "") {
+  return `<div class="ctrl"><label for="${id}">${label}: <output id="${id}-o">${val}${unit}</output></label><input type="range" id="${id}" min="${min}" max="${max}" step="${step}" value="${val}" data-unit="${unit}"></div>`;
+}
+function bindSliders(root, onChange) {
+  $$("input[type=range]", root).forEach(el => el.addEventListener("input", () => { $(`#${el.id}-o`).textContent = el.value + (el.dataset.unit || ""); onChange(); }));
+  $$("input[type=checkbox],select", root).forEach(el => el.addEventListener("change", onChange));
+}
+function setSlider(id, v) { const el = $("#" + id); if (!el) return; el.value = v; $(`#${id}-o`).textContent = el.value + (el.dataset.unit || ""); }
+const val = id => +$("#" + id).value;
+const chk = id => $("#" + id).checked;
+function stat(k, v, extra = "") { return `<div class="stat"><div class="k">${k}</div><div class="v">${v}${extra}</div></div>`; }
+
+function quizHTML(id, qs) {
+  return `<div class="quiz" id="${id}">${qs.map((q, i) => `<fieldset class="q" style="margin:0"><legend class="qt">Q${i + 1}. ${q.q}</legend>${q.a.map((a, j) => `<label><input type="radio" name="${id}-${i}" value="${j}"><span>${a}</span></label>`).join("")}<div class="fb" hidden></div></fieldset>`).join("")}</div>`;
+}
+function bindQuiz(id, qs) {
+  const root = $("#" + id); if (!root) return;
+  $$(".q", root).forEach((el, i) => el.addEventListener("change", e => {
+    const j = +e.target.value, fb = $(".fb", el), q = qs[i]; fb.hidden = false;
+    if (j === q.c) { fb.className = "fb ok"; fb.innerHTML = `<b>Correct.</b> ${q.why}`; }
+    else { fb.className = "fb no"; fb.innerHTML = `<b>Not quite.</b> ${q.hint || q.why}`; }
+  }));
+}
+
+function cvHook(cv, fn) { cv._custom = fn; CUSTOM.add(cv); }
+const CUSTOM = new Set();
+window.addEventListener("resize", () => setTimeout(() => { for (const cv of [...CUSTOM]) { if (cv.isConnected) cv._custom(); else CUSTOM.delete(cv); } }, 100));
+matchMedia("(prefers-color-scheme: dark)").addEventListener("change", () => setTimeout(() => { for (const cv of [...CUSTOM]) if (cv.isConnected) cv._custom(); }, 40));
+
+
+/* ================= Case library engine (shared) =================
+   A case: { title, system, concepts:[..], hook, present, md, eng, eq, ctrls:[[key,label,min,max,step,val,unit]],
+             presets:[[label,{key:val}]], h (canvas height), render(v, cv, out), pearl } */
+function caseLibraryModule(opts) {
+  const { id, num, cases, intro } = opts;
+  const concepts = [...new Set(cases.flatMap(c => c.concepts))].sort();
+  return {
+    id, num, nav: "Case Library", title: `Module ${num}: Clinical Case Library`, subtitle: `${cases.length} interactive cases where the engineering explains the medicine`,
+    html: () => `
+${callout("info", "How to use this library", `<p>${intro}</p><p>Each case has three parts: what the clinician sees, the engineering principle underneath it, and a model you can change. Change the inputs until the clinical picture makes sense to you as an engineer.</p>`)}
+<h2 id="browse">Browse Cases</h2>
+<div style="display:flex;flex-wrap:wrap;gap:10px;align-items:center"><input class="cl-search" id="cl-q" type="search" placeholder="Search cases (e.g. potassium, stent, bone)" aria-label="Search cases"><span class="cl-count" id="cl-count"></span></div>
+<div class="cl-filters" id="cl-f"><button class="cl-chip" data-c="" aria-pressed="true">All</button>${concepts.map(c => `<button class="cl-chip" data-c="${c}" aria-pressed="false">${c}</button>`).join("")}</div>
+<div class="cl-detail" id="cl-detail"></div>
+<div class="cl-grid" id="cl-grid"></div>
+<h2 id="summary">Summary</h2>
+<p>The pattern repeats in every case: a clinical observation, a physical law that explains it, and a parameter that changes the outcome. That chain is engineering judgment, and it is what lets you predict, not just recognize.</p>`,
+    init() {
+      let cur = 0, filt = "", q = "";
+      const grid = $("#cl-grid"), det = $("#cl-detail");
+      const visible = () => cases.map((c, i) => [c, i]).filter(([c]) => (!filt || c.concepts.includes(filt)) && (!q || (c.title + " " + c.system + " " + c.concepts.join(" ") + " " + c.hook).toLowerCase().includes(q)));
+      const drawGrid = () => {
+        const vs = visible();
+        grid.innerHTML = vs.map(([c, i]) => `<button class="cl-card" data-i="${i}" aria-current="${i === cur}"><span class="n">CASE ${i + 1} · ${c.system}</span><span class="t">${c.title}</span><span class="s">${c.hook}</span></button>`).join("");
+        $("#cl-count").textContent = `${vs.length} of ${cases.length} cases`;
+        $$(".cl-card", grid).forEach(b => b.addEventListener("click", () => { show(+b.dataset.i); det.scrollIntoView({ block: "start" }); }));
+      };
+      const show = i => {
+        cur = i; const c = cases[i];
+        det.innerHTML = `<div class="cl-count">Case ${i + 1} of ${cases.length}</div><h3>${c.title}</h3>
+<div class="cl-tags"><span class="cl-tag">${c.system}</span>${c.concepts.map(k => `<span class="cl-tag">${k}</span>`).join("")}</div>
+${callout("scenario", "Presentation", `<p>${c.present}</p>`)}
+<div class="cl-two"><div class="cl-box"><div class="h">What the clinician sees</div><p>${c.md}</p></div><div class="cl-box"><div class="h">What the engineer sees</div><p>${c.eng}</p>${c.eq ? `<div class="eq">${c.eq}</div>` : ""}</div></div>
+<div class="widget" id="cl-w" style="margin:12px 0">
+${c.presets ? `<div class="presets">${c.presets.map((p, j) => `<button class="pill c${[4, 5, 3, 6, 1, 2][j % 6]}" data-j="${j}">${p[0]}</button>`).join("")}</div>` : ""}
+<div class="ctrls">${c.ctrls.map(k => slider("cs-" + k[0], k[1], k[2], k[3], k[4], k[5], k[6] || "")).join("")}</div>
+<div class="plotwrap"><canvas class="plot" id="cl-cv" data-h="${c.h || 230}"></canvas></div><div class="readout" id="cl-out"></div></div>
+${callout("tip", "Clinical pearl", `<p>${c.pearl}</p>`)}
+<div class="cl-nav"><button class="btn" id="cl-prev">← Previous case</button><button class="btn" id="cl-next">Next case →</button></div>`;
+        const run = () => { const v = {}; c.ctrls.forEach(k => v[k[0]] = val("cs-" + k[0])); try { c.render(v, $("#cl-cv"), $("#cl-out")); } catch (e) { $("#cl-out").textContent = "Model error: " + e.message; } };
+        bindSliders($("#cl-w"), run);
+        $$("#cl-w .pill").forEach(b => b.addEventListener("click", () => { const p = c.presets[+b.dataset.j][1]; Object.entries(p).forEach(([k, x]) => setSlider("cs-" + k, x)); $$("#cl-w .pill").forEach(x => x.setAttribute("aria-pressed", x === b)); run(); }));
+        $("#cl-prev").addEventListener("click", () => show((cur - 1 + cases.length) % cases.length));
+        $("#cl-next").addEventListener("click", () => show((cur + 1) % cases.length));
+        run(); drawGrid();
+      };
+      $$("#cl-f .cl-chip").forEach(b => b.addEventListener("click", () => { filt = b.dataset.c; $$("#cl-f .cl-chip").forEach(x => x.setAttribute("aria-pressed", x === b)); drawGrid(); }));
+      $("#cl-q").addEventListener("input", e => { q = e.target.value.trim().toLowerCase(); drawGrid(); });
+      show(0);
+    }
+  };
+}
+/* helpers for case models */
+function linspace(a, b, n) { const o = []; for (let i = 0; i < n; i++) o.push(a + (b - a) * i / (n - 1)); return o; }
+function chip(text, kind) { return `<span class="chip ${kind}" style="align-self:center">${text}</span>`; }
+function beatOnce(o, dur = 1.2, fs = 500) { return synthECG({ hr: 60 / dur * 0.999, dur, fs, hrv: 0, seed: 2, ...o }); }
+
+/* ================= Numeric challenge engine (shared) =================
+   items: { title, q (html), unit, ans (number), tol (fraction), sol (html) }  or  { title, q, choices:[...], ans (index), sol } */
+function challengeModule(opts) {
+  const { id, num, items, scenario, subtitle } = opts;
+  return {
+    id, num, nav: "Challenge", title: `Module ${num}: The Challenge`, subtitle: subtitle || `${items.length} problems. Your numbers. Graded.`,
+    html: () => `${callout("scenario", "Your shift", `<p>${scenario}</p>`)}
+<h2 id="rules">How It's Graded</h2><ul><li>Numeric answers are correct within the tolerance shown (usually ±10%).</li><li>Each problem is worth 1 point. A worked solution appears after grading.</li><li>Use the modules' widgets as calculators if you like.</li></ul>
+<h2 id="problems">The Problems</h2>
+${items.map((it, i) => `<div class="case" id="ch${i}"><div class="case-head"><b>Problem ${i + 1}: ${it.title}</b><span id="ch${i}-chip"></span></div><p style="margin:4px 0 8px">${it.q}</p>
+<div class="case-form">${it.choices ? `<label for="ch${i}-a">Your answer<select id="ch${i}-a"><option value="">Choose…</option>${it.choices.map((c, j) => `<option value="${j}">${c}</option>`).join("")}</select></label>` : `<label for="ch${i}-a">Your answer (${it.unit})<input id="ch${i}-a" type="number" step="any" inputmode="decimal"></label>`}</div>
+<div class="res" id="ch${i}-res"></div></div>`).join("")}
+<div class="scorebar"><span id="chscore">Answer all ${items.length} problems, then grade.</span><span style="display:flex;gap:8px"><button class="btn" id="chreset" style="color:#fff;border-color:#fff">Reset</button><button class="btn solid" id="chgrade">Grade my answers</button></span></div>`,
+    init() {
+      $("#chgrade").addEventListener("click", () => { let tot = 0;
+        items.forEach((it, i) => { const raw = $(`#ch${i}-a`).value; let ok;
+          if (it.choices) ok = raw !== "" && +raw === it.ans; else { const x = +raw; ok = raw !== "" && Math.abs(x - it.ans) <= Math.abs(it.ans) * (it.tol ?? 0.1); }
+          tot += ok; $(`#ch${i}-chip`).innerHTML = chip(ok ? "Correct" : "Not quite", ok ? "good" : "bad");
+          $(`#ch${i}-res`).innerHTML = `<b>Answer:</b> ${it.choices ? it.choices[it.ans] : `${+it.ans.toPrecision(3)} ${it.unit}`}<br>${it.sol}`; });
+        $("#chscore").innerHTML = `Score: <b>${tot} / ${items.length}</b>${tot >= items.length - 1 ? " · Excellent." : tot >= items.length / 2 ? " · Solid. Review the solutions." : " · Revisit the modules and try again."}`; });
+      $("#chreset").addEventListener("click", () => { items.forEach((it, i) => { $(`#ch${i}-a`).value = ""; $(`#ch${i}-chip`).innerHTML = ""; $(`#ch${i}-res`).innerHTML = ""; }); $("#chscore").textContent = `Answer all ${items.length} problems, then grade.`; });
+    }
+  };
+}
+/* shared home + homework builders */
+function homeworkModule(list, n) {
+  return { id: "hw", num: "", nav: "Homework", title: "Homework", subtitle: `${list.length} problems covering modules 1–${n}`,
+    html: () => `<p>Keep this course open while you work. Every problem can be solved with the modules and widgets. Answer keys are hidden under each problem.</p><h2 id="problems">Problems</h2>
+${list.map((h, i) => `<div class="problem"><div><span class="pn">Problem ${i + 1}</span> <span style="color:var(--muted)">· Module ${h[0]} · ${h[1]}</span></div><p style="margin:6px 0 0">${h[2]}</p><details class="hint"><summary>Show answer key</summary><p style="margin:6px 0 0">${h[3]}</p></details></div>`).join("")}
+<h2 id="submit">Submitting</h2><p>Submit answers as a single PDF with screenshots of any widget settings you used as evidence.</p>`, init() {} };
+}
+function genericHome(o) {
+  return `<h1>${o.title}</h1><p class="subtitle">${o.subtitle}</p>
+<h2 id="welcome">Welcome</h2>${o.welcome}
+<h2 id="how-this-works">How This Works</h2>
+<ol><li><b>Clinical scenario.</b> Each module opens with a patient problem.</li><li><b>Interactive widgets.</b> Change the inputs. The model and graphs respond in real time.</li><li><b>Try it.</b> Short guided experiments point you at the key insight.</li><li><b>Quiz.</b> Three questions with instant feedback.</li><li><b>The Challenge.</b> Graded problems with worked solutions.</li><li><b>Clinical Case Library.</b> ${o.caseCount} real clinical cases, each with a model you can change.</li></ol>
+<h2 id="modules">Modules</h2>
+<div class="module-grid">${MODULES.filter(m => m.id !== "hw").map(m => `<a class="module-card ${m.nav === "Challenge" ? "challenge" : ""}" href="#${m.id}"><span class="module-number">${String(m.num).padStart(2, "0")}</span><span class="module-title">${m.title.replace(/^Module \d+: /, "")}</span><span class="module-desc">${o.descs[m.id] || ""}</span></a>`).join("")}</div>
+<h2 id="what-youll-need">What You'll Need</h2><ul><li>A web browser. Everything runs on this page; nothing to install.</li><li>About 20–30 minutes per module.</li>${o.need || ""}</ul>
+<h2 id="homework">Homework</h2><p>A self-paced problem set designed to be solved with the widgets.</p>
+<a class="hw-card" href="#hw"><span class="k">PROBLEM SET</span><span class="t">Open Homework</span><span class="d">${o.hwCount} problems · answer keys included</span></a>
+<p style="margin-top:22px">Let's begin.</p><p><a class="btn solid" href="#m1" style="text-decoration:none;display:inline-block">Begin Module 1 →</a></p>`;
+}
+
+/* ================= Hemodynamics & Biofluids 101 ================= */
+const MODULES = [];
+const M = m => MODULES.push(m);
+const COURSE_TITLE = "Hemodynamics & Biofluids 101";
+const MMHG = 133.322;
+const logTick = v => Math.abs(v - Math.round(v)) < 1e-6 ? String(+(10 ** Math.round(v)).toPrecision(3)) : "";
+const poiseR = (mu, L, r) => 8 * mu * L / (Math.PI * r ** 4);
+function muBlood(H, g) { // Carreau-type model scaled by hematocrit (illustrative), returns mPa·s
+  const minf = 1.2 * Math.pow(1 - H / 0.98, -1.82), m0 = Math.max(minf, 56 * Math.pow(Math.max(0, minf - 1.2) / 2.46, 2.5));
+  return minf + (m0 - minf) * Math.pow(1 + (3.313 * g) ** 2, (0.3568 - 1) / 2);
+}
+function windkessel({ hr = 75, sv = 70, R = 1.0, C = 1.5, ts = 0.3, beats = 8, dt = 0.001 }) { // R mmHg·s/mL, C mL/mmHg
+  const T = 60 / hr, qmax = sv * Math.PI / (2 * ts), t = [], p = [], q = []; let P = 80;
+  for (let k = 0; k < beats * T / dt; k++) { const x = k * dt, ph = x % T, Q = ph < ts ? qmax * Math.sin(Math.PI * ph / ts) : 0; P += dt * (Q - P / R) / C; t.push(x); p.push(P); q.push(Q); }
+  return { t, p, q, T };
+}
+
+/* ---------- Module 1 ---------- */
+const HQ1 = [
+  { q: "An arteriole dilates so its radius increases by 19%. Flow (same pressure) increases by about…", a: ["19%", "40%", "Doubles", "4×"], c: 2, why: "Flow ∝ r⁴. 1.19⁴ ≈ 2.0. Small changes in vessel tone produce large changes in flow, which is how the body redistributes blood." },
+  { q: "Systemic vascular resistance doubles while cardiac output stays the same. Mean arterial pressure…", a: ["Halves", "Stays the same", "Doubles (relative to venous pressure)", "Quadruples"], c: 2, why: "ΔP = Q × R: the circulation's version of Ohm's law. MAP − CVP = CO × SVR." },
+  { q: "Which matters more for flow through an IV catheter: doubling length or halving radius?", a: ["Doubling length (flow ÷2)", "Halving radius (flow ÷16)", "They are equal", "Neither"], c: 1, why: "Resistance ∝ L/r⁴. Halving radius raises resistance 16×; doubling length only 2×. For rapid infusion, short and wide wins." }
+];
+M({ id: "m1", num: "1", nav: "Pressure & Flow", title: "Module 1: Pressure, Flow & Resistance", subtitle: "Ohm's law for blood",
+  html: () => `
+${callout("scenario", "Clinical scenario", `<p>A trauma patient is bleeding. The nurse has a 22-gauge IV in the hand; you ask for two large-bore (14–16 gauge) lines. Ten minutes later, blood is going in several times faster. Why does the needle size matter so much more than raising the bag?</p>`)}
+<h2 id="basics">The Basics</h2>
+<p>Blood flow follows the same logic as current in a circuit: flow = pressure difference ÷ resistance. In the circulation: <span class="mono">MAP − CVP = CO × SVR</span>.</p>
+<p>For steady laminar flow in a straight tube, Poiseuille's law gives the resistance:</p>
+<p style="text-align:center" class="mono">R = 8 · μ · L / (π · r⁴)       Q = ΔP / R</p>
+<p>μ is viscosity, L is length and r is radius. The <b>fourth power of radius</b> dominates everything. It is why arterioles, not the heart, set most of the resistance, and why the body controls flow by changing vessel diameter.</p>
+<h2 id="interactive">Interactive: The r⁴ Law</h2>
+<div class="widget" id="w1"><div class="ctrls">${slider("h1r", "Radius change (%)", -50, 50, 1, 0, "%")}${slider("h1L", "Length change (%)", -50, 100, 1, 0, "%")}${slider("h1mu", "Viscosity change (%)", -50, 100, 1, 0, "%")}${slider("h1dp", "Pressure difference change (%)", -50, 100, 1, 0, "%")}</div>
+<div class="plotwrap"><canvas class="plot" id="h1plot" data-h="240"></canvas></div><div class="readout" id="h1read"></div></div>
+${callout("tip", "Try it", `<ul><li>Raise radius by 19%. Flow doubles. Now try to double flow by raising pressure: you need +100%.</li><li>Constrict radius by 30% (vasoconstriction in shock). Flow drops to about a quarter.</li></ul>`)}
+<h2 id="clinical">Why Does This Matter Clinically?</h2>
+<p>Vasopressors and vasodilators work by changing r. Polycythemia raises μ. Long, narrow PICC lines are poor for resuscitation. A 50% stenosis by diameter raises that segment's resistance 16×, though whether it limits flow depends on the rest of the circuit (Module 2).</p>
+<h2 id="quiz">Quiz: Check Your Understanding</h2>${quizHTML("hq1", HQ1)}
+<h2 id="summary">Summary</h2><ul><li>Q = ΔP/R; the circulation obeys Ohm's law.</li><li>Poiseuille: R ∝ μL/r⁴. Radius dominates.</li><li>Small changes in vessel tone produce large changes in flow.</li></ul>`,
+  init() {
+    const draw = () => { const r = 1 + val("h1r") / 100, L = 1 + val("h1L") / 100, mu = 1 + val("h1mu") / 100, dp = 1 + val("h1dp") / 100, Q = dp * r ** 4 / (L * mu), rs = linspace(0.5, 1.5, 100);
+      plot($("#h1plot"), { series: [{ x: rs.map(x => (x - 1) * 100), y: rs.map(x => 100 * dp * x ** 4 / (L * mu)), color: "--trace", w: 2.2 }, { x: rs.map(x => (x - 1) * 100), y: rs.map(x => 100 * x), color: "--axis", w: 1.2, dash: [5, 4] }], markers: [{ x: (r - 1) * 100, y: Q * 100, color: "--trace2", r: 6 }], xlim: [-50, 50], ylim: [0, Math.max(500, Q * 110)], xlabel: "Radius change (%)", ylabel: "Flow (% of baseline)", annots: [{ x: -48, y: Math.max(500, Q * 110) * 0.97, text: "dashed = if flow were ∝ r", color: "--muted" }], left: 52 });
+      $("#h1read").innerHTML = stat("Resistance", fmt(100 * L * mu / r ** 4, 0), " %") + stat("Flow", fmt(Q * 100, 0), " %") + chip(Q > 1.2 ? "Flow up" : Q < 0.8 ? "Flow down" : "Near baseline", Q < 0.8 ? "bad" : "good"); };
+    bindSliders($("#w1"), draw); draw(); bindQuiz("hq1", HQ1);
+  } });
+
+/* ---------- Module 2 ---------- */
+function ffrModel(pct, Lmm = 8, Dn = 3.5) { const mu = 3.5e-3, rho = 1060, D = Dn / 1000, An = Math.PI * D * D / 4, As = An * (1 - pct / 100) ** 2, Pa = 90 * MMHG, Pv = 5 * MMHG, Rm = (Pa - Pv) / 3.5e-6;
+  const A = 8 * Math.PI * mu * (Lmm / 1000) / (As * As), B = 1.2 * rho / 2 * (1 / As - 1 / An) ** 2, b = Rm + A, Q = (-b + Math.sqrt(b * b + 4 * B * (Pa - Pv))) / (2 * B), dP = A * Q + B * Q * Q;
+  return { ffr: (Pa - dP) / Pa, Q: Q * 1e6, dP: dP / MMHG, v: Q / As }; }
+const HQ2 = [
+  { q: "Using the simplified Bernoulli equation, a jet velocity of 4 m/s across the aortic valve corresponds to a peak gradient of…", a: ["16 mmHg", "32 mmHg", "64 mmHg", "100 mmHg"], c: 2, why: "ΔP ≈ 4v² = 4 × 16 = 64 mmHg. A peak velocity ≥ 4 m/s is one criterion for severe aortic stenosis." },
+  { q: "Why does a coronary stenosis often cause symptoms only during exercise?", a: ["Blood gets thicker", "Flow rises, and the pressure loss grows with flow squared (separation losses)", "The stenosis grows during exercise", "Heart rate lowers pressure"], c: 1, why: "Pressure drop across a stenosis = viscous term (∝ Q) + separation term (∝ Q²). At high flow the Q² term dominates, so distal pressure collapses just when demand is highest." },
+  { q: "A 50% diameter stenosis reduces cross-sectional area by…", a: ["50%", "75%", "25%", "90%"], c: 1, why: "Area ∝ diameter². Half the diameter → one quarter the area: 75% area reduction. Always check whether a report means diameter or area." }
+];
+M({ id: "m2", num: "2", nav: "Stenosis", title: "Module 2: Stenosis & Bernoulli", subtitle: "Where pressure turns into velocity, and back",
+  html: () => `
+${callout("scenario", "Clinical scenario", `<p>A 62-year-old has chest tightness when he climbs stairs, never at rest. The angiogram shows a 65% narrowing of the left anterior descending artery. The cardiologist measures the pressure ratio across it (FFR) before deciding whether to stent.</p>`)}
+<h2 id="basics">The Basics</h2>
+<p><b>Continuity</b>: the same flow passes through every cross-section, so velocity rises where area shrinks: v₂ = v₁ · A₁/A₂.</p>
+<p><b>Bernoulli</b>: as velocity rises, pressure falls. Past the narrowing, the fast jet separates and much of that kinetic energy is lost as turbulence instead of being converted back to pressure. Clinically, the simplified Bernoulli equation estimates a valve gradient from the jet velocity measured by Doppler:</p>
+<p style="text-align:center" class="mono">ΔP (mmHg) ≈ 4 · v² (v in m/s)</p>
+<p>For coronary lesions, the total pressure loss has a viscous part (∝ Q) and a separation part (∝ Q²). <b>FFR</b> = distal ÷ proximal pressure at maximal flow. FFR ≤ 0.80 usually means the lesion limits flow enough to benefit from treatment.</p>
+<h2 id="interactive">Interactive: Narrow a Coronary Artery</h2>
+<div class="widget" id="w2"><div class="ctrls">${slider("h2s", "Diameter stenosis (%)", 0, 90, 1, 65, "%")}${slider("h2L", "Lesion length (mm)", 2, 30, 1, 8)}${slider("h2D", "Reference vessel diameter (mm)", 2, 4.5, 0.1, 3.5)}</div>
+<div class="plotwrap"><canvas class="plot" id="h2plot" data-h="250"></canvas></div><div class="readout" id="h2read"></div><div class="wnote">Model: hyperemic flow through a fixed microvascular resistance, with viscous and separation losses across the lesion. Illustrative, but reproduces the classic shape: nothing happens until about 50%, then FFR falls off a cliff.</div></div>
+${callout("tip", "Try it", `<ul><li>Slide stenosis from 0 to 90%. Find the "critical stenosis" range where FFR drops fastest.</li><li>Keep 60% stenosis and change length from 5 to 25 mm. Long lesions matter.</li><li>Same 60% stenosis in a 2.5 mm vs 4 mm vessel.</li></ul>`)}
+<h2 id="quiz">Quiz: Check Your Understanding</h2>${quizHTML("hq2", HQ2)}
+<h2 id="summary">Summary</h2><ul><li>Continuity: narrower → faster. Bernoulli: faster → lower pressure.</li><li>ΔP ≈ 4v² turns a Doppler velocity into a gradient.</li><li>Stenosis loss has Q and Q² terms; symptoms appear at high flow.</li><li>Diameter % and area % are not the same thing.</li></ul>`,
+  init() {
+    const draw = () => { const L = val("h2L"), D = val("h2D"), s = val("h2s"), xs = linspace(0, 90, 91), r = ffrModel(s, L, D);
+      plot($("#h2plot"), { series: [{ x: xs, y: xs.map(p => ffrModel(p, L, D).ffr), color: "--trace", w: 2.2 }], hlines: [{ y: 0.8, color: "--bad", label: "FFR 0.80" }], markers: [{ x: s, y: r.ffr, color: "--trace2", r: 6 }], xlim: [0, 90], ylim: [0, 1.02], xlabel: "Diameter stenosis (%)", ylabel: "FFR", yfmt: v => v.toFixed(1) });
+      $("#h2read").innerHTML = stat("Area reduction", fmt(100 * (1 - (1 - s / 100) ** 2), 0), " %") + stat("Jet velocity", fmt(r.v, 1), " m/s") + stat("Pressure drop", fmt(r.dP, 0), " mmHg") + stat("FFR", fmt(r.ffr, 2)) + chip(r.ffr <= 0.8 ? "Flow-limiting: consider PCI" : "Not flow-limiting", r.ffr <= 0.8 ? "bad" : "good"); };
+    bindSliders($("#w2"), draw); draw(); bindQuiz("hq2", HQ2);
+  } });
+
+/* ---------- Module 3 ---------- */
+const HQ3 = [
+  { q: "A patient with severe anemia has a new systolic flow murmur. Which change most explains it?", a: ["Higher viscosity", "Lower viscosity and higher cardiac output raise Reynolds number", "Smaller aorta", "Lower heart rate"], c: 1, why: "Re = ρvD/μ. Anemia lowers μ, and the heart compensates with higher output (higher v). Re rises toward turbulence, and turbulence makes sound." },
+  { q: "Why do you hear a carotid bruit over a stenosis but not over a normal carotid?", a: ["The stenosis vibrates", "The high-velocity jet beyond the stenosis becomes turbulent", "Blood clots make noise", "The vessel is larger"], c: 1, why: "Flow through the narrowing speeds up into a jet. Downstream, the jet breaks into turbulent eddies that shake the wall at audible frequencies." },
+  { q: "Laminar flow in a tube has which velocity profile?", a: ["Flat", "Parabolic, fastest in the center", "Fastest at the wall", "Random"], c: 1, why: "In laminar flow, layers slide past each other. The no-slip condition holds the wall layer still, and velocity rises smoothly to a maximum at the center." }
+];
+M({ id: "m3", num: "3", nav: "Turbulence", title: "Module 3: Reynolds Number & Turbulence", subtitle: "Why some blood flow makes noise",
+  html: () => `
+${callout("scenario", "Clinical scenario", `<p>You listen over a 70-year-old's neck and hear a whooshing bruit. In the next room, a pregnant woman with a hemoglobin of 7 has a soft systolic murmur, and her echo is normal. Both sounds come from the same physics.</p>`)}
+<h2 id="basics">The Basics</h2>
+<p>Fluid flow is either orderly (<b>laminar</b>) or chaotic (<b>turbulent</b>). The <b>Reynolds number</b> compares inertia to viscosity:</p>
+<p style="text-align:center" class="mono">Re = ρ · v · D / μ</p>
+<p>In straight pipes, flow is laminar below about 2000 and turbulent above about 4000. In the body, curves, branches and pulsatility make transitions happen earlier, but the trend holds: high velocity, large diameter and low viscosity push toward turbulence. Turbulence wastes energy, makes sound (murmurs, bruits, Korotkoff sounds) and changes stresses on the vessel wall.</p>
+<h2 id="interactive">Interactive: Find the Transition</h2>
+<div class="widget" id="w3"><div class="presets"><button class="pill c4" data-p="rest">Aorta at rest</button><button class="pill c3" data-p="ex">Aorta in exercise</button><button class="pill c5" data-p="anemia">Severe anemia</button><button class="pill c6" data-p="sten">Jet past carotid stenosis</button></div>
+<div class="ctrls">${slider("h3v", "Mean velocity (cm/s)", 5, 400, 1, 20)}${slider("h3D", "Diameter (mm)", 2, 30, 0.5, 25)}${slider("h3mu", "Viscosity (mPa·s)", 1.5, 6, 0.1, 3.5)}</div>
+<div class="plotwrap"><canvas class="plot" id="h3plot" data-h="240"></canvas></div><div class="readout" id="h3read"></div></div>
+${callout("tip", "Try it", `<ul><li>Start at "Aorta at rest", then increase velocity. Where does flow turn turbulent?</li><li>Click <b>Severe anemia</b>: low viscosity and high output. Compare Re with rest.</li></ul>`)}
+<h2 id="quiz">Quiz: Check Your Understanding</h2>${quizHTML("hq3", HQ3)}
+<h2 id="summary">Summary</h2><ul><li>Re = ρvD/μ predicts laminar vs turbulent flow.</li><li>Turbulence makes sound: murmurs, bruits and blood pressure sounds.</li><li>Anemia, high output and stenotic jets all raise Re.</li></ul>`,
+  init() {
+    const P = { rest: [20, 25, 3.5], ex: [60, 25, 3.5], anemia: [45, 25, 2.2], sten: [300, 2.5, 3.5] }, r = rng(5);
+    const draw = () => { const v = val("h3v") / 100, D = val("h3D") / 1000, mu = val("h3mu") / 1000, Re = 1060 * v * D / mu, ys = linspace(-1, 1, 81);
+      const turb = clamp((Re - 2000) / 2000, 0, 1), lam = ys.map(y => 2 * v * (1 - y * y)), tur = ys.map(y => 1.22 * v * Math.pow(Math.max(0, 1 - Math.abs(y)), 1 / 7) + (turb > 0 ? v * 0.12 * gauss(r) * (1 - Math.abs(y)) : 0)), prof = ys.map((y, i) => (1 - turb) * lam[i] + turb * tur[i]);
+      plot($("#h3plot"), { title: "Velocity profile across the vessel", series: [{ x: ys, y: prof.map(x => x * 100), color: turb > 0.5 ? "--trace2" : "--trace", w: 2.4 }], xlim: [-1, 1], ylim: [0, Math.max(...prof) * 115], xlabel: "Position across diameter (wall to wall)", ylabel: "Velocity (cm/s)", xfmt: x => x === 0 ? "center" : Math.abs(x) === 1 ? "wall" : "", left: 52 });
+      $("#h3read").innerHTML = stat("Reynolds number", fmt(Re, 0)) + chip(Re < 2000 ? "Laminar: silent" : Re < 4000 ? "Transitional" : "Turbulent: audible", Re < 2000 ? "good" : Re < 4000 ? "warn" : "bad"); };
+    $$("#w3 .pill").forEach(b => b.addEventListener("click", () => { const [v, D, m] = P[b.dataset.p]; setSlider("h3v", v); setSlider("h3D", D); setSlider("h3mu", m); $$("#w3 .pill").forEach(x => x.setAttribute("aria-pressed", x === b)); draw(); }));
+    bindSliders($("#w3"), draw); draw(); bindQuiz("hq3", HQ3);
+  } });
+
+/* ---------- Module 4 ---------- */
+const HQ4 = [
+  { q: "Blood viscosity at very low shear rates (as in veins with slow flow) is…", a: ["The same as at high shear", "Much higher, because red cells aggregate into rouleaux", "Lower", "Zero"], c: 1, why: "Blood is shear-thinning. At low shear, red cells stack (rouleaux) and viscosity rises many-fold. This contributes to venous stasis and thrombosis." },
+  { q: "A patient with polycythemia vera has a hematocrit of 62%. The main danger is…", a: ["Bleeding from thin blood", "Hyperviscosity: sluggish flow, thrombosis and stroke", "Anemia", "Hypotension"], c: 1, why: "Viscosity rises steeply with hematocrit. Flow slows and thrombosis risk rises. Phlebotomy targets a hematocrit below 45%." },
+  { q: "Why is apparent viscosity lower in capillary-sized tubes (Fåhræus–Lindqvist effect)?", a: ["Capillaries are warmer", "Red cells migrate to the center, leaving a low-viscosity plasma layer at the wall", "Plasma is absorbed", "Platelets lubricate"], c: 1, why: "In narrow tubes, cells crowd the center and a cell-free plasma layer lubricates the wall, lowering effective resistance in the microcirculation." }
+];
+M({ id: "m4", num: "4", nav: "Blood Viscosity", title: "Module 4: Blood Is Not Water", subtitle: "Non-Newtonian flow, hematocrit and stasis",
+  html: () => `
+${callout("scenario", "Clinical scenario", `<p>A 58-year-old with headaches, blurred vision and a ruddy face has a hematocrit of 61%. Another patient, immobile after hip surgery, develops a calf DVT despite normal blood counts. Both stories involve how blood's viscosity depends on what it is doing.</p>`)}
+<h2 id="basics">The Basics</h2>
+<p>For water, viscosity is constant: a <b>Newtonian</b> fluid. Blood is a suspension of deformable red cells, and its viscosity depends on two things:</p>
+<ul><li><b>Hematocrit</b>: more cells, higher viscosity, rising steeply above about 50%.</li><li><b>Shear rate</b>: how fast neighboring layers slide past each other. At low shear, red cells stack into rouleaux and viscosity climbs. At high shear, they break apart, align and deform, and viscosity falls. This is <b>shear thinning</b>.</li></ul>
+<p>Typical shear rates: large veins under 50 s⁻¹, arteries 100–1000 s⁻¹, arterioles and stenoses above 1000 s⁻¹.</p>
+<h2 id="interactive">Interactive: Viscosity Map</h2>
+<div class="widget" id="w4"><div class="presets"><button class="pill c5" data-h="25">Severe anemia (25%)</button><button class="pill c4" data-h="42" aria-pressed="true">Normal (42%)</button><button class="pill c6" data-h="62">Polycythemia (62%)</button></div>
+<div class="ctrls">${slider("h4H", "Hematocrit (%)", 15, 70, 1, 42, "%")}${slider("h4g", "Shear rate (s⁻¹, log scale)", -1, 3, 0.05, 2)}</div>
+<div class="plotwrap"><canvas class="plot" id="h4plot" data-h="250"></canvas></div><div class="readout" id="h4read"></div><div class="wnote">Carreau-type model scaled with hematocrit; values are representative, not patient-specific.</div></div>
+${callout("tip", "Try it", `<ul><li>At normal hematocrit, slide shear rate from 1000 down to 0.1 s⁻¹. Viscosity rises more than tenfold: that is the stasis effect in slow veins.</li><li>Click <b>Polycythemia</b>: the whole curve shifts up.</li></ul>`)}
+<h2 id="quiz">Quiz: Check Your Understanding</h2>${quizHTML("hq4", HQ4)}
+<h2 id="summary">Summary</h2><ul><li>Blood is shear-thinning: thick at low shear, thin at high shear.</li><li>Viscosity rises steeply with hematocrit.</li><li>Slow flow + high viscosity = stasis, one leg of Virchow's triad.</li></ul>`,
+  init() {
+    const draw = () => { const H = val("h4H") / 100, lg = val("h4g"), g = 10 ** lg, xs = linspace(-1, 3, 120), mu = muBlood(H, g);
+      $("#h4g-o").textContent = fmt(g, g < 10 ? 1 : 0) + " s⁻¹";
+      plot($("#h4plot"), { series: [{ x: xs, y: xs.map(x => muBlood(0.42, 10 ** x)), color: "--axis", w: 1.3, dash: [5, 4] }, { x: xs, y: xs.map(x => muBlood(H, 10 ** x)), color: "--trace", w: 2.4 }, { x: xs, y: xs.map(() => 1.0), color: "--trace3", w: 1.2 }], markers: [{ x: lg, y: mu, color: "--trace2", r: 6 }], bands: [{ x0: -1, x1: 1.7, color: css("--warn"), alpha: 0.08, label: "veins / stasis" }, { x0: 2, x1: 3, color: css("--trace3"), alpha: 0.08, label: "arteries" }], xlim: [-1, 3], ylim: [0, 60], xlabel: "Shear rate (s⁻¹)", ylabel: "Viscosity (mPa·s)", xfmt: logTick, annots: [{ x: 2.05, y: 3.5, text: "water ≈ 1", color: "--trace3" }] });
+      $("#h4read").innerHTML = stat("Viscosity", fmt(mu, 1), " mPa·s") + stat("vs water", fmt(mu / 0.7, 0), "× (at 37 °C)") + chip(H > 0.55 ? "Hyperviscosity" : H < 0.3 ? "Low viscosity" : "Normal", H > 0.55 ? "bad" : H < 0.3 ? "warn" : "good"); };
+    $$("#w4 .pill").forEach(b => b.addEventListener("click", () => { setSlider("h4H", b.dataset.h); $$("#w4 .pill").forEach(x => x.setAttribute("aria-pressed", x === b)); draw(); }));
+    bindSliders($("#w4"), draw); draw(); bindQuiz("hq4", HQ4);
+  } });
+
+/* ---------- Module 5 ---------- */
+const HQ5 = [
+  { q: "An 80-year-old has BP 172/68. A 25-year-old has 118/76. What best explains the wide pulse pressure in the older patient?", a: ["Higher stroke volume", "Lower arterial compliance (stiff aorta)", "Lower heart rate", "Higher viscosity"], c: 1, why: "Pulse pressure ≈ stroke volume ÷ compliance. A stiff aorta cannot buffer each ejection, so systolic rises and diastolic falls: isolated systolic hypertension." },
+  { q: "In the Windkessel model, what keeps blood flowing to organs during diastole when the aortic valve is closed?", a: ["The veins", "Elastic recoil of the stretched aorta releasing stored volume", "Atrial contraction", "Gravity"], c: 1, why: "The aorta acts like a capacitor: it stretches in systole, storing volume, and recoils in diastole, pushing blood forward." },
+  { q: "Pulse wave velocity increases when arteries stiffen. Why does that raise central systolic pressure?", a: ["It doesn't", "Reflected waves return earlier, arriving during systole instead of diastole", "It lowers stroke volume", "It reduces heart rate"], c: 1, why: "Faster waves mean reflections from the periphery return while the heart is still ejecting, adding to systolic pressure and increasing cardiac workload." }
+];
+M({ id: "m5", num: "5", nav: "Compliance", title: "Module 5: Compliance & the Windkessel", subtitle: "The aorta as a capacitor",
+  html: () => `
+${callout("scenario", "Clinical scenario", `<p>An 82-year-old's blood pressure is 176/64. Her daughter, at 50, is 132/84. Same family, same lifestyle. The difference is mostly mechanical: the stiffness of their aortas.</p>`)}
+<h2 id="basics">The Basics</h2>
+<p>The heart ejects in pulses, but organs receive nearly continuous flow. The elastic aorta smooths the pulses: it stretches during systole, storing blood, then recoils in diastole. Engineers call this a <b>Windkessel</b> (German for "air chamber") and model it as a resistor and capacitor:</p>
+<p style="text-align:center" class="mono">C · dP/dt = Q_in(t) − P / R</p>
+<p><b>Compliance</b> C = ΔV/ΔP (mL/mmHg). Pulse pressure ≈ stroke volume ÷ compliance. Mean pressure ≈ cardiac output × resistance. Aging, diabetes and kidney disease stiffen the aorta (lower C), widening pulse pressure.</p>
+<h2 id="interactive">Interactive: Two-Element Windkessel</h2>
+<div class="widget" id="w5"><div class="presets"><button class="pill c4" data-p="young" aria-pressed="true">Young adult</button><button class="pill c3" data-p="old">Elderly, stiff aorta</button><button class="pill c5" data-p="sepsis">Septic shock (low R)</button><button class="pill c6" data-p="htn">High resistance</button></div>
+<div class="ctrls">${slider("h5C", "Compliance C (mL/mmHg)", 0.3, 2.5, 0.05, 1.1)}${slider("h5R", "Peripheral resistance R (mmHg·s/mL)", 0.4, 2, 0.05, 1.15)}${slider("h5sv", "Stroke volume (mL)", 30, 120, 1, 70)}${slider("h5hr", "Heart rate (bpm)", 40, 140, 1, 72)}</div>
+<div class="plotwrap"><canvas class="plot" id="h5plot" data-h="240"></canvas></div><div class="readout" id="h5read"></div></div>
+${callout("tip", "Try it", `<ul><li>Drop C from 1.1 to 0.4. Mean pressure barely changes, but systolic rises and diastolic falls.</li><li>Click <b>Septic shock</b>. Low resistance: low diastolic, low mean. Coronary perfusion happens in diastole.</li></ul>`)}
+<h2 id="quiz">Quiz: Check Your Understanding</h2>${quizHTML("hq5", HQ5)}
+<h2 id="summary">Summary</h2><ul><li>The aorta stores volume in systole and returns it in diastole.</li><li>Mean pressure ≈ CO × R. Pulse pressure ≈ SV ÷ C.</li><li>Stiff arteries: isolated systolic hypertension and higher cardiac workload.</li></ul>`,
+  init() {
+    const P = { young: [1.1, 1.15, 70, 72], old: [0.4, 1.2, 70, 72], sepsis: [1.0, 0.5, 75, 115], htn: [0.9, 1.8, 70, 72] };
+    const draw = () => { const w = windkessel({ C: val("h5C"), R: val("h5R"), sv: val("h5sv"), hr: val("h5hr") }), n = w.t.length, st = Math.floor(n - 3 * w.T / 0.001), t = w.t.slice(st).map(x => x - w.t[st]), p = w.p.slice(st);
+      const sys = Math.max(...p), dia = Math.min(...p), map = p.reduce((a, b) => a + b, 0) / p.length;
+      plot($("#h5plot"), { series: [{ x: t, y: p, color: "--trace2", w: 2.2 }], hlines: [{ y: map, color: "--axis", label: "mean" }], xlim: [0, t[t.length - 1]], ylim: [0, 220], xlabel: "Time (s)", ylabel: "Aortic pressure (mmHg)", left: 52 });
+      $("#h5read").innerHTML = stat("BP", `${fmt(sys, 0)}/${fmt(dia, 0)}`, " mmHg") + stat("Pulse pressure", fmt(sys - dia, 0), " mmHg") + stat("Mean", fmt(map, 0), " mmHg") + stat("Cardiac output", fmt(val("h5sv") * val("h5hr") / 1000, 1), " L/min") + chip(sys - dia > 70 ? "Wide pulse pressure" : map < 65 ? "Hypotension" : "Normal", sys - dia > 70 || map < 65 ? "bad" : "good"); };
+    $$("#w5 .pill").forEach(b => b.addEventListener("click", () => { const [C, R, sv, hr] = P[b.dataset.p]; setSlider("h5C", C); setSlider("h5R", R); setSlider("h5sv", sv); setSlider("h5hr", hr); $$("#w5 .pill").forEach(x => x.setAttribute("aria-pressed", x === b)); draw(); }));
+    bindSliders($("#w5"), draw); draw(); bindQuiz("hq5", HQ5);
+  } });
+
+/* ---------- Module 6 ---------- */
+const starling = (pu, pd, pe, R = 1) => pu <= pe ? 0 : (pu - Math.max(pd, pe)) / R;
+const HQ6 = [
+  { q: "In a Starling resistor, once the external pressure exceeds the downstream pressure, flow depends on…", a: ["Upstream − downstream pressure", "Upstream − external pressure", "Downstream pressure only", "Nothing; flow stops"], c: 1, why: "The collapsible segment narrows until its internal pressure matches the outside. Downstream pressure no longer matters: the 'waterfall' effect." },
+  { q: "In compartment syndrome, tissue pressure rises to 40 mmHg while diastolic BP is 60. Why is muscle ischemic despite a palpable pulse?", a: ["Arteries are blocked", "Small veins and capillaries collapse; perfusion depends on BP − compartment pressure, now only 20 mmHg", "Blood is too viscous", "The pulse is from collaterals"], c: 1, why: "The thin-walled microvessels act as Starling resistors. The effective driving pressure is BP − compartment pressure. ΔP = diastolic − compartment < 30 mmHg is a common fasciotomy threshold." },
+  { q: "Adding PEEP in a ventilated patient can lower cardiac output. Why?", a: ["It increases heart rate", "It raises intrathoracic and alveolar pressures, compressing veins and capillaries and reducing venous return", "It lowers viscosity", "It dilates arteries"], c: 1, why: "Raised surrounding pressure acts on collapsible veins (and lung capillaries), reducing the effective driving pressure for flow back to the heart." }
+];
+M({ id: "m6", num: "6", nav: "Collapsible Tubes", title: "Module 6: Collapsible Tubes & the Waterfall", subtitle: "When the outside pressure decides the flow",
+  html: () => `
+${callout("scenario", "Clinical scenario", `<p>A 24-year-old with a tibial fracture complains of pain out of proportion to the injury, worse with passive toe stretch. His foot pulses are normal. A pressure monitor in the anterior compartment reads 45 mmHg. The surgeon prepares for fasciotomy.</p>`)}
+<h2 id="basics">The Basics</h2>
+<p>Veins, capillaries, lung vessels and airways are <b>collapsible</b>. When the pressure outside exceeds the pressure inside, they narrow. Engineers model this with a <b>Starling resistor</b>: a soft tube inside a pressurized chamber.</p>
+<ul><li>If downstream pressure &gt; external pressure: the tube is open; flow = (P<sub>up</sub> − P<sub>down</sub>)/R.</li>
+<li>If external pressure &gt; downstream pressure: the tube partly collapses; flow = (P<sub>up</sub> − P<sub>ext</sub>)/R, no matter how low P<sub>down</sub> goes. Like water over a waterfall, the height of the drop below does not change flow.</li>
+<li>If external &gt; upstream: the tube closes; flow stops.</li></ul>
+<h2 id="interactive">Interactive: The Waterfall</h2>
+<div class="widget" id="w6"><div class="ctrls">${slider("h6u", "Upstream pressure (mmHg)", 0, 100, 1, 60)}${slider("h6e", "External (tissue) pressure (mmHg)", 0, 100, 1, 20)}${slider("h6d", "Downstream pressure (mmHg)", 0, 60, 1, 10)}</div>
+<div class="plotwrap"><canvas class="plot" id="h6plot" data-h="240"></canvas></div><div class="readout" id="h6read"></div></div>
+${callout("tip", "Try it", `<ul><li>Lower downstream pressure from 60 to 0 with external pressure at 20. Flow rises, then plateaus once downstream drops below 20.</li><li>Raise external pressure toward upstream (compartment syndrome). Flow falls to zero while the upstream artery is still pressurized.</li></ul>`)}
+<h2 id="clinical">Why Does This Matter Clinically?</h2>
+<p>Starling resistors appear in West's lung zones, coronary flow during systole, compartment syndrome, abdominal compartment syndrome, raised intracranial pressure (cerebral perfusion pressure = MAP − ICP) and expiratory flow limitation in COPD.</p>
+<h2 id="quiz">Quiz: Check Your Understanding</h2>${quizHTML("hq6", HQ6)}
+<h2 id="summary">Summary</h2><ul><li>Collapsible vessels obey the Starling resistor: outside pressure can replace downstream pressure as the effective back-pressure.</li><li>Perfusion pressure = inflow pressure − max(outflow, surrounding) pressure.</li><li>This explains compartment syndrome, cerebral perfusion pressure and lung zones.</li></ul>`,
+  init() {
+    const draw = () => { const pu = val("h6u"), pe = val("h6e"), pd = val("h6d"), ds = linspace(0, 60, 121), Q = starling(pu, pd, pe);
+      plot($("#h6plot"), { series: [{ x: ds, y: ds.map(d => d > pu ? 0 : starling(pu, d, pe)), color: "--trace", w: 2.4 }], markers: [{ x: pd, y: Q, color: "--trace2", r: 6 }], bands: [{ x0: 0, x1: Math.min(60, pe), color: css("--warn"), alpha: 0.1, label: "waterfall zone" }], xlim: [0, 60], ylim: [0, 105], xlabel: "Downstream pressure (mmHg)", ylabel: "Flow (relative)" });
+      $("#h6read").innerHTML = stat("Effective driving pressure", fmt(Q, 0), " mmHg") + chip(pe >= pu ? "Closed: no flow" : pe > pd ? "Waterfall: outside pressure limits flow" : "Open tube", pe >= pu ? "bad" : pe > pd ? "warn" : "good"); };
+    bindSliders($("#w6"), draw); draw(); bindQuiz("hq6", HQ6);
+  } });
+
+/* ---------- Module 7 ---------- */
+const wss = (muPa, Qml, rmm) => 4 * muPa * Qml * 1e-6 / (Math.PI * (rmm / 1000) ** 3) * 10; // dyn/cm²
+const HQ7 = [
+  { q: "Atherosclerotic plaques form preferentially at the outer wall of the carotid bifurcation. Why there?", a: ["Highest shear stress", "Low and oscillating wall shear stress, which promotes an inflammatory endothelial phenotype", "Highest pressure", "Coldest blood"], c: 1, why: "Where flow separates and recirculates, wall shear stress is low and reverses direction during the cycle. Endothelial cells sense this and switch to a pro-inflammatory, pro-atherogenic state." },
+  { q: "Flow through a vessel doubles. To restore normal wall shear stress, by how much must the radius grow?", a: ["2×", "√2 ≈ 1.41×", "∛2 ≈ 1.26×", "4×"], c: 2, why: "τ ∝ Q/r³. To keep τ constant with 2Q, r³ must double, so r grows by ∛2 ≈ 1.26. Vessels remodel to restore their shear set point (Murray's law)." },
+  { q: "Very high shear (for example in severe aortic stenosis) can cause bleeding. How?", a: ["It destroys platelets only", "It unfolds and cleaves von Willebrand factor multimers", "It thins the blood", "It ruptures capillaries"], c: 1, why: "Extreme shear stretches large vWF multimers, exposing a cleavage site for ADAMTS13. Losing the largest multimers causes acquired von Willebrand disease (Heyde syndrome)." }
+];
+M({ id: "m7", num: "7", nav: "Wall Shear", title: "Module 7: Wall Shear Stress", subtitle: "How endothelium feels the flow",
+  html: () => `
+${callout("scenario", "Clinical scenario", `<p>Carotid ultrasound in a 66-year-old shows plaque exactly at the outer wall of the bifurcation and nowhere else along the artery. The cholesterol, blood pressure and smoking history were the same for every millimeter of the vessel. Location is a fluid mechanics story.</p>`)}
+<h2 id="basics">The Basics</h2>
+<p>Flowing blood drags on the vessel wall. That tangential force per area is <b>wall shear stress</b> (WSS). For Poiseuille flow:</p>
+<p style="text-align:center" class="mono">τ_wall = 4 · μ · Q / (π · r³)</p>
+<p>Endothelial cells sense WSS and respond. Steady, moderately high WSS (roughly 10–70 dyn/cm² in arteries) keeps them anti-inflammatory and anti-thrombotic. <b>Low or oscillating</b> WSS turns on inflammatory genes and promotes plaque. Vessels remodel their diameter to bring WSS back to a set point: high flow widens them, low flow narrows them.</p>
+<h2 id="interactive">Interactive: Shear Stress Calculator</h2>
+<div class="widget" id="w7"><div class="presets"><button class="pill c4" data-p="carotid" aria-pressed="true">Carotid artery</button><button class="pill c3" data-p="bulb">Carotid bulb (dilated)</button><button class="pill c6" data-p="sten">Tight stenosis</button><button class="pill c5" data-p="vein">Leg vein</button></div>
+<div class="ctrls">${slider("h7Q", "Flow (mL/s)", 0.2, 20, 0.1, 6)}${slider("h7r", "Radius (mm)", 0.5, 8, 0.05, 3)}${slider("h7mu", "Viscosity (mPa·s)", 2, 6, 0.1, 3.5)}</div>
+<div class="plotwrap"><canvas class="plot" id="h7plot" data-h="240"></canvas></div><div class="readout" id="h7read"></div></div>
+${callout("tip", "Try it", `<ul><li>Keep flow constant and widen the radius from 3 to 4.5 mm (the carotid bulb). WSS falls more than 3×.</li><li>Click <b>Tight stenosis</b>: shear soars past platelet-activation levels.</li></ul>`)}
+<h2 id="quiz">Quiz: Check Your Understanding</h2>${quizHTML("hq7", HQ7)}
+<h2 id="summary">Summary</h2><ul><li>WSS = 4μQ/(πr³). Radius matters to the third power.</li><li>Low or oscillating WSS → atherosclerosis at bifurcations and curves.</li><li>Very high WSS → platelet activation, vWF cleavage.</li><li>Vessels remodel to restore their shear set point.</li></ul>`,
+  init() {
+    const P = { carotid: [6, 3, 3.5], bulb: [6, 4.5, 3.5], sten: [6, 0.8, 3.5], vein: [2, 5, 4.5] };
+    const draw = () => { const Q = val("h7Q"), r = val("h7r"), mu = val("h7mu") / 1000, t = wss(mu, Q, r), rs = linspace(0.5, 8, 200);
+      plot($("#h7plot"), { series: [{ x: rs, y: rs.map(x => Math.log10(wss(mu, Q, x))), color: "--trace", w: 2.2 }], markers: [{ x: r, y: Math.log10(t), color: "--trace2", r: 6 }], bands: [{ x0: 0.5, x1: 8, color: "transparent", alpha: 0 }], hlines: [{ y: Math.log10(4), color: "--warn", label: "4: atheroprone below" }, { y: Math.log10(70), color: "--good", label: "70" }, { y: Math.log10(300), color: "--bad", label: "platelet activation" }], xlim: [0.5, 8], ylim: [-1, 4], xlabel: "Radius (mm)", ylabel: "WSS (dyn/cm², log)", yfmt: logTick, left: 58 });
+      $("#h7read").innerHTML = stat("Wall shear stress", fmt(t, t < 10 ? 1 : 0), " dyn/cm²") + stat("= ", fmt(t / 10, 2), " Pa") + chip(t < 4 ? "Low: atheroprone" : t <= 70 ? "Physiological" : t < 300 ? "High" : "Very high: platelet activation", t < 4 || t >= 300 ? "bad" : t > 70 ? "warn" : "good"); };
+    $$("#w7 .pill").forEach(b => b.addEventListener("click", () => { const [Q, r, m] = P[b.dataset.p]; setSlider("h7Q", Q); setSlider("h7r", r); setSlider("h7mu", m); $$("#w7 .pill").forEach(x => x.setAttribute("aria-pressed", x === b)); draw(); }));
+    bindSliders($("#w7"), draw); draw(); bindQuiz("hq7", HQ7);
+  } });
+
+/* ---------- Challenge ---------- */
+const CH_HEMO = (() => {
+  const r16 = 0.00066, Qc = 300 * MMHG / poiseR(1e-3, 0.03, r16) * 6e7;
+  const g = 4 * 4.5 ** 2;
+  const Re = 1060 * 0.3 * 0.025 / 0.0025;
+  const tau = wss(3.5e-3, 5, 3);
+  const vmean = 70 / 0.3 / 0.8;
+  return [
+    { title: "Ohm's law", q: "Mean arterial pressure is 90 mmHg, central venous pressure 6 mmHg, cardiac output 5.6 L/min. Systemic vascular resistance in mmHg·min/L (Wood units)?", unit: "Wood units", ans: 84 / 5.6, sol: "SVR = (MAP − CVP)/CO = 84/5.6 = 15 Wood units (× 80 = 1200 dyn·s/cm⁵)." },
+    { title: "r⁴", q: "An arteriole constricts so its radius falls by 20%. By what factor does its resistance increase?", unit: "×", ans: 1 / 0.8 ** 4, sol: "R ∝ 1/r⁴ → 1/0.8⁴ = 2.44×." },
+    { title: "Aortic stenosis", q: "Continuous-wave Doppler shows a peak aortic jet velocity of 4.5 m/s. Peak gradient by the simplified Bernoulli equation?", unit: "mmHg", ans: g, sol: `ΔP = 4v² = 4 × 4.5² = ${g} mmHg. Severe AS (Vmax ≥ 4 m/s).` },
+    { title: "Reynolds", q: "Severe anemia: aortic mean velocity 30 cm/s, diameter 25 mm, blood viscosity 2.5 mPa·s, density 1060 kg/m³. Reynolds number?", unit: "", ans: Re, sol: `Re = ρvD/μ = 1060 × 0.3 × 0.025 / 0.0025 = ${fmt(Re, 0)}: transitional to turbulent, consistent with a flow murmur.` },
+    { title: "Wall shear", q: "Carotid flow 5 mL/s, radius 3 mm, viscosity 3.5 mPa·s. Wall shear stress in dyn/cm²?", unit: "dyn/cm²", ans: tau, sol: `τ = 4μQ/(πr³) = ${fmt(tau / 10, 2)} Pa = ${fmt(tau, 1)} dyn/cm². Physiological range.` },
+    { title: "Compartment syndrome", q: "Diastolic BP 68 mmHg, anterior compartment pressure 45 mmHg. Using ΔP = diastolic − compartment pressure < 30 mmHg as the threshold, what is the right call?", choices: ["Observe; ΔP is adequate", "Fasciotomy; ΔP is 23 mmHg", "Elevate the leg above the heart", "Apply a compression bandage"], ans: 1, sol: "ΔP = 68 − 45 = 23 mmHg, below 30. Microvessels act as Starling resistors; perfusion is failing. Elevation and compression make it worse." },
+    { title: "Compliance", q: "Stroke volume 70 mL, aortic compliance 0.7 mL/mmHg. Using PP ≈ SV/C, estimate pulse pressure.", unit: "mmHg", ans: 100, sol: "PP ≈ 70/0.7 = 100 mmHg: wide, as in isolated systolic hypertension of the elderly." }
+  ];
+})();
+M(challengeModule({ id: "m8", num: "8", items: CH_HEMO, scenario: "You are covering the cardiovascular ICU overnight with a pocket calculator and your engineering degree. Seven questions arrive from the team." }));
+
+const HEMO_HW = [
+  ["1", "Poiseuille", "Compare flow through 14G and 22G catheters (inner diameters about 1.7 and 0.6 mm), same length and pressure. What is the ratio?", "(1.7/0.6)⁴ ≈ 64× for the catheter alone; in practice tubing resistance lowers the real ratio to about 6–10×."],
+  ["1", "Ohm's law", "A septic patient has MAP 55 mmHg, CVP 10, CO 8 L/min. Calculate SVR and explain why norepinephrine is chosen.", "SVR = 45/8 ≈ 5.6 Wood units (low). Vasopressors restore R."],
+  ["2", "Stenosis", "Using the Module 2 widget, find the diameter stenosis where FFR crosses 0.80 for a 3.5 mm vessel with 8 mm and 20 mm lesion length.", "Roughly 60–63% vs ~55%; longer lesions cross earlier."],
+  ["2", "Bernoulli", "A mitral jet velocity is 5 m/s. Estimate the pressure difference between left ventricle and left atrium.", "4 × 25 = 100 mmHg."],
+  ["3", "Turbulence", "Explain why Korotkoff sounds appear when cuff pressure is between systolic and diastolic pressure.", "The artery is partly compressed, so flow forms intermittent high-velocity jets that become turbulent."],
+  ["4", "Viscosity", "At 0.1 s⁻¹ and 1000 s⁻¹, compare viscosity for Hct 42% and 62%. Which ratio is larger, and what does that mean for veins?", "The ratio is much larger at low shear; hyperviscosity hits slow venous flow hardest."],
+  ["5", "Windkessel", "Find a compliance and resistance pair that produces 180/60 at SV 70 mL and HR 72.", "C ≈ 0.35–0.4 mL/mmHg with R ≈ 1.2–1.3."],
+  ["6", "Starling", "Write the cerebral perfusion pressure equation and explain it as a Starling resistor.", "CPP = MAP − max(ICP, CVP); when ICP exceeds venous pressure, it becomes the effective back-pressure."],
+  ["7", "Shear", "An AV fistula raises flow from 0.5 to 15 mL/s in a vein of radius 2 mm. What radius restores the original wall shear stress?", "r ∝ Q^(1/3): 2 × 30^(1/3) ≈ 6.2 mm."],
+  ["9", "Synthesis", "Pick one case from the Case Library and explain the physics to a medical student with no engineering background in one paragraph.", "Open-ended; graded on correct principle and clarity."]
+];
+const HEMO_DESCS = { m1: "Q = ΔP/R and the fourth-power law of radius.", m2: "Continuity, Bernoulli, valve gradients and FFR.", m3: "Reynolds number, murmurs and bruits.", m4: "Shear thinning, hematocrit and stasis.", m5: "The aorta as a capacitor; pulse pressure and stiffness.", m6: "Starling resistors: compartments, lungs, brain.", m7: "How endothelium senses flow; where plaques form.", m8: "Seven graded bedside physics problems.", m9: "16 interactive clinical cases where fluid mechanics explains the medicine." };
+function homeHTML() { return genericHome({ title: "Hemodynamics &amp; Biofluids 101", subtitle: "An interactive tutorial for Texas A&amp;M EnMed students", caseCount: 16, hwCount: HEMO_HW.length, descs: HEMO_DESCS,
+  welcome: `<p>The cardiovascular system is a pump, a branching network of compliant tubes and a non-Newtonian fluid. Murmurs, shock, stenoses, aneurysms, clots and compartment syndrome are all fluid mechanics problems before they are anything else.</p><p>You already know the equations from engineering school. This course shows you where they live in the body, with a model to play with for each one and a clinical decision at the end of every module.</p>`,
+  need: "<li>Comfort with algebra and units (mmHg, mL/s, Pa).</li>" }); }
+
+/* ================= Hemodynamics case library ================= */
+const GAUGES = [["14G", 1.69, 45], ["16G", 1.32, 45], ["18G", 1.02, 32], ["20G", 0.81, 32], ["22G", 0.64, 25]];
+function ivFlow(gi, head, bag, mu) { const [, id, L] = GAUGES[gi], dp = (head * 9.81 * 1000 + bag * MMHG), Rc = poiseR(mu / 1000, L / 1000, id / 2000), Rt = poiseR(mu / 1000, 2, 1.5e-3); return dp / (Rc + Rt) * 6e7; }
+function artWave(t) { // synthetic radial arterial waveform with sharp upstroke and dicrotic notch (mmHg)
+  const T = 0.8, x = t % T; let s;
+  if (x < 0.07) s = 0.5 - 0.5 * Math.cos(Math.PI * x / 0.07); else if (x < 0.3) s = 1 - 0.35 * (x - 0.07) / 0.23; else if (x < 0.34) s = 0.65 - 0.1 * Math.sin(Math.PI * (x - 0.3) / 0.04); else s = 0.62 * Math.exp(-(x - 0.34) / 0.55);
+  return 75 + 45 * s;
+}
+function artLine(fn, zeta, sec = 2.4) {
+  const dt = 0.0002, wn = 2 * Math.PI * fn, n = Math.round((sec + 1.6) / dt); let y = artWave(0), v = 0; const t = [], p = [], m = [];
+  for (let i = 0; i < n; i++) { const x = i * dt, P = artWave(x), a = wn * wn * (P - y) - 2 * zeta * wn * v; v += a * dt; y += v * dt; if (x >= 1.6) { t.push(x - 1.6); p.push(P); m.push(y); } }
+  return { t, p, m };
+}
+const HEMO_CASES = [
+{ title: "Trauma resuscitation: which IV?", system: "Emergency / Trauma", concepts: ["Poiseuille", "Resistance"], hook: "Short and wide beats high and squeezed.",
+  present: "A motorcyclist with a pelvic fracture is hypotensive. The only access is a 22-gauge IV. The massive transfusion protocol is activated.",
+  md: "Place two large-bore peripheral IVs (14–16G) or a rapid infuser catheter. Pressure bags help, but catheter size matters most.",
+  eng: "Flow = ΔP / (R_catheter + R_tubing). Catheter resistance scales with 1/r⁴, so a 14G has a fraction of a 22G's resistance. Once the catheter is wide, the tubing becomes the bottleneck. Blood is about 3–4× more viscous than saline, which slows everything.",
+  eq: "Q = ΔP / (R_cath + R_tubing),   R = 8μL / (πr⁴)",
+  ctrls: [["g", "Catheter (0 = 14G … 4 = 22G)", 0, 4, 1, 4], ["h", "Bag height above patient (m)", 0.3, 2, 0.1, 1], ["bag", "Pressure bag (mmHg)", 0, 300, 10, 0], ["mu", "Fluid viscosity (mPa·s; saline 1, blood ~3.5)", 1, 4.5, 0.1, 1]], presets: [["Saline by gravity", { bag: 0, mu: 1 }], ["Blood + pressure bag", { bag: 300, mu: 3.5 }]],
+  render(v, cv, out) { const qs = GAUGES.map((_, i) => ivFlow(i, v.h, v.bag, v.mu)), xs = [0, 1, 2, 3, 4];
+    plot(cv, { series: [{ x: xs, y: qs, color: "--trace", w: 2 }, { x: xs, y: qs, color: "--trace", dots: true, r: 5 }], markers: [{ x: v.g, y: qs[v.g], color: "--trace2", r: 8, label: GAUGES[v.g][0] }], xlim: [-0.3, 4.3], ylim: [0, Math.max(...qs) * 1.25], xlabel: "Catheter gauge", ylabel: "Flow (mL/min)", xfmt: x => GAUGES[x] ? GAUGES[x][0] : "", left: 52 });
+    $("#cs-g-o").textContent = GAUGES[v.g][0];
+    out.innerHTML = stat("Flow", fmt(qs[v.g], 0), " mL/min") + stat("1 unit blood (~300 mL) in", fmt(300 / qs[v.g], 1), " min") + chip(qs[v.g] < 100 ? "Too slow for hemorrhage" : "Adequate", qs[v.g] < 100 ? "bad" : "good"); },
+  pearl: "A long central line can flow slower than a short peripheral 16G. For resuscitation, choose short and wide." },
+
+{ title: "Grading aortic stenosis", system: "Cardiology", concepts: ["Bernoulli", "Continuity"], hook: "Why a tight valve can show a low gradient.",
+  present: "An 81-year-old with exertional syncope has a calcified aortic valve. Echo: valve area 0.8 cm², but mean gradient only 28 mmHg. Ejection fraction 30%.",
+  md: "Severe AS: Vmax ≥ 4 m/s, mean gradient ≥ 40 mmHg, area ≤ 1.0 cm². Low-flow, low-gradient AS fools the gradient criteria; dobutamine echo helps.",
+  eng: "Jet velocity = flow ÷ valve area (continuity), and gradient ≈ 4v² (Bernoulli). Gradient depends on flow as well as on area. A weak ventricle pushes less flow, so velocity and gradient fall even though the valve is just as tight.",
+  eq: "v ≈ (SV / ejection time) / AVA,   ΔP_mean ≈ 2.4 · v_max²",
+  ctrls: [["ava", "Aortic valve area (cm²)", 0.4, 3.5, 0.05, 0.8], ["sv", "Stroke volume (mL)", 25, 100, 1, 40]], presets: [["Normal valve", { ava: 3, sv: 75 }], ["Severe AS, good LV", { ava: 0.8, sv: 75 }], ["Low-flow low-gradient", { ava: 0.8, sv: 40 }]],
+  render(v, cv, out) { const vmax = a => 1.5 * (v.sv / 0.3) / a / 100, as = linspace(0.4, 3.5, 120), vm = vmax(v.ava), mg = 2.4 * vm * vm;
+    plot(cv, { series: [{ x: as, y: as.map(vmax), color: "--trace", w: 2.2 }], hlines: [{ y: 4, color: "--bad", label: "4 m/s severe" }], markers: [{ x: v.ava, y: vm, color: "--trace2", r: 6 }], bands: [{ x0: 0.4, x1: 1.0, color: css("--bad"), alpha: 0.08, label: "AVA ≤ 1.0" }], xlim: [0.4, 3.5], ylim: [0, 7], xlabel: "Valve area (cm²)", ylabel: "Peak jet velocity (m/s)" });
+    const sev = v.ava <= 1, grad = vm >= 4;
+    out.innerHTML = stat("Vmax", fmt(vm, 1), " m/s") + stat("Mean gradient", fmt(mg, 0), " mmHg") + chip(sev && grad ? "Severe AS (concordant)" : sev ? "Discordant: low-flow AS?" : "Not severe", sev ? "bad" : "good"); },
+  pearl: "When area says severe but gradient says moderate, check the flow. Stroke volume index below 35 mL/m² defines low flow." },
+
+{ title: "Is this coronary lesion worth stenting?", system: "Cardiology", concepts: ["Stenosis", "Bernoulli"], hook: "The angiogram looks bad; the physiology decides.",
+  present: "A 59-year-old with stable angina has an intermediate (55–65%) LAD stenosis. The interventionalist measures FFR before deciding.",
+  md: "FFR ≤ 0.80 favors revascularization; FFR > 0.80 favors medical therapy. Visual estimate of stenosis correlates poorly with FFR.",
+  eng: "Pressure loss across a stenosis has a viscous term (∝ Q·L/As²) and a separation term (∝ Q²/As²). It depends on lesion length, vessel size and how much flow the downstream bed demands, not just percent narrowing.",
+  ctrls: [["s", "Diameter stenosis (%)", 30, 85, 1, 60], ["L", "Lesion length (mm)", 3, 30, 1, 10], ["D", "Vessel diameter (mm)", 2.2, 4.5, 0.1, 3.2]], presets: [["Short lesion, big vessel", { s: 60, L: 5, D: 4 }], ["Long lesion, small vessel", { s: 60, L: 25, D: 2.6 }]],
+  render(v, cv, out) { const xs = linspace(30, 85, 80), r = ffrModel(v.s, v.L, v.D);
+    plot(cv, { series: [{ x: xs, y: xs.map(p => ffrModel(p, v.L, v.D).ffr), color: "--trace", w: 2.2 }], hlines: [{ y: 0.8, color: "--bad", label: "0.80" }], markers: [{ x: v.s, y: r.ffr, color: "--trace2", r: 6 }], xlim: [30, 85], ylim: [0, 1.02], xlabel: "Diameter stenosis (%)", ylabel: "FFR", yfmt: x => x.toFixed(1) });
+    out.innerHTML = stat("FFR", fmt(r.ffr, 2)) + stat("Hyperemic flow", fmt(r.Q, 1), " mL/s") + chip(r.ffr <= 0.8 ? "Ischemic: revascularize" : "Medical therapy", r.ffr <= 0.8 ? "bad" : "good"); },
+  pearl: "The same 60% narrowing can be harmless in a short lesion of a big vessel and ischemic in a long lesion of a small one." },
+
+{ title: "Stroke thrombectomy: aspiration catheter bore", system: "Neurointervention", concepts: ["Poiseuille", "Pressure × area"], hook: "A slightly larger catheter pulls much harder.",
+  present: "A 68-year-old with a middle cerebral artery occlusion goes for thrombectomy. The team chooses between aspiration catheters with inner diameters of 0.055\" and 0.088\".",
+  md: "Larger-bore aspiration catheters achieve higher first-pass success. Clot must be engaged at the catheter tip.",
+  eng: "Suction force on the clot face = vacuum pressure × tip area, so it scales with r². Before engagement, aspiration flow through a 130 cm catheter follows Poiseuille, scaling with r⁴. A small increase in bore pays off twice.",
+  eq: "F_tip = ΔP · π r²,   Q = ΔP · π r⁴ / (8 μ L)",
+  ctrls: [["id", "Catheter inner diameter (inch)", 0.04, 0.1, 0.001, 0.071], ["vac", "Vacuum (mmHg below atmospheric)", 200, 700, 10, 650], ["L", "Catheter length (cm)", 100, 160, 1, 130]], presets: [["0.055\" (small)", { id: 0.055 }], ["0.071\"", { id: 0.071 }], ["0.088\" (large)", { id: 0.088 }]],
+  render(v, cv, out) { const r = d => d * 0.0254 / 2, dp = v.vac * MMHG, F = d => dp * Math.PI * r(d) ** 2, Q = d => dp * Math.PI * r(d) ** 4 / (8 * 3.5e-3 * v.L / 100) * 6e7, ds = linspace(0.04, 0.1, 80);
+    plot(cv, { series: [{ x: ds, y: ds.map(F).map(x => x * 1000), color: "--trace", w: 2.2 }, { x: ds, y: ds.map(Q), color: "--trace3", w: 2, dash: [6, 4] }], markers: [{ x: v.id, y: F(v.id) * 1000, color: "--trace2", r: 6 }], xlim: [0.04, 0.1], ylim: [0, Math.max(F(0.1) * 1000, Q(0.1)) * 1.05], xlabel: "Inner diameter (inch)", ylabel: "Tip force (mN), dashed = flow (mL/min)", xfmt: x => x.toFixed(3), left: 52 });
+    out.innerHTML = stat("Tip force", fmt(F(v.id) * 1000, 0), " mN") + stat("Blood flow (unengaged)", fmt(Q(v.id), 0), " mL/min") + stat("vs 0.055\"", fmt(F(v.id) / F(0.055), 1), "× force"); },
+  pearl: "Engineering detail matters clinically: catheter wall thickness, tip shape and trackability determine which bore can actually reach the clot." },
+
+{ title: "Polycythemia: more red cells, less oxygen?", system: "Hematology", concepts: ["Viscosity", "Optimization"], hook: "Oxygen delivery has a sweet spot.",
+  present: "A 55-year-old with polycythemia vera (hematocrit 60%) has headaches, dizziness and a recent TIA.",
+  md: "Phlebotomy to hematocrit below 45% reduces thrombotic events. Too low a hematocrit causes anemia symptoms.",
+  eng: "Oxygen carried per mL rises linearly with hematocrit, but viscosity rises steeply, so flow at a fixed driving pressure falls. Oxygen delivery = flow × O₂ content, which peaks at an intermediate hematocrit: a classic optimization.",
+  eq: "DO₂ ∝ (ΔP / R(μ(Hct))) · Hct",
+  ctrls: [["H", "Hematocrit (%)", 15, 70, 1, 60]], presets: [["Anemia 25%", { H: 25 }], ["Normal 42%", { H: 42 }], ["Polycythemia 60%", { H: 60 }]],
+  render(v, cv, out) { const do2 = h => (h / 100) / muBlood(h / 100, 300), hs = linspace(15, 70, 120), mx = Math.max(...hs.map(do2)), best = hs[hs.map(do2).indexOf(mx)];
+    plot(cv, { series: [{ x: hs, y: hs.map(h => 100 * do2(h) / mx), color: "--trace", w: 2.2 }], markers: [{ x: v.H, y: 100 * do2(v.H) / mx, color: "--trace2", r: 6 }], xlim: [15, 70], ylim: [0, 105], xlabel: "Hematocrit (%)", ylabel: "O₂ delivery (% of max)" });
+    out.innerHTML = stat("Viscosity (high shear)", fmt(muBlood(v.H / 100, 300), 1), " mPa·s") + stat("O₂ delivery", fmt(100 * do2(v.H) / mx, 0), " % of max") + stat("Model optimum", fmt(best, 0), " %") + chip(v.H > 52 ? "Hyperviscosity" : v.H < 30 ? "Anemia" : "Near optimum", v.H > 52 || v.H < 30 ? "bad" : "good"); },
+  pearl: "The model optimum depends on assumptions. The real body compensates with cardiac output; still, the trade-off is why hematocrit is tightly regulated." },
+
+{ title: "A new murmur in severe anemia", system: "Cardiology / Hematology", concepts: ["Reynolds", "Turbulence"], hook: "A loud heart with a normal valve.",
+  present: "A 30-year-old with heavy menstrual bleeding has hemoglobin 6.5 g/dL, a heart rate of 112 and a new soft systolic murmur. Echo shows a normal heart.",
+  md: "Flow murmur from high-output state. It resolves when anemia is treated.",
+  eng: "Lower hematocrit lowers viscosity; the heart compensates with higher cardiac output, so aortic velocity rises. Both push the Reynolds number up toward the turbulent range, and turbulence makes sound.",
+  ctrls: [["hb", "Hemoglobin (g/dL)", 4, 16, 0.5, 6.5]],
+  render(v, cv, out) { const re = hb => { const H = hb * 3 / 100, mu = muBlood(H, 500) / 1000, co = 5 * Math.max(1, 14 / hb) ** 0.8, vel = co / 60 / 1000 / (Math.PI * 0.0125 ** 2); return 1060 * vel * 0.025 / mu; }, hs = linspace(4, 16, 100);
+    plot(cv, { series: [{ x: hs, y: hs.map(re), color: "--trace", w: 2.2 }], hlines: [{ y: 2000, color: "--warn", label: "2000" }, { y: 4000, color: "--bad", label: "4000" }], markers: [{ x: v.hb, y: re(v.hb), color: "--trace2", r: 6 }], xlim: [4, 16], ylim: [0, 7000], xlabel: "Hemoglobin (g/dL)", ylabel: "Aortic Reynolds number (mean flow)", left: 56 });
+    const R = re(v.hb); out.innerHTML = stat("Re", fmt(R, 0)) + stat("Cardiac output", fmt(5 * Math.max(1, 14 / v.hb) ** 0.8, 1), " L/min") + chip(R > 3000 ? "Flow murmur likely" : "Quiet", R > 3000 ? "warn" : "good"); },
+  pearl: "Mean-flow Re underestimates peak-systolic Re by about 3×, which is why murmurs are systolic." },
+
+{ title: "Isolated systolic hypertension", system: "Cardiology / Geriatrics", concepts: ["Compliance", "Windkessel"], hook: "Same stroke volume, stiffer aorta, higher systolic.",
+  present: "A 78-year-old's BP is 174/66. Her diastolic is normal or low. She asks why her 'top number' keeps rising while her 'bottom number' falls.",
+  md: "Isolated systolic hypertension from arterial stiffening. Treat systolic; avoid driving diastolic too low (coronaries fill in diastole).",
+  eng: "Aortic compliance falls with age as elastin fragments and collagen increases. In the Windkessel, the same stroke volume into a smaller capacitor produces a larger pressure swing: systolic up, diastolic down, mean nearly unchanged.",
+  ctrls: [["C", "Aortic compliance (mL/mmHg)", 0.3, 2, 0.05, 0.45]], presets: [["Age 25", { C: 1.1 }], ["Age 55", { C: 0.8 }], ["Age 80", { C: 0.42 }]],
+  render(v, cv, out) { const w = windkessel({ C: v.C, R: 1.15, sv: 70, hr: 72 }), y = windkessel({ C: 1.1, R: 1.15, sv: 70, hr: 72 }), n = w.t.length, st = n - Math.floor(2 * w.T / 0.001), t = w.t.slice(st).map(x => x - w.t[st]), p = w.p.slice(st), q = y.p.slice(st);
+    plot(cv, { series: [{ x: t, y: q, color: "--axis", w: 1.3, dash: [5, 4] }, { x: t, y: p, color: "--trace2", w: 2.2 }], xlim: [0, t[t.length - 1]], ylim: [0, 220], xlabel: "Time (s), dashed = young aorta", ylabel: "Pressure (mmHg)", left: 52 });
+    const s = Math.max(...p), d = Math.min(...p); out.innerHTML = stat("BP", `${fmt(s, 0)}/${fmt(d, 0)}`) + stat("Pulse pressure", fmt(s - d, 0), " mmHg") + chip(s > 140 && d < 90 ? "Isolated systolic HTN" : "Normal pattern", s > 140 && d < 90 ? "bad" : "good"); },
+  pearl: "Pulse pressure is a marker of arterial stiffness and independently predicts cardiovascular risk in older adults." },
+
+{ title: "Compartment syndrome", system: "Orthopedics / Trauma", concepts: ["Starling resistor", "Perfusion pressure"], hook: "A pulse is present while the muscle dies.",
+  present: "Four hours after a tibial fracture, a 22-year-old has escalating pain and pain on passive stretch. Pulses are palpable. Compartment pressure is being measured.",
+  md: "Fasciotomy if ΔP = diastolic − compartment pressure is below about 30 mmHg (or clinical diagnosis). Pulses are lost late.",
+  eng: "The muscle's capillaries and venules are collapsible. Rising compartment pressure acts as the external pressure on a Starling resistor: perfusion depends on arterial pressure minus tissue pressure. Large arteries, with high internal pressure, stay open, so the pulse is preserved.",
+  eq: "Perfusion ∝ P_diastolic − P_compartment",
+  ctrls: [["dia", "Diastolic BP (mmHg)", 40, 90, 1, 70], ["cp", "Compartment pressure (mmHg)", 5, 80, 1, 40]], presets: [["Normal", { cp: 8 }], ["Evolving", { cp: 35 }], ["Hypotensive + high pressure", { dia: 50, cp: 35 }]],
+  render(v, cv, out) { const cps = linspace(0, 80, 160), perf = c => Math.max(0, v.dia - c);
+    plot(cv, { series: [{ x: cps, y: cps.map(perf), color: "--trace", w: 2.2 }], hlines: [{ y: 30, color: "--bad", label: "ΔP 30 mmHg" }], markers: [{ x: v.cp, y: perf(v.cp), color: "--trace2", r: 6 }], xlim: [0, 80], ylim: [0, 95], xlabel: "Compartment pressure (mmHg)", ylabel: "ΔP (mmHg)" });
+    const d = v.dia - v.cp; out.innerHTML = stat("ΔP", fmt(d, 0), " mmHg") + chip(d < 30 ? "Fasciotomy" : "Monitor", d < 30 ? "bad" : "good"); },
+  pearl: "Hypotension lowers the threshold: the same compartment pressure is more dangerous in a shocked patient." },
+
+{ title: "West zones and PEEP", system: "Pulmonary / Critical care", concepts: ["Starling resistor", "Hydrostatics"], hook: "Height in the lung decides which pressure controls flow.",
+  present: "A ventilated ARDS patient's PEEP is raised from 8 to 16 cmH₂O. Oxygenation improves, but blood pressure and the pulmonary artery catheter readings change.",
+  md: "PEEP can convert zone 3 to zone 2 or 1, increasing dead space and making wedge pressures unreliable. Wedge readings require the catheter tip in zone 3.",
+  eng: "Pulmonary capillaries are collapsible tubes surrounded by alveolar pressure. Arterial and venous pressures fall with height (hydrostatics: about 0.74 mmHg per cm). Where alveolar pressure exceeds venous pressure, flow depends on arterial − alveolar pressure (zone 2). Where it exceeds arterial, flow stops (zone 1).",
+  ctrls: [["h", "Height above heart (cm)", -10, 15, 0.5, 8], ["peep", "Alveolar pressure / PEEP (cmH₂O)", 0, 25, 1, 8], ["pa", "Pulmonary artery mean at heart (mmHg)", 10, 35, 1, 15]],
+  render(v, cv, out) { const hs = linspace(-10, 15, 120), PA = v.peep * 0.7356, z = h => { const pa = v.pa - 0.7356 * h, pv = 8 - 0.7356 * h; return [pa, pv, pa <= PA ? 0 : (pa - Math.max(pv, PA))]; };
+    plot(cv, { series: [{ x: hs, y: hs.map(h => z(h)[2]), color: "--trace", w: 2.2 }], markers: [{ x: v.h, y: z(v.h)[2], color: "--trace2", r: 6 }], xlim: [-10, 15], ylim: [0, 25], xlabel: "Height above left atrium (cm)", ylabel: "Driving pressure (mmHg)" });
+    const [pa, pv, q] = z(v.h); out.innerHTML = stat("Arterial", fmt(pa, 1), " mmHg") + stat("Alveolar", fmt(PA, 1), " mmHg") + stat("Venous", fmt(pv, 1), " mmHg") + chip(pa <= PA ? "Zone 1: no flow" : PA > pv ? "Zone 2: waterfall" : "Zone 3: normal", pa <= PA ? "bad" : PA > pv ? "warn" : "good"); },
+  pearl: "If the wedge pressure rises by more than half the PEEP increase, suspect the catheter tip is not in zone 3." },
+
+{ title: "Thrombus inside an aneurysm sac", system: "Vascular", concepts: ["Wall shear stress", "Stasis"], hook: "Dilation slows the wall layer to a crawl.",
+  present: "CT shows a 6 cm abdominal aortic aneurysm lined with thick, layered thrombus. The patient asks why clot forms in his widest artery.",
+  md: "Intraluminal thrombus is common in AAAs and may weaken the underlying wall. Distal embolization is possible.",
+  eng: "At the same flow, wall shear stress scales with 1/r³. Doubling diameter cuts WSS eightfold. The dilated sac also contains recirculating, slow flow. Low shear and stasis favor platelet deposition and fibrin build-up.",
+  ctrls: [["D", "Aortic diameter (mm)", 18, 80, 1, 60], ["Q", "Mean flow (mL/s)", 20, 80, 1, 40]],
+  render(v, cv, out) { const Ds = linspace(18, 80, 120), t = D => wss(3.5e-3, v.Q, D / 2);
+    plot(cv, { series: [{ x: Ds, y: Ds.map(t), color: "--trace", w: 2.2 }], hlines: [{ y: 4, color: "--bad", label: "low-shear zone" }], markers: [{ x: v.D, y: t(v.D), color: "--trace2", r: 6 }], xlim: [18, 80], ylim: [0, Math.max(20, t(18) * 1.05)], xlabel: "Diameter (mm)", ylabel: "Mean WSS (dyn/cm²)" });
+    out.innerHTML = stat("Mean WSS", fmt(t(v.D), 2), " dyn/cm²") + stat("vs normal aorta", fmt(t(v.D) / t(20) * 100, 0), " %") + chip(t(v.D) < 4 ? "Thrombus-prone" : "Normal", t(v.D) < 4 ? "bad" : "good"); },
+  pearl: "Infrarenal aortic mean WSS is already low at rest; walking raises flow and shear, one proposed benefit of exercise for small aneurysms." },
+
+{ title: "Why plaque forms at the carotid bulb", system: "Neuro / Vascular", concepts: ["Wall shear stress", "Oscillatory flow"], hook: "Flow reversal at the outer wall.",
+  present: "A 64-year-old's carotid ultrasound shows plaque on the outer wall of the bulb, opposite the flow divider. The rest of the artery is clean.",
+  md: "Atherosclerosis favors bifurcations, inner curves and branch ostia. These are hemodynamic sites, not random ones.",
+  eng: "The bulb widens suddenly. On its outer wall, flow separates and recirculates, so WSS is low and reverses direction during part of each cycle. The oscillatory shear index (OSI) measures this reversal. Endothelium under low, oscillating shear becomes inflammatory.",
+  eq: "OSI = ½ · (1 − |∫τ dt| / ∫|τ| dt)",
+  ctrls: [["dil", "Bulb dilation (× common carotid diameter)", 1, 2, 0.05, 1.5]],
+  render(v, cv, out) { const t = linspace(0, 1, 200), base = x => 12 + 18 * Math.exp(-(((x - 0.15) / 0.07) ** 2)) - 4 * Math.exp(-(((x - 0.35) / 0.06) ** 2)), sep = (v.dil - 1), tau = t.map(x => base(x) / v.dil ** 3 - sep * 14 * Math.exp(-(((x - 0.3) / 0.12) ** 2)));
+    plot(cv, { series: [{ x: t, y: t.map(base), color: "--axis", w: 1.3, dash: [5, 4] }, { x: t, y: tau, color: "--trace", w: 2.2 }], hlines: [{ y: 0, color: "--axis", label: "" }], xlim: [0, 1], ylim: [-15, 32], xlabel: "Fraction of cardiac cycle (dashed = straight carotid)", ylabel: "WSS outer wall (dyn/cm²)", left: 52 });
+    const pos = tau.reduce((a, b) => a + b, 0), abs = tau.reduce((a, b) => a + Math.abs(b), 0), osi = 0.5 * (1 - Math.abs(pos) / abs), mean = pos / tau.length;
+    out.innerHTML = stat("Mean WSS", fmt(mean, 1), " dyn/cm²") + stat("OSI", fmt(osi, 2)) + chip(osi > 0.1 || mean < 4 ? "Atheroprone site" : "Protected", osi > 0.1 || mean < 4 ? "bad" : "good"); },
+  pearl: "Waveforms here are illustrative. The pattern (low mean, reversing shear at the outer bulb wall) is consistently seen in imaging and simulation studies." },
+
+{ title: "Heyde syndrome: a valve that makes you bleed", system: "Cardiology / GI", concepts: ["Shear rate", "Biomechanics of proteins"], hook: "Aortic stenosis plus GI bleeding has a mechanical link.",
+  present: "An 84-year-old with severe aortic stenosis has recurrent GI bleeding from angiodysplasia. After valve replacement, the bleeding stops.",
+  md: "Acquired von Willebrand syndrome from high shear across the stenotic valve; resolves after valve replacement.",
+  eng: "Very high shear stretches large von Willebrand factor multimers from a coiled to an elongated form, exposing a cleavage site for ADAMTS13. The largest, most hemostatic multimers are cut. Shear rate in the jet scales with jet velocity ÷ shear-layer thickness.",
+  ctrls: [["ava", "Aortic valve area (cm²)", 0.5, 3, 0.05, 0.7], ["sv", "Stroke volume (mL)", 40, 100, 1, 70]],
+  render(v, cv, out) { const vm = a => 1.5 * (v.sv / 0.3) / a / 100, gam = a => vm(a) / 0.0005, as = linspace(0.5, 3, 100);
+    plot(cv, { series: [{ x: as, y: as.map(gam).map(g => g / 1000), color: "--trace", w: 2.2 }], hlines: [{ y: 5, color: "--bad", label: "≈ vWF unfolding" }], markers: [{ x: v.ava, y: gam(v.ava) / 1000, color: "--trace2", r: 6 }], xlim: [0.5, 3], ylim: [0, 20], xlabel: "Valve area (cm²)", ylabel: "Jet shear rate (×1000 s⁻¹)", left: 52 });
+    out.innerHTML = stat("Jet velocity", fmt(vm(v.ava), 1), " m/s") + stat("Shear rate", fmt(gam(v.ava) / 1000, 1), " ×10³ s⁻¹") + chip(gam(v.ava) > 5000 ? "vWF cleavage likely" : "Below threshold", gam(v.ava) > 5000 ? "bad" : "good"); },
+  pearl: "Shear-layer thickness (0.5 mm) is an assumption. The threshold order of magnitude (thousands of s⁻¹) matches experimental vWF data." },
+
+{ title: "Arterial line: over- or under-damped?", system: "Critical care", concepts: ["Second-order systems", "Resonance"], hook: "The monitor's systolic pressure can be wrong by 20 mmHg.",
+  present: "An ICU patient's arterial line reads 168/52 while a cuff reads 138/60. The waveform has a sharp spike and ringing after the upstroke.",
+  md: "Underdamped (ringing) lines overestimate systolic and underestimate diastolic. Overdamped lines (air bubbles, clot, kinks) flatten the waveform. A fast-flush test checks the system.",
+  eng: "Fluid-filled tubing plus a transducer is a second-order mass–spring–damper system with natural frequency fn and damping ratio ζ. If fn is low and ζ is small, harmonics of the pressure waveform near fn are amplified (resonance). Bubbles and compliant tubing lower fn; clots and narrow tubing raise damping.",
+  eq: "ẍ + 2ζωₙẋ + ωₙ²x = ωₙ²·P_true(t)",
+  ctrls: [["fn", "Natural frequency fn (Hz)", 5, 40, 0.5, 12], ["z", "Damping ratio ζ", 0.05, 1.5, 0.01, 0.15]], presets: [["Ringing (underdamped)", { fn: 12, z: 0.12 }], ["Optimal", { fn: 25, z: 0.6 }], ["Air bubble (overdamped)", { fn: 8, z: 1.2 }]],
+  render(v, cv, out) { const a = artLine(v.fn, v.z), ts = Math.max(...a.p), td = Math.min(...a.p), ms = Math.max(...a.m), md = Math.min(...a.m);
+    plot(cv, { series: [{ x: a.t, y: a.p, color: "--axis", w: 1.3, dash: [5, 4] }, { x: a.t, y: a.m, color: "--trace2", w: 2 }], xlim: [0, 2.4], ylim: [20, 200], xlabel: "Time (s), dashed = true pressure", ylabel: "mmHg", left: 52 });
+    out.innerHTML = stat("True", `${fmt(ts, 0)}/${fmt(td, 0)}`) + stat("Monitor", `${fmt(ms, 0)}/${fmt(md, 0)}`) + stat("Systolic error", fmt(ms - ts, 0), " mmHg") + chip(v.z < 0.3 ? "Underdamped: overreads systolic" : v.z > 0.9 ? "Overdamped: flattened" : "Acceptable", v.z < 0.3 || v.z > 0.9 ? "bad" : "good"); },
+  pearl: "Mean arterial pressure is the most robust number on a poorly damped line. Base decisions on MAP until the line is fixed." },
+
+{ title: "Dialysis fistula maturation", system: "Nephrology / Vascular surgery", concepts: ["Wall shear stress", "Remodeling"], hook: "The vein grows until its shear stress feels normal again.",
+  present: "Six weeks after a radiocephalic fistula, the vein has grown from 2.5 to 6 mm and is ready for needling. In another patient, the vein stayed small and the fistula failed to mature.",
+  md: "Maturation requires adequate flow (often > 500 mL/min) and vein diameter (≈ 6 mm). Poor inflow or venous stenosis cause failure.",
+  eng: "Connecting the vein to an artery multiplies its flow. WSS jumps (∝ Q/r³), and the endothelium drives outward remodeling until WSS returns toward its set point. The predicted equilibrium radius scales with Q^(1/3) (Murray's law).",
+  eq: "r_eq = (4 μ Q / (π τ_set))^(1/3)",
+  ctrls: [["Q", "Fistula flow (mL/min)", 50, 1500, 10, 600], ["tau", "Target WSS (dyn/cm²)", 10, 40, 1, 15]],
+  render(v, cv, out) { const req = Q => Math.cbrt(4 * 3.5e-3 * Q / 6e7 / (Math.PI * v.tau / 10)) * 2000, qs = linspace(50, 1500, 120);
+    plot(cv, { series: [{ x: qs, y: qs.map(req), color: "--trace", w: 2.2 }], hlines: [{ y: 6, color: "--good", label: "≈ 6 mm cannulation" }], markers: [{ x: v.Q, y: req(v.Q), color: "--trace2", r: 6 }], xlim: [50, 1500], ylim: [0, 12], xlabel: "Flow (mL/min)", ylabel: "Equilibrium vein diameter (mm)" });
+    const d = req(v.Q), t0 = wss(3.5e-3, v.Q / 60, 1.25);
+    out.innerHTML = stat("Initial WSS (2.5 mm vein)", fmt(t0, 0), " dyn/cm²") + stat("Predicted diameter", fmt(d, 1), " mm") + chip(d >= 6 ? "Matures" : "Failure to mature", d >= 6 ? "good" : "bad"); },
+  pearl: "The 'rule of 6s' (flow > 600 mL/min, diameter > 6 mm, depth < 6 mm) captures the same physics in clinical terms." },
+
+{ title: "Massive pulmonary embolism", system: "Pulmonary / Critical care", concepts: ["Parallel resistors", "Ventricular load"], hook: "Block half the parallel paths and the RV fails.",
+  present: "A 47-year-old after knee surgery collapses with hypoxia and hypotension. Echo shows a dilated right ventricle. CT confirms bilateral pulmonary emboli.",
+  md: "Massive PE: RV failure from acute pressure overload. Thrombolysis or thrombectomy if unstable.",
+  eng: "The pulmonary vascular bed is many resistors in parallel. Blocking a fraction f leaves (1 − f) of them, so resistance rises as 1/(1 − f). Normal lungs have reserve (recruitment of unused vessels), so pressure barely rises at first, then rises steeply. A thin RV cannot acutely generate a mean pressure above about 40 mmHg.",
+  eq: "PVR = PVR₀ / (1 − f),   mPAP = PAWP + CO × PVR",
+  ctrls: [["f", "Fraction of vessels obstructed (%)", 0, 85, 1, 55], ["co", "Cardiac output (L/min)", 2, 8, 0.1, 5]],
+  render(v, cv, out) { const pvr0 = 1.5, recruit = f => Math.max(0, f - 0.25) / 0.75, mpap = f => 10 + v.co * pvr0 / (1 - 0.92 * recruit(f)), fs = linspace(0, 0.85, 120);
+    plot(cv, { series: [{ x: fs.map(x => x * 100), y: fs.map(mpap), color: "--trace", w: 2.2 }], hlines: [{ y: 40, color: "--bad", label: "acute RV limit ≈ 40" }], markers: [{ x: v.f, y: mpap(v.f / 100), color: "--trace2", r: 6 }], xlim: [0, 85], ylim: [0, 80], xlabel: "Obstruction (%)", ylabel: "Required mean PA pressure (mmHg)" });
+    const m = mpap(v.f / 100); out.innerHTML = stat("PVR", fmt(pvr0 / (1 - 0.92 * recruit(v.f / 100)), 1), " Wood units") + stat("Required mPAP", fmt(m, 0), " mmHg") + chip(m > 40 ? "RV failure: shock" : m > 25 ? "RV strain" : "Compensated", m > 40 ? "bad" : m > 25 ? "warn" : "good"); },
+  pearl: "A normal-sized RV cannot generate very high pressures acutely. Very high PA pressure with PE suggests a chronic component (CTEPH)." },
+
+{ title: "Claudication: a stenosis that hides at rest", system: "Vascular", concepts: ["Stenosis", "Flow demand"], hook: "Normal ankle pressure at rest, collapse after walking.",
+  present: "A 67-year-old smoker gets calf pain after two blocks that resolves with rest. Resting ankle-brachial index is 0.92. After treadmill walking it falls to 0.55.",
+  md: "Peripheral artery disease. Exercise ABI unmasks a stenosis that is borderline at rest. Supervised exercise therapy is first-line.",
+  eng: "During exercise, calf arterioles dilate and downstream resistance falls, so flow demand rises. The stenosis loss grows with flow (Q and Q² terms), so the pressure drop that was small at rest becomes large. Same lesion, different operating point.",
+  ctrls: [["s", "Iliac/femoral diameter stenosis (%)", 30, 85, 1, 65], ["ex", "Exercise (distal resistance fall, %)", 0, 85, 1, 0]], presets: [["Rest", { ex: 0 }], ["Walking", { ex: 75 }]],
+  render(v, cv, out) { const run = (s, ex) => { const D = 0.007, An = Math.PI * D * D / 4, As = An * (1 - s / 100) ** 2, Pa = 100 * MMHG, Rd = (Pa - 10 * MMHG) / 5e-6 * (1 - ex / 100), A = 8 * Math.PI * 3.5e-3 * 0.03 / (As * As), B = 1.2 * 530 * (1 / As - 1 / An) ** 2, b = Rd + A, Q = (-b + Math.sqrt(b * b + 4 * B * (Pa - 10 * MMHG))) / (2 * B), dP = A * Q + B * Q * Q; return { abi: (Pa - dP) / Pa, Q: Q * 6e7 }; };
+    const exs = linspace(0, 85, 100), r = run(v.s, v.ex);
+    plot(cv, { series: [{ x: exs, y: exs.map(e => run(v.s, e).abi), color: "--trace", w: 2.2 }], hlines: [{ y: 0.9, color: "--warn", label: "ABI 0.9" }], markers: [{ x: v.ex, y: r.abi, color: "--trace2", r: 6 }], xlim: [0, 85], ylim: [0, 1.05], xlabel: "Exercise: fall in distal resistance (%)", ylabel: "Ankle-brachial index", yfmt: x => x.toFixed(1) });
+    out.innerHTML = stat("ABI", fmt(r.abi, 2)) + stat("Limb flow", fmt(r.Q, 0), " mL/min") + chip(r.abi < 0.6 ? "Ischemic: claudication" : r.abi < 0.9 ? "PAD" : "Normal", r.abi < 0.6 ? "bad" : r.abi < 0.9 ? "warn" : "good"); },
+  pearl: "If the story fits claudication but resting ABI is normal, do an exercise ABI. The physics predicts it will drop." }
+];
+M(caseLibraryModule({ id: "m9", num: "9", cases: HEMO_CASES, intro: "Sixteen clinical situations where resistance, Bernoulli, turbulence, viscosity, compliance, collapsible tubes and wall shear stress explain what happens to the patient." }));
+M(homeworkModule(HEMO_HW, 9));
+
+/* ================= router ================= */
+function navHTML(active) {
+  return `<a href="#home" class="${active === "home" ? "active" : ""}"><span>Home</span></a>` + MODULES.map(m => `<a href="#${m.id}" class="${active === m.id ? "active" : ""}">${m.num ? `<span class="n">${m.num}.</span>` : ""}<span>${m.nav}</span></a>`).join("");
+}
+let tocObs;
+function buildTOC() {
+  const hs = $$("#main h2[id]"); const toc = $("#toc");
+  if (!hs.length) { toc.innerHTML = ""; return; }
+  toc.innerHTML = `<h2>On this page</h2><ul>${hs.map(h => `<li><a href="#${h.id}" data-target="${h.id}">${h.textContent}</a></li>`).join("")}</ul>`;
+  $$("a", toc).forEach(a => a.addEventListener("click", e => { e.preventDefault(); document.getElementById(a.dataset.target).scrollIntoView({ block: "start" }); }));
+  if (tocObs) tocObs.disconnect();
+  tocObs = new IntersectionObserver(es => { es.forEach(e => { if (e.isIntersecting) { $$("a", toc).forEach(a => a.classList.toggle("on", a.dataset.target === e.target.id)); } }); }, { rootMargin: "-80px 0px -70% 0px" });
+  hs.forEach(h => tocObs.observe(h));
+}
+function route() {
+  let id = (location.hash || "#home").slice(1);
+  const m = MODULES.find(x => x.id === id);
+  if (!m && id !== "home") { // in-page anchor on home or unknown -> home
+    if (!document.getElementById(id)) id = "home"; else return;
+  }
+  PLOTS.clear(); CUSTOM.clear();
+  $("#navlinks").innerHTML = navHTML(m ? m.id : "home");
+  const main = $("#main");
+  if (!m) { main.innerHTML = homeHTML(); document.title = COURSE_TITLE; }
+  else {
+    const i = MODULES.indexOf(m), prev = MODULES[i - 1], next = MODULES[i + 1];
+    main.innerHTML = `<h1>${m.title}</h1><p class="subtitle">${m.subtitle}</p>${m.html()}
+<nav class="module-nav" aria-label="Module navigation"><a href="#${prev ? prev.id : "home"}">← ${prev ? prev.title.replace(/^Module (\d+): .*/, "Module $1") : "Home"}</a>${next ? `<a href="#${next.id}">${next.id === "hw" ? "Homework" : next.title.replace(/^Module (\d+): .*/, "Module $1")} →</a>` : `<a href="#home">Home →</a>`}</nav>`;
+    m.init();
+  }
+  buildTOC(); window.scrollTo(0, 0);
+  const act = $("#navlinks a.active"); if (act) act.scrollIntoView({ block: "nearest", inline: "center" });
+}
+window.addEventListener("hashchange", route);
+$("#themeBtn").addEventListener("click", () => {
+  const r = document.documentElement, cur = r.dataset.theme || (matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light");
+  r.dataset.theme = cur === "dark" ? "light" : "dark"; setTimeout(() => { redrawAll(); for (const cv of [...CUSTOM]) if (cv.isConnected) cv._custom(); }, 20);
+});
+route();
+
+</script>
+</body></html>
